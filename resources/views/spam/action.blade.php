@@ -1,0 +1,3 @@
+<button data-id="{{$model->id}}" class="btn btn-sm btn-icon me-1 btn-detail"><i class="ti ti-eye"></i></button>
+<button data-id="{{$model->id}}" data-tanggal="{{$model->tanggal}}" data-lokasi="{{$model->lokasi}}" data-koordinat="{{$model->koordinat}}" data-kondisi_existing="{{$model->kondisi_existing}}" data-permasalahan="{{$model->permasalahan}}" data-tindak_lanjut="{{$model->tindak_lanjut}}" class="btn btn-sm btn-icon me-1"><i class="ti ti-pencil"></i></a></button>
+<button data-id="{{$model->id}}" class="btn btn-sm btn-icon btn-delete"><i class="ti ti-trash"></i></button>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+        <style>
+        /* Improved mobile responsiveness */
+        .card-datatable.table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 767.98px) {
+            .dt-action-buttons .btn {
+                padding: 0.375rem;
+                font-size: 0.75rem;
+            }
+
+            .datatables-basic th,
+            .datatables-basic td {
+                white-space: nowrap;
+                padding: 0.5rem;
+            }
+
+            .dropdown-menu {
+                position: absolute !important;
+            }
+
+            .dataTables_length select,
+            .dataTables_filter input {
+                width: 100% !important;
+            }
+
+            .card-header {
+                flex-direction: column !important;
+                align-items: stretch !important;
+            }
+
+            .head-label {
+                text-align: center !important;
+                margin-bottom: 1rem;
+            }
+
+            .dt-action-buttons {
+                justify-content: center !important;
+                margin-top: 1rem;
+            }
+        }
+
+        /* Image thumbnail sizing */
+        .img-thumbnail {
+            max-width: 50px;
+            height: auto;
+        }
+    </style>
+
+    @include('admin.css')
+    <link rel="stylesheet" href="{{ asset('vendors/bootstrap-datepicker/bootstrap-datepicker.min.css') }}" />
+</head>
+
+<body>
+    <div class="container-scroller">
+        @include('admin.navbar')
+
+        <div class="container-fluid page-body-wrapper">
+            @include('admin.sidebar')
+
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    <div class="row">
+                        <div class="col-md-12 grid-margin">
+                            <div class="row">
+                                <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                                    <h5>Dashboard > Laporan Rab</h5>
+                                </div>
+                                <div class="col-12 col-xl-4">
+                                    <div class="justify-content-end d-flex">
+                                        <div class="dropdown flex-md-grow-1 flex-xl-grow-0">
+                                            <button class="btn btn-sm btn-light bg-white dropdown-toggle" type="button"
+                                                id="dropdownMenuDate2" data-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="true">
+                                                <i class="mdi mdi-calendar"></i>
+                                                Today
+                                                ({{ \Carbon\Carbon::now()->timezone('Asia/Jakarta')->translatedFormat('d F Y | H:i') }}
+                                                WIB)
+                                            </button>
+
+                                            <div class="dropdown-menu dropdown-menu-right"
+                                                aria-labelledby="dropdownMenuDate2">
+                                                <a class="dropdown-item" href="#">January - March</a>
+                                                <a class="dropdown-item" href="#">March - June</a>
+                                                <a class="dropdown-item" href="#">June - August</a>
+                                                <a class="dropdown-item" href="#">August - November</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CARD DATA USER -->
+                    <div class="row">
+                        <div class="card w-100">
+                            <div class="card-body">
+                                <form action="{{ route('laporan-rab.store') }}" method="POST" class="row" target="_blank">
+                                    @csrf
+                                    <div class="row mb-3">
+                                        <p class="card-title">Laporan Rab</p>
+                                    </div>
+                                    <div class="col-md-6 col-12 mb-4 mt-2">
+                                        <label class="form-label">Tanggal Mulai</label>
+                                        <input type="text" name="start" placeholder="DD/MM/YYYY" class="form-control datepicker" required="">
+                                    </div>
+                                    <div class="col-md-6 col-12 mb-4 mt-2">
+                                        <label class="form-label">Tanggal Akhir</label>
+                                        <input type="text" name="end" placeholder="DD/MM/YYYY" class="form-control datepicker" required="">
+                                    </div>
+                                    <div class="col-12 text-end mb-4">
+                                        <button type="reset" class="btn btn-secondary btn-sm rounded"><i class="fa-solid fa-rotate me-1"></i> Reset </button>
+                                        <button type="submit" class="btn btn-primary btn-sm rounded"><i class="fa-solid fa-print me-1"></i> Print </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <footer class="footer">
+                    <div class="d-sm-flex justify-content-center justify-content-sm-between">
+                        <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">
+                            © 2025 PERUMDA AIR MINUM TIRTA MULIA KAB. PEMALANG
+                        </span>
+                    </div>
+                </footer>
+            </div>
+        </div>
+    </div>
+
+    @include('admin.js')
+    <script src="{{ asset('vendors/bootstrap-datepicker/bootstrap-datepicker.min.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+            $('.datepicker').datepicker({
+                todayHighlight: true,
+                format: 'dd/mm/yyyy',
+                orientation: 'auto',
+                autoclose: true,
+                endDate: new Date()
+            });
+        });
+    </script>
+</body>
+
+</html>
