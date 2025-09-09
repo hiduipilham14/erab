@@ -15,6 +15,7 @@
                                 <option value="data-gis">Data Update GIS</option>
                                 <option value="data-jaringan">Data Jaringan Baru</option>
                                 <option value="data-pipa">Data Penggantian Pipa</option>
+                                <option value="data-spam">Data SPAM</option>
                             </select>
                             @error('kategori')
                                 <span class="invalid-feedback">{{ $message }}</span>
@@ -29,7 +30,7 @@
                         </div>
                         <div class="col-md-6 col-12 mb-4 mt-2">
                             <label class="form-label">Pilih Tanggal Print</label>
-                            <input type="text" name="tgl_print" value="{{ old('tggl_print') ?? date("d/m/Y") }}" placeholder="hh/bb/tttt" class="form-control datepicker" required="">
+                            <input type="text" name="tgl_print" value="{{ old('tgl_print') ?? date('d/m/Y') }}" placeholder="hh/bb/tttt" class="form-control datepicker" required="">
                             @error('tgl_print')
                                 <span class="invalid-feedback">{{ $message }}</span>
                             @enderror

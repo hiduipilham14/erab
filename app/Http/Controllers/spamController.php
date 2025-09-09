@@ -37,6 +37,7 @@ class spamController extends Controller
         ];
         $validator = \Validator::make($data, [
             'tanggal' => 'required',
+            'spam' => 'required',
             'lokasi' => 'required',
             'koordinat' => 'required',
             'kondisi_existing' => 'required',
@@ -60,6 +61,7 @@ class spamController extends Controller
                 'tanggal',
                 'lokasi',
                 'koordinat',
+                'spam',
                 'kondisi_existing',
                 'permasalahan',
                 'tindak_lanjut',
