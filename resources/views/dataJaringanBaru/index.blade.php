@@ -142,7 +142,6 @@
                                             @csrf
                                             <input type="hidden" id="form_id" name="id">
                                             <input type="hidden" id="form_method" name="_method" value="">
-
                                             <div class="col-sm-6">
                                                 <label class="form-label" for="form_tanggal">Tanggal <span class="text-danger">*</span></label>
                                                 <input type="date" id="form_tanggal" name="tanggal" class="form-control" required />
@@ -165,15 +164,21 @@
                                                 </select>
                                             </div>
 
-                                            <div class="col-sm-6">
-                                                <label class="form-label" for="form_vol">Vol (m) <span class="text-danger">*</span></label>
-                                                <input type="number" id="form_vol" name="vol" class="form-control" placeholder="0" required />
-                                            </div>
+                                           
 
                                             <div class="col-sm-6">
                                                 <label class="form-label" for="form_koordinat">Koordinat <span class="text-danger">*</span></label>
                                                 <input type="text" id="form_koordinat" name="koordinat" class="form-control" placeholder="0" required />
                                             </div>
+
+                                             <div class="col-sm-6" id="volume-container" >
+                                                <label class="form-label" for="form_vol">Vol (m) <span class="text-danger">*</span></label>
+                                                <div class="input-group mb-2 volume-entry">
+                                                    <input type="number" name="vol[]" class="form-control" placeholder="0" required />
+                                                    <button type="button" class="btn btn-success " id="btn-add-volume"><i class="fa fa-plus"></i></button>
+                                                </div>
+                                            </div>
+
 
                                             <div class="col-sm-6">
                                                 <label class="form-label" for="form_lokasi">Lokasi <span class="text-danger">*</span></label>
@@ -184,23 +189,27 @@
                                             <!-- Pipa Selection -->
                                             <div class="col-sm-6">
                                                 <label class="form-label" for="form_jenis_pipa">PIPA <span class="text-danger">*</span></label>
-                                                <select id="form_jenis_pipa" name="jenis_pipa" class="form-select" required>
-                                                    <option value="">-- pilih jenis pipa --</option>
-                                                    @foreach ($pipas as $pipa)
-                                                        <option value="{{ $pipa->id }}">{{ $pipa->nama }}</option>
-                                                    @endforeach
-                                                </select>
+                                                <div class="select2-primary">
+                                                    <select id="form_jenis_pipa" name="jenis_pipa[]" class="form-select select2 " required multiple>
+                                                        <option value="">-- pilih jenis pipa --</option>
+                                                        @foreach ($pipas as $pipa)
+                                                            <option value="{{ $pipa->id }}">{{ $pipa->nama }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
                                             </div>
 
                                             <!-- Diameter-->
                                             <div class="col-sm-6">
                                                 <label class="form-label" for="form_diameter">DN (inchi) <span class="text-danger">*</span></label>
-                                                <select id="form_diameter" name="diameter" class="form-select" required>
-                                                    <option value="">-- pilih diameter --</option>
-                                                    @foreach ($diameters as $diameter)
-                                                        <option value="{{ $diameter->id }}">{{ $diameter->nama }}</option>
-                                                    @endforeach
-                                                </select>
+                                                 <div class="select2-primary">
+                                                     <select id="form_diameter" name="diameter[]" class="form-select select2 " multiple required>
+                                                         <option value="">-- pilih diameter --</option>
+                                                         @foreach ($diameters as $diameter)
+                                                             <option value="{{ $diameter->id }}">{{ $diameter->nama }}</option>
+                                                         @endforeach
+                                                     </select>
+                                                </div>
                                             </div>
 
                                             <div class="col-sm-6">
@@ -248,6 +257,20 @@
         $(document).ready(function() {
             initDataTable();
             setupEventHandlers();
+
+            $("#btn-add-volume").click(function() {
+                const volumeInput = `
+                    <div class="input-group mb-2 volume-entry">
+                        <input type="number" name="vol[]" class="form-control" placeholder="0" required />
+                        <button type="button" class="btn btn-danger btn-remove-volume"><i class="fa fa-minus"></i></button>
+                    </div>
+                `;
+                $("#volume-container").append(volumeInput);
+            });
+
+            $(document).on('click', '.btn-remove-volume', function() {
+                $(this).closest('.volume-entry').remove();
+            });
         });
 
         function initDataTable() {
