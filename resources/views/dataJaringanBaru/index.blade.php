@@ -91,13 +91,9 @@
                                             <th>No</th>
                                             <th>Tanggal</th>
                                             <th>Divisi</th>
-                                            <th>Pekerjaan</th>
-                                            <th>Lokasi</th>
-                                            <th>Pipa</th>
+                                            <th>Volume(M)</th>
                                             <th>Diameter (inchi)</th>
-                                            <th>Vol (m)</th>
-                                            <th>Koordinat</th>
-                                            <th>Keterangan</th>
+                                            <th>Pekerjaan</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -106,15 +102,16 @@
                         </div>
 
                         <!-- Modal Detail -->
-                        <div class="modal fade" id="modalDetail" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
-                            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                        <div class="modal fade" id="modalDetail" tabindex="-1" aria-hidden="true"
+                            data-bs-backdrop="static">
+                            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
                                 <div class="modal-content">
-                                    <div class="modal-header bg-primary text-white">
+                                    <div class="modal-header">
                                         <h5 class="modal-title">
                                             <i class="ti ti-file-description me-2"></i>
                                             Detail Jaringan Baru
                                         </h5>
-                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                        <button type="button" class="btn-close " data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body" id="detailContent">
@@ -258,6 +255,16 @@
             initDataTable();
             setupEventHandlers();
 
+             $('#form_diameter').wrap('<div class="position-relative"></div>').select2({
+                placeholder: '-- pilih diameter --',
+                dropdownParent: $('#form_diameter').parent()
+            });
+            $('#form_diameter').val(null).trigger('change');
+            $('#form_jenis_pipa').wrap('<div class="position-relative"></div>').select2({
+                placeholder: '-- pilih jenis pipa --',
+                dropdownParent: $('#form_jenis_pipa').parent()
+            });
+            $('#form_jenis_pipa').val(null).trigger('change');
             $("#btn-add-volume").click(function() {
                 const volumeInput = `
                     <div class="input-group mb-2 volume-entry">
@@ -291,13 +298,9 @@
                         }
                     },
                     { data: 'divisi', name: 'divisi' },
-                    { data: 'pekerjaan', name: 'pekerjaan' },
-                    { data: 'lokasi', name: 'lokasi' },
-                    { data: 'jenis_pipa', name: 'jenis_pipa' },
+                    { data: 'volume', name: 'volume' },
                     { data: 'diameter', name: 'diameter' },
-                    { data: 'vol', name: 'vol' },
-                    { data: 'koordinat', name: 'koordinat' },
-                    { data: 'keterangan', name: 'keterangan' },
+                    { data: 'pekerjaan', name: 'pekerjaan' },
                     { data: 'action', name: 'action', orderable: false, searchable: false }
                 ],
 
@@ -393,12 +396,25 @@
             $('#form_tanggal').val(data.tanggal.split(' ')[0]);
             $('#form_pekerjaan').val(data.pekerjaan);
             $('#form_divisi').val(data.divisi_id);
-            $('#form_vol').val(data.vol);
             $('#form_koordinat').val(data.koordinat);
             $('#form_lokasi').val(data.lokasi);
-            $('#form_jenis_pipa').val(data.jenis_pipa_id);
-            $('#form_diameter').val(data.diameter_id);
             $('#form_keterangan').val(data.keterangan);
+            $("#volume-container").html('<label class="form-label" for="form_vol">Vol (m) <span class="text-danger">*</span></label>');
+            data.volume_jaringan.forEach((v,i) => {
+                const volumeInput = `
+                    <div class="input-group mb-2 volume-entry">
+                        <input type="number" name="vol[]" class="form-control" value="${v.volume}" required />
+                        ${i === 0 ? 
+                            '<button type="button" class="btn btn-success " id="btn-add-volume"><i class="fa fa-plus"></i></button>' :
+                            '<button type="button" class="btn btn-danger btn-remove-volume"><i class="fa fa-minus"></i></button>'}
+                    </div>
+                `;
+                $("#volume-container").append(volumeInput);
+            });
+            let diameter = data.diameter_jaringan.map(d => d.diameter.toString());
+            $('#form_diameter').val(diameter).trigger('change');
+            let jenis_pipa = data.jenis_pipa_jaringan.map(p => p.jenis_pipa.toString());
+            $('#form_jenis_pipa').val(jenis_pipa).trigger('change');
         }
 
         function handleFormSubmit(e) {
