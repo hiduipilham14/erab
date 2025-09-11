@@ -10,7 +10,7 @@ use App\Models\dataPipa;
 use App\Models\dataDivisi;
 use App\Models\dataDiameter;
 use Illuminate\Support\Facades\Validator;
-
+use DB;
 class dataJaringanBaruController extends Controller
 {
     /**
@@ -19,18 +19,37 @@ class dataJaringanBaruController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = dataJaringanBaru::with(['data_divisi', 'data_pipas', 'data_diameters'])
-                ->select('id', 'tanggal', 'divisi', 'pekerjaan', 'lokasi', 'jenis_pipa', 'diameter', 'vol', 'koordinat', 'keterangan')
-                ->latest();
+            $data = dataJaringanBaru::with([
+                'data_divisi',
+                'diameterJaringan.dataDiameter', // Eager load nested relation
+                'volumeJaringan'
+            ])->get();
 
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('divisi', fn($row) => $row->data_divisi->nama ?? '-')
-                ->addColumn('jenis_pipa', fn($row) => $row->data_pipas->nama ?? '-')
-                ->addColumn('diameter', fn($row) => $row->data_diameters->nama ?? '-')
+                ->addColumn('diameter', function($row) {
+                    // Mengambil nama diameter dari relasi hasMany
+                    $diameters = $row->diameterJaringan
+                        ->pluck('dataDiameter.nama')
+                        ->filter() // Menghilangkan nilai null
+                        ->unique() // Menghilangkan duplikat
+                        ->toArray();
+                    
+                    return !empty($diameters) ? implode(', ', $diameters) : '-';
+                })
+                ->addColumn('volume', function($row) {
+                    // Mengambil volume dari relasi hasMany
+                    $volumes = $row->volumeJaringan
+                        ->pluck('volume')
+                        ->filter() // Menghilangkan nilai null
+                        ->unique() // Menghilangkan duplikat jika diperlukan
+                        ->toArray();
+                    
+                    return !empty($volumes) ? implode(', ', $volumes) : '-';
+                })
                 ->addColumn('action', function ($row) {
-                    return '
-                    <div class="d-inline-block">
+                    return '<div class="d-inline-block">
                         <a href="javascript:;" class="btn btn-sm btn-icon btn-show-detail" data-id="' . $row->id . '">
                             <i class="ti ti-eye"></i>
                         </a>
@@ -40,11 +59,10 @@ class dataJaringanBaruController extends Controller
                         <a href="javascript:;" class="btn btn-sm btn-icon delete-record" data-id="' . $row->id . '">
                             <i class="ti ti-trash"></i>
                         </a>
-                    </div>
-                ';
+                    </div>';
                 })
-                ->rawColumns(['action'])
-                ->make(true);
+            ->rawColumns(['action'])
+            ->make(true);
         }
 
         $divisis = dataDivisi::all();
@@ -81,11 +99,14 @@ class dataJaringanBaruController extends Controller
             'tanggal' => 'required|date',
             'pekerjaan' => 'required|string|max:255',
             'divisi' => 'required|exists:data_divisis,id',
-            'vol' => 'required|string|max:100',
             'koordinat' => 'required|string|max:100',
             'lokasi' => 'required|string|max:255',
-            'jenis_pipa' => 'required|exists:data_pipas,id',
-            'diameter' => 'required|exists:data_diameters,id',
+            'jenis_pipa' => 'required|array',
+            'jenis_pipa.*' => 'required|exists:data_pipas,id',
+            'vol' => 'required|array',
+            'vol.*' => 'required|string|max:100',
+            'diameter' => 'required|array',
+            'diameter.*' => 'required|exists:data_diameters,id',
             'keterangan' => 'required|string|max:255',
         ]);
 
@@ -93,15 +114,36 @@ class dataJaringanBaruController extends Controller
             'tanggal',
             'pekerjaan',
             'divisi',
-            'vol',
             'koordinat',
             'lokasi',
-            'jenis_pipa',
-            'diameter',
             'keterangan',
         ]);
 
         $dataJaringanBaru = dataJaringanBaru::create($data);
+        foreach ($request->jenis_pipa as $index => $jenisPipa) {
+            DB::table('jenispipa_jaringan')->insert([
+                'jenis_pipa' => $jenisPipa,
+                'data_jaringan_barus_id' => $dataJaringanBaru->id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+        foreach ($request->vol as $index => $vol) {
+            DB::table('volume_jaringan')->insert([
+                'volume' => $vol,
+                'data_jaringan_barus_id' => $dataJaringanBaru->id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+        foreach ($request->diameter as $index => $diameter) {
+            DB::table('diameter_jaringan')->insert([
+                'diameter' => $diameter,
+                'data_jaringan_barus_id' => $dataJaringanBaru->id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
 
         return response()->json([
             'success' => true,
@@ -114,38 +156,38 @@ class dataJaringanBaruController extends Controller
      * Display the specified resource.
      */
 
-public function show($id)
-{
-    try {
-        $data = DataJaringanBaru::with([
-            'data_divisi:id,nama',
-            'data_pipas:id,nama',
-            'data_diameters:id,nama'
-        ])->findOrFail($id);
+    public function show($id)
+    {
+        try {
+            $data = DataJaringanBaru::with([
+                'data_divisi',
+                'diameterJaringan', // Eager load nested relation
+                'volumeJaringan',
+                'jenisPipaJaringan' // Eager load nested relation
+            ])->findOrFail($id);
+            return response()->json([
+                'status' => 'success',
+                'html' => view('dataJaringanBaru.detail', [
+                    'data' => $data,
+                    'formatted_tanggal' => $data->tanggal
+                        ? Carbon::parse($data->tanggal)->format('d/m/Y')
+                        : '-'
+                ])->render()
+            ]);
 
-        return response()->json([
-            'status' => 'success',
-            'html' => view('dataJaringanBaru.detail', [
-                'data' => $data,
-                'formatted_tanggal' => $data->tanggal
-                    ? Carbon::parse($data->tanggal)->format('d/m/Y')
-                    : '-'
-            ])->render()
-        ]);
-
-    } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Data not found'
-        ], 404);
-    } catch (\Exception $e) {
-        \log()::error("Show error: " . $e->getMessage());
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Server error'
-        ], 500);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Data not found'
+            ], 404);
+        } catch (\Exception $e) {
+            \log()::error("Show error: " . $e->getMessage());
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Server error'
+            ], 500);
+        }
     }
-}
 
 
 
@@ -155,7 +197,12 @@ public function show($id)
     public function edit($id)
     {
         try {
-            $dataJaringanBaru = dataJaringanBaru::findOrFail($id);
+            $dataJaringanBaru = DataJaringanBaru::with([
+                'data_divisi',
+                'diameterJaringan',
+                'volumeJaringan',
+                'jenisPipaJaringan'
+            ])->findOrFail($id);
             return response()->json($dataJaringanBaru);
         } catch (\Exception $e) {
             return response()->json([
@@ -170,16 +217,18 @@ public function show($id)
         try {
             $dataJaringanBaru = dataJaringanBaru::findOrFail($id);
 
-            $validator = Validator::make($request->all(), [
+            $validated = $request->validate([
                 'tanggal' => 'required|date',
                 'pekerjaan' => 'required|string|max:255',
                 'divisi' => 'required|exists:data_divisis,id',
-                'vol' => 'required|string|max:100',
                 'koordinat' => 'required|string|max:100',
                 'lokasi' => 'required|string|max:255',
-                // 'rab' => 'required|numeric',
-                'jenis_pipa' => 'required|exists:data_pipas,id',
-                'diameter' => 'required|exists:data_diameters,id',
+                'jenis_pipa' => 'required|array',
+                'jenis_pipa.*' => 'required|exists:data_pipas,id',
+                'vol' => 'required|array',
+                'vol.*' => 'required|string|max:100',
+                'diameter' => 'required|array',
+                'diameter.*' => 'required|exists:data_diameters,id',
                 'keterangan' => 'required|string|max:255',
             ]);
 
@@ -194,6 +243,33 @@ public function show($id)
             $validated = $validator->validated();
 
             $dataJaringanBaru->update($validated);
+            DB::table('jenispipa_jaringan')->where('data_jaringan_barus_id', $dataJaringanBaru->id)->delete();
+            DB::table('volume_jaringan')->where('data_jaringan_barus_id', $dataJaringanBaru->id)->delete();
+            DB::table('diameter_jaringan')->where('data_jaringan_barus_id', $dataJaringanBaru->id)->delete();
+            foreach ($request->jenis_pipa as $index => $jenisPipa) {
+                DB::table('jenispipa_jaringan')->insert([
+                    'jenis_pipa' => $jenisPipa,
+                    'data_jaringan_barus_id' => $dataJaringanBaru->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+            foreach ($request->vol as $index => $vol) {
+                DB::table('volume_jaringan')->insert([
+                    'volume' => $vol,
+                    'data_jaringan_barus_id' => $dataJaringanBaru->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+            foreach ($request->diameter as $index => $diameter) {
+                DB::table('diameter_jaringan')->insert([
+                    'diameter' => $diameter,
+                    'data_jaringan_barus_id' => $dataJaringanBaru->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
 
             return response()->json([
                 'success' => true,

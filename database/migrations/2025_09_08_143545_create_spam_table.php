@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->date('tanggal');
             $table->text('lokasi');
+            $table->string('spam');
             $table->string('koordinat');
             $table->text('kondisi_existing');
             $table->text('permasalahan');

@@ -1,3 +1,3 @@
-<button data-id="{{$model->id}}" data-tanggal="{{$model->tanggal}}" data-lokasi="{{$model->lokasi}}" data-koordinat="{{$model->koordinat}}" data-kondisi_existing="{{$model->kondisi_existing}}" data-permasalahan="{{$model->permasalahan}}" data-tindak_lanjut="{{$model->tindak_lanjut}}" class="btn-edit btn btn-sm btn-primary"><i class="fa fa-pencil-alt"></i> Edit</button>
-<button data-id="{{$model->id}}" class="btn-detail btn btn-sm btn-info"><i class="fa fa-eye"></i> Detail</button>
-<button data-id="{{$model->id}}" class="btn-danger btn btn-sm btn-delete"><i class="fa fa-trash"></i> Delete</button>
+<button data-id="{{$model->id}}" class="btn btn-sm btn-icon me-1 btn-detail"><i class="ti ti-eye"></i></button>
+<button data-id="{{$model->id}}" data-spam="{{$model->spam}}" data-tanggal="{{$model->tanggal}}" data-lokasi="{{$model->lokasi}}" data-koordinat="{{$model->koordinat}}" data-kondisi_existing="{{$model->kondisi_existing}}" data-permasalahan="{{$model->permasalahan}}" data-tindak_lanjut="{{$model->tindak_lanjut}}" class="btn btn-sm btn-icon btn-edit me-1"><i class="ti ti-pencil"></i></a></button>
+<button data-id="{{$model->id}}" class="btn btn-sm btn-icon btn-delete"><i class="ti ti-trash"></i></button>

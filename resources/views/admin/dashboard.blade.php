@@ -48,10 +48,10 @@
 
         <div class="row">
             {{-- Grafik RAB --}}
-            <div class="col-md-6 mb-4">
+            <div class="col-md-12 mb-4">
                 <div class="card h-100" style="border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15);">
                     <div class="card-header bg-white py-3" style="border-bottom: 1px solid #e0e0e0;">
-                        <h5 class="mb-0 fw-bold text-dark">Grafik RAB</h5>
+                        <h5 class="mb-0 fw-bold text-dark">Grafik RAB Bulanan</h5>
                     </div>
                     <div class="card-body p-3" style="height: 350px;">
                         <canvas id="rabChart"></canvas>
@@ -59,10 +59,10 @@
                 </div>
             </div>
             {{-- Grafik GIS --}}
-            <div class="col-md-6 mb-4">
+            <div class="col-md-12 mb-4">
                 <div class="card h-100" style="border: 1px solid #e0e0e0; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.15);">
                     <div class="card-header bg-white py-3" style="border-bottom: 1px solid #e0e0e0;">
-                        <h5 class="mb-0 fw-bold text-dark">Grafik GIS</h5>
+                        <h5 class="mb-0 fw-bold text-dark">Grafik GIS Bulanan</h5>
                     </div>
                     <div class="card-body p-3" style="height: 350px;">
                         <canvas id="gisChart"></canvas>

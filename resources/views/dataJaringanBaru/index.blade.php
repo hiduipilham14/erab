@@ -4,24 +4,15 @@
 
 <head>
     <style>
-      
         /* Improved mobile responsiveness */
         .custom-modal-center {
             top: 50% !important;
             left: 50% !important;
             transform: translate(-50%, -50%) !important;
             width: 600px;
-            /* Sesuaikan lebar */
             height: auto;
-            /* Atur tinggi sesuai konten */
             border-radius: 8px;
-            /* Biar cantik */
         }
-
-        /* .card-datatable.table-responsive {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        } */
 
         /* Mobile optimizations */
         @media (max-width: 767.98px) {
@@ -89,8 +80,7 @@
                 <div class="content-wrapper">
                     <!-- Content -->
                     <div class="container-xxl flex-grow-1 container-p-y">
-                        <h4 class="py-3 mb-4"><span class="text-muted fw-light">Dashboard/</span> Data Jaringan Baru
-                        </h4>
+                        <h4 class="py-3 mb-4"><span class="text-muted fw-light">Dashboard/</span> Data Jaringan Baru</h4>
 
                         <!-- DataTable dengan Tombol -->
                         <div class="card">
@@ -101,13 +91,9 @@
                                             <th>No</th>
                                             <th>Tanggal</th>
                                             <th>Divisi</th>
-                                            <th>Pekerjaan</th>
-                                            <th>Lokasi</th>
-                                            <th>Pipa</th>
+                                            <th>Volume(M)</th>
                                             <th>Diameter (inchi)</th>
-                                            <th>Vol (m)</th>
-                                            <th>Koordinat</th>
-                                            <th>Keterangan</th>
+                                            <th>Pekerjaan</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -118,14 +104,14 @@
                         <!-- Modal Detail -->
                         <div class="modal fade" id="modalDetail" tabindex="-1" aria-hidden="true"
                             data-bs-backdrop="static">
-                            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
                                 <div class="modal-content">
-                                    <div class="modal-header bg-primary text-white">
+                                    <div class="modal-header">
                                         <h5 class="modal-title">
                                             <i class="ti ti-file-description me-2"></i>
                                             Detail Jaringan Baru
                                         </h5>
-                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                        <button type="button" class="btn-close " data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body" id="detailContent">
@@ -140,132 +126,34 @@
                             </div>
                         </div>
 
-                        <!-- Modal to add new record -->
-                        <!-- Modal to add new record -->
-                        <div class="modal fade" id="add-new-record" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <!-- Unified Modal for Add/Edit -->
+                        <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-xl">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Tambah Data Jaringan Baru</h5>
+                                        <h5 class="modal-title" id="formModalLabel">Tambah Data Jaringan Baru</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <form class="add-new-record pt-0 row g-2" id="form-add-new-record" enctype="multipart/form-data">
+                                        <form class="unified-form pt-0 row g-2" id="form-jaringan" enctype="multipart/form-data">
                                             @csrf
-
+                                            <input type="hidden" id="form_id" name="id">
+                                            <input type="hidden" id="form_method" name="_method" value="">
                                             <div class="col-sm-6">
-                                                <label class="form-label" for="tanggal">Tanggal</label>
-                                                <input type="date" id="tanggal" name="tanggal" class="form-control" required />
+                                                <label class="form-label" for="form_tanggal">Tanggal <span class="text-danger">*</span></label>
+                                                <input type="date" id="form_tanggal" name="tanggal" class="form-control" required />
                                             </div>
 
                                             <div class="col-sm-6">
-                                                <label class="form-label" for="pekerjaan">Pekerjaan</label>
-                                                <input type="text" id="pekerjaan" name="pekerjaan" class="form-control"
+                                                <label class="form-label" for="form_pekerjaan">Pekerjaan <span class="text-danger">*</span></label>
+                                                <input type="text" id="form_pekerjaan" name="pekerjaan" class="form-control"
                                                     placeholder="Jenis pekerjaan" required />
                                             </div>
 
                                             <!-- Divisi Selection -->
                                             <div class="col-sm-6">
-                                                <label class="form-label" for="divisi">Divisi <span class="text-danger">*</span></label>
-                                                <select id="divisi" name="divisi" class="form-select" required>
-                                                    <option value=""> -- pilih divisi --</option>
-                                                    @foreach ($divisis as $divisi)
-                                                        <option value="{{ $divisi->id }}">{{ $divisi->nama }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-
-                                            <div class="col-sm-6">
-                                                <label class="form-label" for="vol">Vol (m)</label>
-                                                <input type="number" id="vol" name="vol" class="form-control" placeholder="0" required />
-                                            </div>
-
-                                            <div class="col-sm-6">
-                                                <label class="form-label" for="koordinat">Koordinat</label>
-                                                <input type="text" id="koordinat" name="koordinat" class="form-control" placeholder="0" required />
-                                            </div>
-
-                                            <div class="col-sm-6">
-                                                <label class="form-label" for="lokasi">Lokasi</label>
-                                                <input type="text" id="lokasi" name="lokasi" class="form-control"
-                                                    placeholder="Lokasi pekerjaan" required />
-                                            </div>
-
-                                            <!-- <div class="col-sm-6">
-                                                <label class="form-label" for="rab">RAB</label>
-                                                <input type="number" id="rab" name="rab" class="form-control"
-                                                    placeholder="Rencana Anggaran Biaya" required />
-                                            </div> -->
-
-                                            <!-- Pipa Selection -->
-                                            <div class="col-sm-6">
-                                                <label class="form-label" for="jenis_pipa">PIPA<span class="text-danger">*</span></label>
-                                                <select id="jenis_pipa" name="jenis_pipa" class="form-select" required>
-                                                    <option value="">-- pilih jenis pipa --</option>
-                                                    @foreach ($pipas as $pipa)
-                                                        <option value="{{ $pipa->id }}">{{ $pipa->nama }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-
-                                            <!-- Diameter-->
-                                            <div class="col-sm-6">
-                                                <label class="form-label" for="diameter">DN (inchi)<span class="text-danger">*</span></label>
-                                                <select id="diameter" name="diameter" class="form-select" required>
-                                                    <option value="">-- pilih diameter --</option>
-                                                    @foreach ($diameters as $diameter)
-                                                        <option value="{{ $diameter->id }}">{{ $diameter->nama }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-
-                                            <div class="col-sm-6">
-                                                <label class="form-label" for="keterangan">Keterangan</label>
-                                                <textarea id="keterangan" name="keterangan" class="form-control" placeholder="Keterangan " rows="2"></textarea>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="submit" form="form-add-new-record" class="btn btn-primary data-submit me-sm-3 me-1">Simpan</button>
-                                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!--/ DataTable with Buttons -->
-
-                        <!-- Edit Modal -->
-                        <!-- Modal to edit record -->
-                        <div class="modal fade" id="edit-record" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-xl">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="editModalLabel">Edit Data Jaringan</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form class="edit-record pt-0 row g-2" id="form-edit-record" enctype="multipart/form-data">
-                                            @csrf
-                                            @method('PUT')
-                                            <input type="hidden" id="edit_id" name="id">
-
-                                            <!-- Tanggal -->
-                                            <div class="col-sm-6">
-                                                <label class="form-label" for="edit_tanggal">Tanggal <span class="text-danger">*</span></label>
-                                                <input type="date" id="edit_tanggal" name="tanggal" class="form-control" required />
-                                            </div>
-
-                                            <div class="col-sm-6">
-                                                <label class="form-label" for="edit_pekerjaan">Pekerjaan <span class="text-danger">*</span></label>
-                                                <input type="text" id="edit_pekerjaan" name="pekerjaan" class="form-control"
-                                                    placeholder="Jenis pekerjaan" required />
-                                            </div>
-
-                                            <!-- Divisi Selection -->
-                                            <div class="col-sm-6">
-                                                <label class="form-label" for="edit_divisi_id">Divisi <span class="text-danger">*</span></label>
-                                                <select id="edit_divisi_id" name="divisi_id"  class="form-select" required>
+                                                <label class="form-label" for="form_divisi">Divisi <span class="text-danger">*</span></label>
+                                                <select id="form_divisi" name="divisi" class="form-select" required>
                                                     <option value="">-- pilih divisi --</option>
                                                     @foreach ($divisis as $divisi)
                                                         <option value="{{ $divisi->id }}">{{ $divisi->nama }}</option>
@@ -273,57 +161,62 @@
                                                 </select>
                                             </div>
 
-                                            <!-- Volume -->
+                                           
+
                                             <div class="col-sm-6">
-                                                <label class="form-label" for="edit_vol">Volume <span class="text-danger">*</span></label>
-                                                <input type="number" id="edit_vol" name="vol" class="form-control"
-                                                    placeholder="Volume pekerjaan" required />
+                                                <label class="form-label" for="form_koordinat">Koordinat <span class="text-danger">*</span></label>
+                                                <input type="text" id="form_koordinat" name="koordinat" class="form-control" placeholder="0" required />
                                             </div>
 
-                                            <!-- koordinat -->
-                                            <div class="col-sm-6">
-                                                <label class="form-label" for="edit_koordinat">Koordinat <span class="text-danger">*</span></label>
-                                                <input type="text" id="edit_koordinat" name="koordinat" class="form-control" required />
+                                             <div class="col-sm-6" id="volume-container" >
+                                                <label class="form-label" for="form_vol">Vol (m) <span class="text-danger">*</span></label>
+                                                <div class="input-group mb-2 volume-entry">
+                                                    <input type="number" name="vol[]" class="form-control" placeholder="0" required />
+                                                    <button type="button" class="btn btn-success " id="btn-add-volume"><i class="fa fa-plus"></i></button>
+                                                </div>
                                             </div>
 
-                                            <!-- lokasi -->
+
                                             <div class="col-sm-6">
-                                                <label class="form-label" for="edit_lokasi">Lokasi <span class="text-danger">*</span></label>
-                                                <input type="text" id="edit_lokasi" name="lokasi" class="form-control" required />
+                                                <label class="form-label" for="form_lokasi">Lokasi <span class="text-danger">*</span></label>
+                                                <input type="text" id="form_lokasi" name="lokasi" class="form-control"
+                                                    placeholder="Lokasi pekerjaan" required />
                                             </div>
 
                                             <!-- Pipa Selection -->
                                             <div class="col-sm-6">
-                                                <label class="form-label" for="edit_jenis_pipa">PIPA<span class="text-danger">*</span></label>
-                                                <select id="edit_jenis_pipa" name="jenis_pipa[]" class="form-select" multiple required>
-                                                    <option value="">Pilih Jenis Pipa</option>
-                                                    @foreach ($pipas as $pipa)
-                                                        <option value="{{ $pipa->id }}">{{ $pipa->nama }}</option>
-                                                    @endforeach
-                                                </select>
+                                                <label class="form-label" for="form_jenis_pipa">PIPA <span class="text-danger">*</span></label>
+                                                <div class="select2-primary">
+                                                    <select id="form_jenis_pipa" name="jenis_pipa[]" class="form-select select2 " required multiple>
+                                                        <option value="">-- pilih jenis pipa --</option>
+                                                        @foreach ($pipas as $pipa)
+                                                            <option value="{{ $pipa->id }}">{{ $pipa->nama }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
                                             </div>
 
-                                            <!-- Diameter -->
+                                            <!-- Diameter-->
                                             <div class="col-sm-6">
-                                                <label class="form-label" for="edit_diameter">Diameter<span class="text-danger">*</span></label>
-                                                <select id="edit_diameter" name="diameter" class="form-select" required>
-                                                    <option value="">Pilih Diameter</option>
-                                                    @foreach ($diameters as $diameter)
-                                                        <option value="{{ $diameter->id }}">{{ $diameter->nama }}</option>
-                                                    @endforeach
-                                                </select>
+                                                <label class="form-label" for="form_diameter">DN (inchi) <span class="text-danger">*</span></label>
+                                                 <div class="select2-primary">
+                                                     <select id="form_diameter" name="diameter[]" class="form-select select2 " multiple required>
+                                                         <option value="">-- pilih diameter --</option>
+                                                         @foreach ($diameters as $diameter)
+                                                             <option value="{{ $diameter->id }}">{{ $diameter->nama }}</option>
+                                                         @endforeach
+                                                     </select>
+                                                </div>
                                             </div>
 
-                                            <!-- Keterangan -->
-                                            <div class="col-sm-12">
-                                                <label class="form-label" for="edit_keterangan">Keterangan</label>
-                                                <textarea id="edit_keterangan" name="keterangan" class="form-control" 
-                                                    placeholder="Keterangan tambahan" rows="2"></textarea>
+                                            <div class="col-sm-6">
+                                                <label class="form-label" for="form_keterangan">Keterangan</label>
+                                                <textarea id="form_keterangan" name="keterangan" class="form-control" placeholder="Keterangan " rows="2"></textarea>
                                             </div>
                                         </form>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="submit" form="form-edit-record" class="btn btn-primary data-submit me-sm-3 me-1">Update</button>
+                                        <button type="submit" form="form-jaringan" class="btn btn-primary" id="submitBtn">Simpan</button>
                                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
                                     </div>
                                 </div>
@@ -355,18 +248,46 @@
     @include('admin.js')
 
     <script>
+        let table;
+        let currentMode = 'add'; // 'add' or 'edit'
+
         $(document).ready(function() {
-            var table = $('#data-jaringan-baru-table').DataTable({
+            initDataTable();
+            setupEventHandlers();
+
+             $('#form_diameter').wrap('<div class="position-relative"></div>').select2({
+                placeholder: '-- pilih diameter --',
+                dropdownParent: $('#form_diameter').parent()
+            });
+            $('#form_diameter').val(null).trigger('change');
+            $('#form_jenis_pipa').wrap('<div class="position-relative"></div>').select2({
+                placeholder: '-- pilih jenis pipa --',
+                dropdownParent: $('#form_jenis_pipa').parent()
+            });
+            $('#form_jenis_pipa').val(null).trigger('change');
+            $("#btn-add-volume").click(function() {
+                const volumeInput = `
+                    <div class="input-group mb-2 volume-entry">
+                        <input type="number" name="vol[]" class="form-control" placeholder="0" required />
+                        <button type="button" class="btn btn-danger btn-remove-volume"><i class="fa fa-minus"></i></button>
+                    </div>
+                `;
+                $("#volume-container").append(volumeInput);
+            });
+
+            $(document).on('click', '.btn-remove-volume', function() {
+                $(this).closest('.volume-entry').remove();
+            });
+        });
+
+        function initDataTable() {
+            table = $('#data-jaringan-baru-table').DataTable({
                 processing: true,
                 serverSide: true,
                 responsive: true,
                 ajax: "{{ route('data-jaringan-baru.index') }}",
-                columns: [{
-                        data: 'DT_RowIndex',
-                        name: 'DT_RowIndex',
-                        orderable: false,
-                        searchable: false
-                    },
+                columns: [
+                    { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                     {
                         data: 'tanggal',
                         name: 'tanggal',
@@ -376,85 +297,21 @@
                             return `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`;
                         }
                     },
-                    {
-                        data: 'divisi', // sesuaikan dengan addColumn('divisi', ...)
-                        name: 'divisi'
-                    },
-                    {
-                        data: 'pekerjaan',
-                        name: 'pekerjaan'
-                    },
-                    {
-                        data: 'lokasi',
-                        name: 'lokasi'
-                    },
-                    {
-                        data: 'jenis_pipa',
-                        name: 'jenis_pipa'
-                    },
-                    {
-                        data: 'diameter',
-                        name: 'diameter'
-                    },
-                    {
-                        data: 'vol', // dari addColumn('pipa_gis', ...)
-                        name: 'vol'
-                    },
-                    {
-                        data: 'koordinat',
-                        name: 'koordinat'
-                    },
-
-                    {
-                         data: 'keterangan', // dari addColumn('pipa_lap', ...)
-                         name: 'keterangan'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
-                    }
+                    { data: 'divisi', name: 'divisi' },
+                    { data: 'volume', name: 'volume' },
+                    { data: 'diameter', name: 'diameter' },
+                    { data: 'pekerjaan', name: 'pekerjaan' },
+                    { data: 'action', name: 'action', orderable: false, searchable: false }
                 ],
 
                 dom: '<"card-header flex-column flex-md-row"<"head-label text-center"><"dt-action-buttons text-end pt-3 pt-md-0"B>><"row"<"col-sm-6 col-md-6"l><"col-sm-6 col-md-6 d-flex justify-content-center justify-content-md-end"f>>t<"row"<"col-sm-6 col-md-6"i><"col-sm-6 col-md-6"p>>',
-                buttons: 
-                [
-                    // {
-                    //     extend: 'collection',
-                    //     className: 'btn btn-label-primary dropdown-toggle me-2',
-                    //     text: '<i class="ti ti-file-export me-sm-1"></i> <span class="d-none d-sm-inline-block">Export</span>',
-                    //     buttons: [{
-                    //             extend: 'print',
-                    //             text: '<i class="ti ti-printer me-1"></i>Print'
-                    //         },
-                    //         {
-                    //             extend: 'csv',
-                    //             text: '<i class="ti ti-file-text me-1"></i>Csv'
-                    //         },
-                    //         {
-                    //             extend: 'excel',
-                    //             text: '<i class="ti ti-file-spreadsheet me-1"></i>Excel'
-                    //         },
-                    //         {
-                    //             extend: 'pdf',
-                    //             text: '<i class="ti ti-file-description me-1"></i>Pdf'
-                    //         },
-                    //         {
-                    //             extend: 'copy',
-                    //             text: '<i class="ti ti-copy me-1"></i>Copy'
-                    //         }
-                    //     ]
-                    // },
-                    {
-                        text: '<i class="ti ti-plus me-sm-1"></i> <span class="d-none d-sm-inline-block">Tambah</span>',
-                        className: 'create-new btn btn-primary',
-                        action: function() {
-                            $('#form-add-new-record')[0].reset();
-                            $('#add-new-record').modal('show');
-                        }
+                buttons: [{
+                    text: '<i class="ti ti-plus me-sm-1"></i> <span class="d-none d-sm-inline-block">Tambah</span>',
+                    className: 'create-new btn btn-primary',
+                    action: function() {
+                        openModal('add');
                     }
-                ],
+                }],
                 responsive: {
                     details: {
                         display: $.fn.dataTable.Responsive.display.modal({
@@ -470,303 +327,288 @@
             });
 
             $('div.head-label').html('<h5 class="card-title mb-0">Data Jaringan Baru</h5>');
+        }
 
-            // store
-            $('#form-add-new-record').submit(function(e) {
-                e.preventDefault();
-                var formData = new FormData(this);
+        function setupEventHandlers() {
+            // Form submit handler
+            $('#form-jaringan').on('submit', handleFormSubmit);
 
-                // Tampilkan Pemuatan SweetAlert
-                let swalInstance = Swal.fire({
-                    title: 'Menyimpan Data',
-                    html: 'Sedang memproses data kegiatan...',
-                    allowOutsideClick: false,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
-                });
-
-                $.ajax({
-                    url: "{{ route('data-jaringan-baru.store') }}",
-                    type: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    beforeSend: function() {
-                        $('.data-submit').prop('disabled', true)
-                            .html(
-                                '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Menyimpan...'
-                            );
-                    },
-                    success: function(response) {
-                        $('#add-new-record').modal('hide');
-                        table.ajax.reload();
-
-                        // Close loading and show success
-                        swalInstance.close();
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Berhasil!',
-                            text: response.message || 'Kegiatan berhasil ditambahkan',
-                            timer: 2000,
-                            showConfirmButton: false,
-                            timerProgressBar: true
-                        });
-                    },
-                    error: function(xhr) {
-                        // Close loading first
-                        swalInstance.close();
-
-                        if (xhr.status === 422) {
-                            let errors = xhr.responseJSON.errors;
-                            let errorMessages = Object.values(errors).map(msg =>
-                                `<div>• ${msg}</div>`).join('');
-
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Validasi Gagal',
-                                html: `<div class="text-start">${errorMessages}</div>`,
-                                confirmButtonText: 'Mengerti'
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Gagal!',
-                                text: xhr.responseJSON?.message ||
-                                    'Terjadi kesalahan. Silakan coba lagi.',
-                                confirmButtonText: 'Mengerti'
-                            });
-                        }
-                    },
-                    complete: function() {
-                        $('.data-submit').prop('disabled', false).html('Simpan');
-                    }
-                });
+            // Edit button handler
+            $(document).on('click', '.edit-record', function() {
+                const id = $(this).data('id');
+                openModal('edit', id);
             });
 
-            // destroy
-            $(document).on('click', '.delete-record', function() {
-                var id = $(this).data('id');
-                var url = "{{ route('data-jaringan-baru.destroy', ':id') }}".replace(':id', id);
+            // Delete button handler
+            $(document).on('click', '.delete-record', handleDelete);
 
-                Swal.fire({
-                    title: 'Apakah Anda yakin?',
-                    text: "Data yang dihapus tidak dapat dikembalikan!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Ya, hapus!',
-                    cancelButtonText: 'Batal',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            url: url,
-                            type: 'DELETE',
-                            data: {
-                                _token: "{{ csrf_token() }}"
-                            },
-                            beforeSend: function() {
-                                Swal.showLoading();
-                            },
-                            success: function(response) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Berhasil!',
-                                    text: response.success ||
-                                        'Data berhasil dihapus',
-                                    timer: 1500,
-                                    showConfirmButton: false
-                                });
-                                table.ajax.reload(null, false);
-                            },
-                            error: function(xhr) {
-                                let errorMsg = xhr.responseJSON?.error ||
-                                    'Terjadi kesalahan saat menghapus data';
-                                Swal.fire(
-                                    'Error!',
-                                    errorMsg,
-                                    'error'
-                                );
-                            }
-                        });
-                    }
-                });
+            // Detail button handler
+            $(document).on('click', '.btn-show-detail', handleShowDetail);
+
+            // Retry handler for detail modal
+            $(document).on('click', '.retry-load', function() {
+                const id = $(this).data('id');
+                loadDetail(id);
             });
-        });
+        }
 
+        function openModal(mode, id = null) {
+            currentMode = mode;
+            resetForm();
+            
+            if (mode === 'add') {
+                $('#formModalLabel').text('Tambah Data Jaringan Baru');
+                $('#form_method').val('');
+                $('#submitBtn').text('Simpan');
+            } else if (mode === 'edit') {
+                $('#formModalLabel').text('Edit Data Jaringan Baru');
+                $('#form_method').val('PUT');
+                $('#submitBtn').text('Update');
+                loadEditData(id);
+            }
+            
+            $('#formModal').modal('show');
+        }
 
-        // Edit record handler - tanpa alert loading dan error
-        $(document).on('click', '.edit-record', function() {
-            var id = $(this).data('id');
-            var url = "{{ route('data-jaringan-baru.edit', ':id') }}".replace(':id', id);
+        function resetForm() {
+            $('#form-jaringan')[0].reset();
+            $('#form_id').val('');
+            $('#form_method').val('');
+        }
 
+        function loadEditData(id) {
+            const url = "{{ route('data-jaringan-baru.edit', ':id') }}".replace(':id', id);
+            
             $.ajax({
                 url: url,
                 type: 'GET',
                 success: function(response) {
-                    // Populate form dengan data response
-                    $('#edit_id').val(response.id);
-                    $('#edit_tanggal').val(response.tanggal.split(' ')[0]); // kalau format datetime
-                    $('#edit_pekerjaan').val(response.pekerjaan);
-                    $('#edit_divisi').val(response.divisi_id); // sesuaikan nama kolom relasi
-                    $('#edit_vol').val(response.vol);
-                    $('#edit_koordinat').val(response.koordinat);
-                    $('#edit_lokasi').val(response.lokasi);
-                    $('#edit_jenis_pipa').val(response.jenis_pipa_id); // sesuaikan nama kolom relasi
-                    $('#edit_diameter').val(response.diameter_id); // sesuaikan nama kolom relasi
-                    $('#edit_keterangan').val(response.keterangan);
-
-                    // Tampilkan file saat ini jika ada
-                    if (response.file) {
-                        $('#current-file').html(`
-                    <small>File saat ini:</small><br>
-                    <a href="/storage/file/${response.file}" target="_blank">
-                        <img src="/storage/file/${response.file}" width="100" class="img-thumbnail">
-                    </a>
-                    <div class="form-check mt-2">
-                        <input class="form-check-input" type="checkbox" id="remove_file" name="remove_file">
-                        <label class="form-check-label" for="remove_file">
-                            Hapus file saat ini
-                        </label>
-                    </div>
-                `);
-                    } else {
-                        $('#current-file').html('<small>Tidak ada file</small>');
-                    }
-
-                    $('#edit-record').modal('show');
+                    populateForm(response);
                 },
                 error: function() {
-                    // Tidak menampilkan alert error
-                    console.error('Gagal memuat data Jaringan Baru');
+                    showAlert('error', 'Gagal memuat data');
                 }
             });
-        });
+        }
 
-        // Update record handler - dengan auto close modal dan alert
-        $('#form-edit-record').submit(function(e) {
+        function populateForm(data) {
+            $('#form_id').val(data.id);
+            $('#form_tanggal').val(data.tanggal.split(' ')[0]);
+            $('#form_pekerjaan').val(data.pekerjaan);
+            $('#form_divisi').val(data.divisi_id);
+            $('#form_koordinat').val(data.koordinat);
+            $('#form_lokasi').val(data.lokasi);
+            $('#form_keterangan').val(data.keterangan);
+            $("#volume-container").html('<label class="form-label" for="form_vol">Vol (m) <span class="text-danger">*</span></label>');
+            data.volume_jaringan.forEach((v,i) => {
+                const volumeInput = `
+                    <div class="input-group mb-2 volume-entry">
+                        <input type="number" name="vol[]" class="form-control" value="${v.volume}" required />
+                        ${i === 0 ? 
+                            '<button type="button" class="btn btn-success " id="btn-add-volume"><i class="fa fa-plus"></i></button>' :
+                            '<button type="button" class="btn btn-danger btn-remove-volume"><i class="fa fa-minus"></i></button>'}
+                    </div>
+                `;
+                $("#volume-container").append(volumeInput);
+            });
+            let diameter = data.diameter_jaringan.map(d => d.diameter.toString());
+            $('#form_diameter').val(diameter).trigger('change');
+            let jenis_pipa = data.jenis_pipa_jaringan.map(p => p.jenis_pipa.toString());
+            $('#form_jenis_pipa').val(jenis_pipa).trigger('change');
+        }
+
+        function handleFormSubmit(e) {
             e.preventDefault();
-            var formData = new FormData(this);
-            var id = $('#edit_id').val();
-            var url = "{{ route('data-jaringan-baru.update', ':id') }}".replace(':id', id);
-            var $submitBtn = $('.data-submit');
-            var $editModal = $('#edit-record');
-
-            // Tambahkan remove_file ke formData jika dicentang
-            if ($('#remove_file').is(':checked')) {
-                formData.append('remove_file', true);
+            
+            const formData = new FormData(this);
+            const isEdit = currentMode === 'edit';
+            const id = $('#form_id').val();
+            
+            let url, method;
+            if (isEdit) {
+                url = "{{ route('data-jaringan-baru.update', ':id') }}".replace(':id', id);
+                method = 'POST'; // Laravel akan menggunakan _method untuk PUT
+            } else {
+                url = "{{ route('data-jaringan-baru.store') }}";
+                method = 'POST';
             }
 
-            // Nonaktifkan tombol submit
-            $submitBtn.prop('disabled', true)
-                .html('<span class="spinner-border spinner-border-sm"></span> Menyimpan...');
+            const $submitBtn = $('#submitBtn');
+            const originalText = $submitBtn.text();
+
+            // Show loading state
+            showLoadingAlert(isEdit ? 'Memperbarui data...' : 'Menyimpan data...');
+            $submitBtn.prop('disabled', true).html(
+                '<span class="spinner-border spinner-border-sm me-1"></span>' + 
+                (isEdit ? 'Memperbarui...' : 'Menyimpan...')
+            );
 
             $.ajax({
                 url: url,
-                type: 'POST',
+                type: method,
                 data: formData,
                 processData: false,
                 contentType: false,
                 success: function(response) {
-                    // Tutup modal terlebih dahulu
-                    var bsmodal = bootstrap.modal.getInstance($editModal[0]);
-                    bsmodal.hide();
-
-                    // Tampilkan alert sukses
+                    $('#formModal').modal('hide');
+                    table.ajax.reload(null, false);
+                    
                     Swal.fire({
                         icon: 'success',
                         title: 'Berhasil!',
-                        text: response.message || 'Data berhasil diperbarui',
+                        text: response.message || (isEdit ? 'Data berhasil diperbarui' : 'Data berhasil disimpan'),
                         timer: 2000,
                         showConfirmButton: false,
-                        timerProgressBar: true,
-                        didClose: () => {
-                            // Reload tabel setelah alert tertutup
-                            $('#data-jaringan-baru-table').DataTable().ajax.reload(null,
-                                false);
-                        }
+                        timerProgressBar: true
                     });
                 },
                 error: function(xhr) {
-                    console.error('Error:', xhr.responseText);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Gagal',
-                        text: xhr.responseJSON?.message ||
-                            'Terjadi kesalahan saat menyimpan data',
-                        timer: 2000,
-                        showConfirmButton: false
-                    });
+                    handleFormError(xhr);
                 },
                 complete: function() {
-                    $submitBtn.prop('disabled', false).html('Update');
+                    $submitBtn.prop('disabled', false).text(originalText);
                 }
             });
-        });
+        }
 
-        // modal detail
-        $(document).on('click', '.btn-show-detail', function() {
-            const button = $(this);
-            const id = button.data('id');
+        function handleDelete() {
+            const id = $(this).data('id');
+            const url = "{{ route('data-jaringan-baru.destroy', ':id') }}".replace(':id', id);
+
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Data yang dihapus tidak dapat dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    performDelete(url);
+                }
+            });
+        }
+
+        function performDelete(url) {
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                data: { _token: "{{ csrf_token() }}" },
+                beforeSend: function() {
+                    Swal.showLoading();
+                },
+                success: function(response) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil!',
+                        text: response.success || 'Data berhasil dihapus',
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+                    table.ajax.reload(null, false);
+                },
+                error: function(xhr) {
+                    const errorMsg = xhr.responseJSON?.error || 'Terjadi kesalahan saat menghapus data';
+                    Swal.fire('Error!', errorMsg, 'error');
+                }
+            });
+        }
+
+        function handleShowDetail() {
+            const id = $(this).data('id');
+            loadDetail(id);
+            $('#modalDetail').modal('show');
+        }
+
+        function loadDetail(id) {
             const url = `/data-jaringan-baru/${id}`;
-
+            
             // Show loading state
             $('#detailContent').html(`
-        <div class="text-center py-5">
-            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;"></div>
-            <p class="mt-3">Memuat data Jaringan Baru...</p>
-        </div>
-    `);
+                <div class="text-center py-5">
+                    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;"></div>
+                    <p class="mt-3">Memuat data Jaringan Baru...</p>
+                </div>
+            `);
 
-            // Show modal
-            const modal = new bootstrap.Modal(document.getElementById('modalDetail'));
-            modal.show();
-
-            // Fetch data
             fetch(url, {
-                    headers: {
-                        'Accept': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    }
-                })
-                .then(async response => {
-                    const data = await response.json();
-                    if (!response.ok) throw new Error(data.message || 'Failed to load data');
-                    return data;
-                })
-                .then(data => {
-                    if (data.status === 'success') {
-                        $('#detailContent').html(data.html);
-                    } else {
-                        throw new Error(data.message || 'Invalid response');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    $('#detailContent').html(`
-            <div class="alert alert-danger mx-3 mt-3">
-                <i class="ti ti-alert-circle me-2"></i>
-                ${error.message || 'Server error'}
-                <button class="btn btn-sm btn-outline-danger mt-2 retry-load" data-id="${id}">
-                    <i class="ti ti-reload me-1"></i> Coba Lagi
-                </button>
-            </div>
-        `);
-                });
-        });
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(async response => {
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.message || 'Failed to load data');
+                return data;
+            })
+            .then(data => {
+                if (data.status === 'success') {
+                    $('#detailContent').html(data.html);
+                } else {
+                    throw new Error(data.message || 'Invalid response');
+                }
+            })
+            .catch(error => {
+                $('#detailContent').html(`
+                    <div class="alert alert-danger mx-3 mt-3">
+                        <i class="ti ti-alert-circle me-2"></i>
+                        ${error.message || 'Server error'}
+                        <button class="btn btn-sm btn-outline-danger mt-2 retry-load" data-id="${id}">
+                            <i class="ti ti-reload me-1"></i> Coba Lagi
+                        </button>
+                    </div>
+                `);
+            });
+        }
 
-        // Retry handler
-        $(document).on('click', '.retry-load', function() {
-            $(this).closest('.alert').replaceWith(`
-        <div class="text-center py-5">
-            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;"></div>
-            <p class="mt-3">Memuat data Jaringan Baru...</p>
-        </div>
-    `);
-            $(this).trigger('click');
-        });
+        // Utility functions
+        function showLoadingAlert(message) {
+            Swal.fire({
+                title: 'Processing',
+                html: message,
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        }
+
+        function showAlert(type, message) {
+            Swal.fire({
+                icon: type,
+                title: type === 'success' ? 'Berhasil!' : 'Error!',
+                text: message,
+                timer: 2000,
+                showConfirmButton: false
+            });
+        }
+
+        function handleFormError(xhr) {
+            Swal.close();
+            
+            if (xhr.status === 422) {
+                const errors = xhr.responseJSON.errors;
+                const errorMessages = Object.values(errors).map(msg => `<div>• ${msg}</div>`).join('');
+                
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Validasi Gagal',
+                    html: `<div class="text-start">${errorMessages}</div>`,
+                    confirmButtonText: 'Mengerti'
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: xhr.responseJSON?.message || 'Terjadi kesalahan. Silakan coba lagi.',
+                    confirmButtonText: 'Mengerti'
+                });
+            }
+        }
     </script>
 </body>
 

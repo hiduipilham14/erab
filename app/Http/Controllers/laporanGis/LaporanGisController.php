@@ -7,6 +7,7 @@ use App\Models\dataJaringanBaru;
 use App\Models\Laporangis;
 use App\Models\dataPenggantianPipa;
 use App\Models\dataUpdateGis;
+use App\Models\spam;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use DateTime;
@@ -54,17 +55,10 @@ class LaporanGisController extends Controller
                 : null
             ],
             "tgl_print" => "required|date_format:d/m/Y",
-            "kategori" => "required|string|in:data-gis,data-pipa,data-jaringan"
+            "kategori" => "required|string|in:data-gis,data-pipa,data-jaringan,data-spam"
         ]);
-        // dd($request->all());
-
-        // ob_end_clean();
-
         ini_set('memory_limit', '5G');
         ini_set('max_execution_time', '10000');
-
-
-
         $carbonBulan = Carbon::createFromFormat('m/Y', $request->bulan);
         $carbonBulan->setLocale("id");
         $bulanLaporan = $carbonBulan->format("Y-m");
@@ -76,7 +70,6 @@ class LaporanGisController extends Controller
         $data["get_laporan"] = $laporanGrouped;
         $data["staff"] = Auth::user()->name;
         $data["title"] = $getAttributes["title"] ." ". $data["laporan_bulan"];
-        // dd($data);
         $pdf = Pdf::loadView($getAttributes["view"], $data);
         $pdf->setOption([
             'isPhpEnabled' => true,
@@ -86,7 +79,6 @@ class LaporanGisController extends Controller
             'defaultFont' => 'sans-serif'
         ]);
         $pdf->setPaper([0, 0, 609.4488, 935.433], 'landscape');
-
         return $pdf->stream($data["title"] . ".pdf", array("Attachment" => false));
     }
     /**
@@ -98,7 +90,7 @@ class LaporanGisController extends Controller
         $startDate = date('Y-m-01', strtotime($bulanLaporan . '-01'));
         $endDate = date('Y-m-t', strtotime($bulanLaporan . '-01'));
         $laporanGrouped = [];
-
+        // dd($startDate, $endDate);
         switch($kategori) {
             case "data-jaringan" :
                 $laporanRaw = dataJaringanBaru::with(['data_divisi', 'data_pipas', 'data_diameters'])->whereBetween("tanggal", [$startDate, $endDate])->get()->groupBy('data_divisi.nama');
@@ -123,6 +115,13 @@ class LaporanGisController extends Controller
                 }
                 $laporanGrouped["view"] = "laporangis.laporan-update-pipa";
                 $laporanGrouped["title"] = "Laporan Update Data Penggantian Pipa";
+                break;
+            case "data-spam" :
+
+                $laporanRaw = spam::whereBetween("tanggal", [$startDate, $endDate])->get();
+                $laporanGrouped["data"] = $laporanRaw;
+                $laporanGrouped["view"] = "laporangis.laporan-update-spam";
+                $laporanGrouped["title"] = "Laporan Update Data Spam";
                 break;
             default:
                 $laporanRaw = dataUpdateGis::with('divisi')->whereBetween("tanggal", [$startDate, $endDate])->get()->groupBy('divisi.nama');

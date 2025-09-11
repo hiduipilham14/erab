@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-
+use Illuminate\Database\Eloquent\Relations\HasMany; // Tambahkan import ini
 
 class dataJaringanBaru extends Model
 {
     use HasFactory;
+    
     protected $fillable = [
         'tanggal',
         'pekerjaan',
@@ -22,19 +23,23 @@ class dataJaringanBaru extends Model
         'keterangan',
     ];
 
-    public function data_divisi()
+    public function data_divisi(): BelongsTo
     {
         return $this->belongsTo(dataDivisi::class, 'divisi');
     }
 
-    public function data_pipas()
+    public function jenisPipaJaringan(): HasMany
     {
-        return $this->belongsTo(dataPipa::class, 'jenis_pipa');
+        return $this->hasMany(jenispipaJaringan::class, 'data_jaringan_barus_id');
     }
 
-    public function data_diameters()
+    public function diameterJaringan(): HasMany
     {
-        return $this->belongsTo(dataDiameter::class, 'diameter');
+        return $this->hasMany(diameterJaringan::class, 'data_jaringan_barus_id');
     }
 
+    public function volumeJaringan(): HasMany
+    {
+        return $this->hasMany(volumeJaringan::class, 'data_jaringan_barus_id');
+    }
 }

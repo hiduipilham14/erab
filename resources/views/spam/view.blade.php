@@ -46,20 +46,21 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">
+                <div class="card-header d-flex justify-content-between">
                     <h3 class="card-title">Tabel SPAM</h3>
-                    <div class="float-right">
+                    <div class="float-right text-right">
                         <button class="btn add-new btn-primary mb-3 mb-md-0 waves-effect waves-light" id="btn-create"><i class="fa fa-plus"></i>
-                            Tambah SPAM</button>
+                            Tambah</button>
                     </div>
                 </div>
                 <!-- /.card-header -->
                 <div class="card-body table-responsive">
-                    <table id="table-spam" class="table table-bordered nowrap table-striped">
+                    <table id="table-spam" class="datatables-basic table">
                         <thead>
                             <tr>
                                 <th>No</th>
                                 <th>Tanggal</th>
+                                <th>Spam</th>
                                 <th>Koordinat</th>
                                 <th>Lokasi</th>
                                 <th>Kondisi Eksisting</th>
@@ -106,6 +107,12 @@
                             <textarea class="form-control" name="lokasi" id="lokasi" rows="3"
                                 placeholder="Masukkan Lokasi"></textarea>
                             <small class="help-block text-danger lokasi"></small>
+                        </div>
+                         <div class="col-md-6 form-group mb-3">
+                            <label for="spam">Spam</label>
+                           <input type="text" class="form-control" name="spam" id="spam" placeholder="Masukkan Spam" value=""
+                                required">
+                            <small class="help-block text-danger spam"></small>
                         </div>
                         <div class="col-md-6 form-group mb-3">
                             <label for="koordinat">Koordinat</label>
@@ -231,6 +238,7 @@
                 columns: [
                     { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                     { data: 'tanggal', name: 'tanggal' },
+                    { data: 'spam', name: 'spam' },
                     { data: 'koordinat', name: 'koordinat' },
                     { data: 'lokasi', name: 'lokasi' },
                     { data: 'kondisi_existing', name: 'kondisi_existing' },
@@ -253,7 +261,8 @@
                 $("#file_spam").val("");
                 $("#file_permasalahan").val("");
                 $("#file_existing").val("");
-                    $("#tanggal").val("");
+                $("#tanggal").val("");
+                $("#spam").val("");
                 $("#save").text("Save Spam")
                 $(".modal-title").text("Modal Tambah Spam");
                 $("#modal-spam").modal("show");
@@ -318,6 +327,7 @@
                 let koordinat = $(this).data('koordinat');
                 let kondisi_existing = $(this).data('kondisi_existing');
                 let permasalahan = $(this).data('permasalahan');
+                let spam = $(this).data('spam');
                 let tindak_lanjut = $(this).data('tindak_lanjut');
                 Swal.fire({
                         title: "Yakin?",
@@ -335,6 +345,7 @@
                         if (willEdit.value) {
                             $("#id").val(id);
                             $("#tanggal").val(tanggal);
+                            $("#spam").val(spam);
                             $("#lokasi").val(lokasi);
                             $("#koordinat").val(koordinat);
                             $("#kondisi_existing").val(kondisi_existing);
