@@ -13,21 +13,30 @@ return new class extends Migration
     {
         Schema::create('data_rabs', function (Blueprint $table) {
             $table->id();
-            $table->date('tanggal');
+            $table->date('tanggal_input');
+            $table->date('tanggal_awal');
+            $table->date('tanggal_selesai');
+            
+            // Data SPK
             $table->string('no_spk');
-            $table->string('pekerjaan');
-            $table->string('vol');
-            $table->string('lokasi');
-            $table->string('rab');
-            $table->string('keterangan');
-            $table->string('bahan');
-            $table->string('upah');
-            $table->string('jumlah');
-            $table->string('gis');
-            $table->string('file')->nullable();
-            $table->string('file2')->nullable();
-            $table->string('file3')->nullable();
-
+            // Data teknis pekerjaan
+            $table->string('masa_pemeliharaan')->nullable();
+            $table->string('penyedia_pipa')->nullable();
+            // File uploads
+            $table->string('file_spk')->nullable();
+            $table->string('file_ded')->nullable();
+            $table->string('file_rab')->nullable();
+            // Data biaya
+            $table->decimal('honor', 15, 2)->default(0);
+            $table->decimal('rab', 15, 2)->default(0);
+            $table->decimal('bahan', 15, 2)->default(0);
+            $table->decimal('upah', 15, 2)->default(0);
+            $table->decimal('jumlah', 15, 2)->default(0);
+            // Data GIS
+            $table->string('gis')->nullable();
+            $table->string('pekerjaan_gis')->nullable();
+            $table->string('lokasi_gis')->nullable();
+            $table->text('keterangan_gis')->nullable();
             $table->timestamps();
         });
     }

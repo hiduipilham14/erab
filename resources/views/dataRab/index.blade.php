@@ -148,15 +148,13 @@
 
                         <!-- Combined Modal for Add and Edit -->
                         <div class="modal fade" id="modalRabForm" tabindex="-1" aria-hidden="true">
-                            <div class="modal-dialog modal-xl-custom modal-dialog-centered modal-dialog-scrollable">
+                            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
                                 <div class="modal-content">
-                                    <div class="modal-header bg-primary text-white">
+                                    <div class="modal-header ">
                                         <h5 class="modal-title" id="modalRabFormTitle">
-                                            <i class="ti ti-file-description me-2"></i>
                                             <span id="modalTitle">Tambah Data RAB</span>
                                         </h5>
-                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
+                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         <form class="row g-3 two-column-form" id="form-rab" enctype="multipart/form-data">
@@ -470,9 +468,6 @@
                 populateForm(data);
             }
             
-            // Hide current file containers initially
-            $('[id^="current-file"]').parent().addClass('d-none');
-            $('[id^="remove_file"]').prop('checked', false);
             
             modal.modal('show');
         }
