@@ -6,8 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\DataRab;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Models\dataPipa;
+use App\Models\dataDivisi;
+use App\Models\dataDiameter;
 use Illuminate\Support\Facades\Validator;
-
+use DB;
 
 class dataRabController extends Controller
 {
@@ -17,8 +20,7 @@ class dataRabController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = DataRab::select('id', 'tanggal', 'tanggal_pelaksana', 'no_spk', 'pekerjaan', 'masa_pemeliharaan', 'penyedia', 'vol', 'lokasi', 'rab')->latest();
-
+            $data = DataRab::with(['diameterRab','jenisPipaRab', 'volumeRab'])->orderBy('created_at', 'desc')->get();
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -33,11 +35,43 @@ class dataRabController extends Controller
                 </button>';
                     return $btn;
                 })
-                ->rawColumns(['action'])
+                ->addColumn('diameter', function($row) {
+                    // Mengambil nama diameter dari relasi hasMany
+                    $diameters = $row->diameterRab
+                        ->pluck('dataDiameter.nama')
+                        ->filter() // Menghilangkan nilai null
+                        ->unique() // Menghilangkan duplikat
+                        ->toArray();
+                    
+                    return !empty($diameters) ? implode(', ', $diameters) : '-';
+                })
+                ->addColumn('jenisPipaRab', function($row) {
+                    // Mengambil nama jenis pipa dari relasi hasMany
+                    $jenisPipa = $row->jenisPipaRab
+                        ->pluck('dataPipa.nama')
+                        ->filter() // Menghilangkan nilai null
+                        ->unique() // Menghilangkan duplikat
+                        ->toArray();
+
+                    return !empty($jenisPipa) ? implode(', ', $jenisPipa) : '-';
+                })
+                ->addColumn('volume', function($row) {
+                    // Mengambil volume dari relasi hasMany
+                    $volumes = $row->volumeRab
+                        ->pluck('volume')
+                        ->filter() // Menghilangkan nilai null
+                        ->unique() // Menghilangkan duplikat jika diperlukan
+                        ->toArray();
+                    
+                    return !empty($volumes) ? implode(', ', $volumes) : '-';
+                })
+                
+                ->rawColumns(['action', 'diameter', 'jenisPipaRab', 'volume'])
                 ->make(true);
         }
-
-        return view('dataRab.index');
+        $diameters = dataDiameter::all();
+        $pipas = dataPipa::all();
+        return view('dataRab.index', compact( 'diameters', 'pipas'));
     }
 
     /**

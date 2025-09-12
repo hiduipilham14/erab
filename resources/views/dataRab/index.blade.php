@@ -106,14 +106,13 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Tanggal RAB</th>
-                                            <th>Tgl pelaksana</th>
+                                            <th>Tanggal Awal</th>
                                             <th>No SPK</th>
-                                            <th>Pekerjaan</th>
-                                            <th>Masa Pemeliharaan</th>
-                                            <th>penyedia</th>
+                                            <th>Diameter(inch)</th>
+                                            <th>Pipa</th>
                                             <th>Vol (m)</th>
-                                            <th>Lokasi</th>
                                             <th>RAB (Rp)</th>
+                                            <th>Pekerjaaan</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -157,130 +156,163 @@
                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <form class="row g-3 two-column-form" id="form-rab" enctype="multipart/form-data">
+                                        <form class="row g-3" id="form-rab" enctype="multipart/form-data">
                                             @csrf
                                             <input type="hidden" id="rab_id" name="id">
                                             <div id="method-field"></div>
                                             
+                                            <!-- Kolom Kiri -->
                                             <div class="col-md-6">
-                                                <label class="form-label" for="tanggal">Tanggal</label>
-                                                <input type="date" id="tanggal" name="tanggal" class="form-control" required />
-                                            </div>
-                                            
-                                            <div class="col-md-6">
-                                                <label class="form-label" for="tanggal_pelaksana">Tanggal Pelaksana</label>
-                                                <input type="date" id="tanggal_pelaksana" name="tanggal_pelaksana" class="form-control" required />
-                                            </div>
-                                            
-                                            <div class="col-md-6">
-                                                <label class="form-label" for="no_spk">No SPK</label>
-                                                <input type="number" id="no_spk" name="no_spk" class="form-control" placeholder="0" required />
-                                            </div>
-                                            
-                                            <div class="col-md-6">
-                                                <label class="form-label" for="pekerjaan">Pekerjaan</label>
-                                                <input type="text" id="pekerjaan" name="pekerjaan" class="form-control" placeholder="Jenis pekerjaan" required />
-                                            </div>
-                                            
-                                            <div class="col-md-6">
-                                                <label class="form-label" for="masa_pemeliharaan">Masa Pemeliharaan</label>
-                                                <input type="text" id="masa_pemeliharaan" name="masa_pemeliharaan" class="form-control" placeholder="input data" required />
-                                            </div>
-                                            
-                                            <div class="col-md-6">
-                                                <label class="form-label" for="penyedia">Penyedia</label>
-                                                <input type="text" id="penyedia" name="penyedia" class="form-control" placeholder="input data" required />
-                                            </div>
-                                            
-                                            <div class="col-md-6">
-                                                <label class="form-label" for="vol">Volume (m)</label>
-                                                <input type="number" id="vol" name="vol" class="form-control" placeholder="0" required />
-                                            </div>
-                                            
-                                            <div class="col-md-6">
-                                                <label class="form-label" for="lokasi">Lokasi</label>
-                                                <input type="text" id="lokasi" name="lokasi" class="form-control" placeholder="Lokasi pekerjaan" required />
-                                            </div>
-                                            
-                                            <div class="col-md-6">
-                                                <label class="form-label" for="rab">RAB (Rp)</label>
-                                                <input type="number" id="rab" name="rab" class="form-control" placeholder="0" required />
-                                            </div>
-                                            
-                                            <div class="col-md-6">
-                                                <label class="form-label" for="keterangan">Keterangan</label>
-                                                <textarea id="keterangan" name="keterangan" class="form-control" placeholder="Keterangan tambahan" rows="2"></textarea>
-                                            </div>
-                                            
-                                            <div class="col-md-6">
-                                                <label class="form-label" for="honor">Honor (Rp)</label>
-                                                <input type="number" id="honor" name="honor" class="form-control" placeholder="0" />
-                                            </div>
-                                            
-                                            <div class="col-md-6">
-                                                <label class="form-label" for="bahan">Bahan (Rp)</label>
-                                                <input type="number" id="bahan" name="bahan" class="form-control" placeholder="0" />
-                                            </div>
-                                            
-                                            <div class="col-md-6">
-                                                <label class="form-label" for="upah">Upah (Rp)</label>
-                                                <input type="number" id="upah" name="upah" class="form-control" placeholder="0" />
-                                            </div>
-                                            
-                                            <div class="col-md-6">
-                                                <label class="form-label" for="jumlah">Jumlah (Rp)</label>
-                                                <input type="number" id="jumlah" name="jumlah" class="form-control" placeholder="0" />
-                                            </div>
-                                            
-                                            <div class="col-md-6">
-                                                <label class="form-label" for="gis">GIS</label>
-                                                <input type="text" id="gis" name="gis" class="form-control" placeholder="Data GIS" />
-                                            </div>
-                                            
-                                            <div class="col-md-6">
-                                                <label class="form-label" for="file">SPK</label>
-                                                <input type="file" id="file" name="file" class="form-control" />
-                                                <div id="current-file-container" class="mt-2 d-none">
-                                                    <small>File saat ini:</small>
-                                                    <div id="current-file" class="mt-1"></div>
-                                                    <div class="form-check mt-2">
-                                                        <input class="form-check-input" type="checkbox" id="remove_file" name="remove_file">
-                                                        <label class="form-check-label" for="remove_file">
-                                                            Hapus file saat ini
-                                                        </label>
+                                                <!-- Tgl RAB -->
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="tanggal">Tgl RAB</label>
+                                                    <input type="date" id="tanggal" name="tanggal" class="form-control" required />
+                                                </div>
+                                                
+                                                <!-- Tgl Awal Pekerjaan -->
+                                                <div class="row mb-3">
+                                                    <div class="col-md-6">
+                                                        <label class="form-label" for="tanggal_pelaksana">Tgl Awal Pekerjaan</label>
+                                                        <input type="date" id="tanggal_pelaksana" name="tanggal_pelaksana" class="form-control" required />
                                                     </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label" for="tanggal_selesai">Tgl Selesai Pekerjaan</label>
+                                                        <input type="date" id="tanggal_selesai" name="tanggal_selesai" class="form-control" required />
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- No SPK -->
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="no_spk">No SPK</label>
+                                                    <input type="number" id="no_spk" name="no_spk" class="form-control" placeholder="0" required />
+                                                </div>
+                                                
+                                                <!-- Masa Pemeliharaan -->
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="masa_pemeliharaan">Masa Pemeliharaan</label>
+                                                    <input type="text" id="masa_pemeliharaan" name="masa_pemeliharaan" class="form-control" placeholder="input data" required />
+                                                </div>
+                                                
+                                                <!-- Penyedia -->
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="penyedia">Penyedia</label>
+                                                    <input type="text" id="penyedia" name="penyedia" class="form-control" placeholder="input data" required />
+                                                </div>
+                                                
+                                                <!-- PIPA -->
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="pipa">PIPA</label>
+                                                    <div class="select2-primary">
+                                                        <select id="form_jenis_pipa" name="jenis_pipa[]" class="form-select select2 " required multiple>
+                                                            <option value="">-- pilih jenis pipa --</option>
+                                                            @foreach ($pipas as $pipa)
+                                                                <option value="{{ $pipa->id }}">{{ $pipa->nama }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Diameter (inch) -->
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="diameter">Diameter ( inch )</label>
+                                                    <div class="select2-primary">
+                                                        <select id="form_diameter" name="diameter[]" class="form-select select2 " multiple required>
+                                                            <option value="">-- pilih diameter --</option>
+                                                            @foreach ($diameters as $diameter)
+                                                                <option value="{{ $diameter->id }}">{{ $diameter->nama }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Volume (m) -->
+                                                <div class="mb-3" id="volume-container">
+                                                    <label class="form-label" for="vol">Volume ( m )</label>
+                                                    <div class="input-group mb-3">
+                                                        <input type="number" id="vol" name="vol[]" class="form-control" placeholder="0" required />
+                                                        <button type="button" class="btn btn-success " id="btn-add-volume"><i class="fa fa-plus"></i></button>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- SPK File -->
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="file">SPK</label>
+                                                    <input type="file" id="file" name="file" class="form-control" />
+                                                    <small class="text-muted">tidak ada berkas yang di pilih</small>
+                                                </div>
+                                                
+                                                <!-- DED File -->
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="file2">DED</label>
+                                                    <input type="file" id="file2" name="file2" class="form-control" />
+                                                    <small class="text-muted">tidak ada berkas yang di pilih</small>
+                                                </div>
+                                                
+                                                <!-- RAB File -->
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="file3">RAB</label>
+                                                    <input type="file" id="file3" name="file3" class="form-control" />
+                                                    <small class="text-muted">tidak ada berkas yang di pilih</small>
                                                 </div>
                                             </div>
                                             
+                                            <!-- Kolom Kanan -->
                                             <div class="col-md-6">
-                                                <label class="form-label" for="file2">DED</label>
-                                                <input type="file" id="file2" name="file2" class="form-control" />
-                                                <div id="current-file2-container" class="mt-2 d-none">
-                                                    <small>File saat ini:</small>
-                                                    <div id="current-file2" class="mt-1"></div>
-                                                    <div class="form-check mt-2">
-                                                        <input class="form-check-input" type="checkbox" id="remove_file2" name="remove_file2">
-                                                        <label class="form-check-label" for="remove_file2">
-                                                            Hapus file saat ini
-                                                        </label>
-                                                    </div>
+                                                <!-- Honor (Rp) -->
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="honor">Honor (Rp)</label>
+                                                    <input type="number" id="honor" name="honor" class="form-control" placeholder="0" />
+                                                </div>
+                                                
+                                                <!-- RAB (Rp) -->
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="rab">RAB (Rp)</label>
+                                                    <input type="number" id="rab" name="rab" class="form-control" placeholder="0" required />
+                                                </div>
+                                                
+                                                <!-- Bahan (Rp) -->
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="bahan">Bahan (Rp)</label>
+                                                    <input type="number" id="bahan" name="bahan" class="form-control" placeholder="0" />
+                                                </div>
+                                                
+                                                <!-- Upah (Rp) -->
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="upah">Upah (Rp)</label>
+                                                    <input type="number" id="upah" name="upah" class="form-control" placeholder="0" />
+                                                </div>
+                                                
+                                                <!-- Jumlah (Rp) -->
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="jumlah">Jumlah (Rp)</label>
+                                                    <input type="number" id="jumlah" name="jumlah" class="form-control" placeholder="0" />
+                                                </div>
+                                                
+                                                <!-- GIS -->
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="gis">GIS</label>
+                                                    <input type="text" id="gis" name="gis" class="form-control" placeholder="Data GIS" />
+                                                </div>
+                                                
+                                                <!-- Pekerjaan -->
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="pekerjaan">Pekerjaan</label>
+                                                    <textarea id="pekerjaan" name="pekerjaan" class="form-control" placeholder="Jenis pekerjaan" rows="2" required></textarea>
+                                                </div>
+                                                
+                                                <!-- Lokasi -->
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="lokasi">Lokasi</label>
+                                                    <textarea id="lokasi" name="lokasi" class="form-control" placeholder="Lokasi pekerjaan" rows="2" required></textarea>
+                                                </div>
+                                                
+                                                <!-- Keterangan -->
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="keterangan">Keterangan</label>
+                                                    <textarea id="keterangan" name="keterangan" class="form-control" placeholder="Keterangan tambahan" rows="3"></textarea>
                                                 </div>
                                             </div>
                                             
-                                            <div class="col-md-6">
-                                                <label class="form-label" for="file3">RAB</label>
-                                                <input type="file" id="file3" name="file3" class="form-control" />
-                                                <div id="current-file3-container" class="mt-2 d-none">
-                                                    <small>File saat ini:</small>
-                                                    <div id="current-file3" class="mt-1"></div>
-                                                    <div class="form-check mt-2">
-                                                        <input class="form-check-input" type="checkbox" id="remove_file3" name="remove_file3">
-                                                        <label class="form-check-label" for="remove_file3">
-                                                            Hapus file saat ini
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </form>
                                     </div>
                                     <div class="modal-footer">
@@ -344,6 +376,20 @@
             
             // Initialize form submission handler
             initializeFormSubmission(table);
+
+             $("#btn-add-volume").click(function() {
+                const volumeInput = `
+                    <div class="input-group mb-2 volume-entry">
+                        <input type="number" name="vol[]" class="form-control" placeholder="0" required />
+                        <button type="button" class="btn btn-danger btn-remove-volume"><i class="fa fa-minus"></i></button>
+                    </div>
+                `;
+                $("#volume-container").append(volumeInput);
+            });
+
+            $(document).on('click', '.btn-remove-volume', function() {
+                $(this).closest('.volume-entry').remove();
+            });
         });
         
         // Initialize DataTable
@@ -354,15 +400,14 @@
                 ajax: "{{ route('data-rab.index') }}",
                 columns: [
                     { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-                    { data: 'tanggal', name: 'tanggal', render: formatDate },
-                    { data: 'tanggal_pelaksana', name: 'tanggal_pelaksana', render: formatDate },
+                    { data: 'tanggal_input', name: 'tanggal_input', render: formatDate },
+                    { data: 'tanggal_awal', name: 'tanggal_awal', render: formatDate },
                     { data: 'no_spk', name: 'no_spk' },
-                    { data: 'pekerjaan', name: 'pekerjaan' },
-                    { data: 'masa_pemeliharaan', name: 'masa_pemeliharaan' },
-                    { data: 'penyedia', name: 'penyedia' },
-                    { data: 'vol', name: 'vol' },
-                    { data: 'lokasi', name: 'lokasi' },
+                    { data: 'diameter', name: 'diameter' },
+                    { data: 'jenisPipaRab', name: 'jenisPipaRab' },
+                    { data: 'volume', name: 'volume' },
                     { data: 'rab', name: 'rab', render: data => 'Rp ' + data },
+                    { data: 'pekerjaan_gis', name: 'pekerjaan_gis' },
                     { data: 'action', name: 'action', orderable: false, searchable: false, render: renderActionButtons }
                 ],
                 dom: '<"card-header flex-column flex-md-row"<"head-label text-center"><"dt-action-buttons text-end pt-3 pt-md-0"B>><"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end"f>>t<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
