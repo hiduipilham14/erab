@@ -106,7 +106,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Tanggal RAB</th>
-                                            <th>Tanggal Awal</th>
+                                            <th>Tanggal Pelaksana</th>
                                             <th>No SPK</th>
                                             <th>Diameter(inch)</th>
                                             <th>Pipa</th>
@@ -123,14 +123,14 @@
                         <!-- Modal Detail -->
                         <div class="modal fade" id="modalDetail" tabindex="-1" aria-hidden="true"
                             data-bs-backdrop="static">
-                            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+                            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
                                 <div class="modal-content">
-                                    <div class="modal-header bg-primary text-white">
+                                    <div class="modal-header">
                                         <h5 class="modal-title">
                                             <i class="ti ti-file-description me-2"></i>
                                             Detail RAB
                                         </h5>
-                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body" id="detailContent">
@@ -164,16 +164,22 @@
                                             <!-- Kolom Kiri -->
                                             <div class="col-md-6">
                                                 <!-- Tgl RAB -->
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="tanggal">Tgl RAB</label>
-                                                    <input type="date" id="tanggal" name="tanggal" class="form-control" required />
+                                                <div class="row mb-3">
+                                                    <div class="col-md-6">
+                                                         <label class="form-label" for="tanggal">Tgl RAB</label>
+                                                         <input type="date" id="tanggal_input" name="tanggal_input" class="form-control" required />
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label" for="tanggal_pelaksana">Tgl Pelaksana</label>
+                                                        <input type="date" id="tanggal_pelaksana" name="tanggal_pelaksana" class="form-control" required />
+                                                    </div>
                                                 </div>
                                                 
                                                 <!-- Tgl Awal Pekerjaan -->
                                                 <div class="row mb-3">
                                                     <div class="col-md-6">
                                                         <label class="form-label" for="tanggal_pelaksana">Tgl Awal Pekerjaan</label>
-                                                        <input type="date" id="tanggal_pelaksana" name="tanggal_pelaksana" class="form-control" required />
+                                                        <input type="date" id="tanggal_awal" name="tanggal_awal" class="form-control" required />
                                                     </div>
                                                     <div class="col-md-6">
                                                         <label class="form-label" for="tanggal_selesai">Tgl Selesai Pekerjaan</label>
@@ -196,7 +202,7 @@
                                                 <!-- Penyedia -->
                                                 <div class="mb-3">
                                                     <label class="form-label" for="penyedia">Penyedia</label>
-                                                    <input type="text" id="penyedia" name="penyedia" class="form-control" placeholder="input data" required />
+                                                    <input type="text" id="penyedia_pipa" name="penyedia_pipa" class="form-control" placeholder="input data" required />
                                                 </div>
                                                 
                                                 <!-- PIPA -->
@@ -236,22 +242,22 @@
                                                 
                                                 <!-- SPK File -->
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="file">SPK</label>
-                                                    <input type="file" id="file" name="file" class="form-control" />
+                                                    <label class="form-label" for="file_spk">SPK</label>
+                                                    <input type="file" id="file_spk" name="file_spk" class="form-control" />
                                                     <small class="text-muted">tidak ada berkas yang di pilih</small>
                                                 </div>
                                                 
                                                 <!-- DED File -->
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="file2">DED</label>
-                                                    <input type="file" id="file2" name="file2" class="form-control" />
+                                                    <label class="form-label" for="file_ded">DED</label>
+                                                    <input type="file" id="file_ded" name="file_ded" class="form-control" />
                                                     <small class="text-muted">tidak ada berkas yang di pilih</small>
                                                 </div>
                                                 
                                                 <!-- RAB File -->
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="file3">RAB</label>
-                                                    <input type="file" id="file3" name="file3" class="form-control" />
+                                                    <label class="form-label" for="file_rab">RAB</label>
+                                                    <input type="file" id="file_rab" name="file_rab" class="form-control" />
                                                     <small class="text-muted">tidak ada berkas yang di pilih</small>
                                                 </div>
                                             </div>
@@ -296,20 +302,20 @@
                                                 
                                                 <!-- Pekerjaan -->
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="pekerjaan">Pekerjaan</label>
-                                                    <textarea id="pekerjaan" name="pekerjaan" class="form-control" placeholder="Jenis pekerjaan" rows="2" required></textarea>
+                                                    <label class="form-label" for="pekerjaan_gis">Pekerjaan</label>
+                                                    <textarea id="pekerjaan_gis" name="pekerjaan_gis" class="form-control" placeholder="Jenis pekerjaan" rows="2" required></textarea>
                                                 </div>
                                                 
                                                 <!-- Lokasi -->
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="lokasi">Lokasi</label>
-                                                    <textarea id="lokasi" name="lokasi" class="form-control" placeholder="Lokasi pekerjaan" rows="2" required></textarea>
+                                                    <label class="form-label" for="lokasi_gis">Lokasi</label>
+                                                    <textarea id="lokasi_gis" name="lokasi_gis" class="form-control" placeholder="Lokasi pekerjaan" rows="2" required></textarea>
                                                 </div>
                                                 
                                                 <!-- Keterangan -->
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="keterangan">Keterangan</label>
-                                                    <textarea id="keterangan" name="keterangan" class="form-control" placeholder="Keterangan tambahan" rows="3"></textarea>
+                                                    <label class="form-label" for="keterangan_gis">Keterangan</label>
+                                                    <textarea id="keterangan_gis" name="keterangan_gis" class="form-control" placeholder="Keterangan tambahan" rows="3"></textarea>
                                                 </div>
                                             </div>
                                             
@@ -520,26 +526,41 @@
         // Populate form with data for editing
         function populateForm(data) {
             $('#rab_id').val(data.id);
-            $('#tanggal').val(data.tanggal.split(' ')[0]);
-            $('#tanggal_pelaksana').val(data.tanggal_pelaksana.split(' ')[0]);
+            $('#tanggal_input').val(data.tanggal_input);
+            $('#tanggal_awal').val(data.tanggal_awal);
+            $("#tanggal_selesai").val(data.tanggal_selesai);
             $('#no_spk').val(data.no_spk);
-            $('#pekerjaan').val(data.pekerjaan);
+            $("#tanggal_pelaksana").val(data.tanggal_pelaksana);
+            $('#pekerjaan_gis').val(data.pekerjaan_gis);
             $('#masa_pemeliharaan').val(data.masa_pemeliharaan);
-            $('#penyedia').val(data.penyedia);
-            $('#vol').val(data.vol);
-            $('#lokasi').val(data.lokasi);
+            $('#penyedia_pipa').val(data.penyedia_pipa);
+            $('#lokasi_gis').val(data.lokasi_gis);
+            $('#keterangan_gis').val(data.keterangan_gis);
             $('#rab').val(data.rab);
-            $('#keterangan').val(data.keterangan);
             $('#honor').val(data.honor);
             $('#bahan').val(data.bahan);
             $('#upah').val(data.upah);
             $('#jumlah').val(data.jumlah);
             $('#gis').val(data.gis);
-            
+            data.volume_rab.forEach((v,i) => {
+                const volumeInput = `
+                    <div class="input-group mb-2 volume-entry">
+                        <input type="number" name="vol[]" class="form-control" value="${v.volume}" required />
+                        ${i === 0 ? 
+                            '<button type="button" class="btn btn-success " id="btn-add-volume"><i class="fa fa-plus"></i></button>' :
+                            '<button type="button" class="btn btn-danger btn-remove-volume"><i class="fa fa-minus"></i></button>'}
+                    </div>
+                `;
+                $("#volume-container").append(volumeInput);
+            });
+            let diameter = data.diameter_rab.map(d => d.diameter.toString());
+            $('#form_diameter').val(diameter).trigger('change');
+            let jenis_pipa = data.jenis_pipa_rab.map(p => p.jenis_pipa.toString());
+            $('#form_jenis_pipa').val(jenis_pipa).trigger('change');
             // Show current files if they exist
-            showCurrentFile('file', data.file);
-            showCurrentFile('file2', data.file2);
-            showCurrentFile('file3', data.file3);
+            showCurrentFile('file_spk', data.file_spk);
+            showCurrentFile('file_ded', data.file_ded);
+            showCurrentFile('file_rab', data.file_rab);
         }
         
         // Show current file in form

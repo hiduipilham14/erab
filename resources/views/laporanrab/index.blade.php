@@ -38,18 +38,23 @@
                     <table class="dt-responsive table table-bordered table-hover" id="tblaporanrab">
                         <thead>
                             <tr>
-                                <th class="text-center"><b>No</b></th>
-                                <th class="text-center sorting_disabled"><b>Tanggal</b></th>
-                                <th class="text-center sorting_disabled"><b>No.SPK</b></th>
-                                <th class="text-center sorting_disabled"><b>Pekerjaan</b></th>
-                                <th class="text-center sorting_disabled"><b>Vol (m)</b></th>
-                                <th class="text-center sorting_disabled"><b>Lokasi</b></th>
-                                <th class="text-center sorting_disabled"><b>RAB (Rp)</b></th>
-                                <th class="text-center sorting_disabled"><b>Bahan (Rp)</b></th>
-                                <th class="text-center sorting_disabled"><b>Upah (Rp)</b></th>
-                                <th class="text-center sorting_disabled"><b>Jumlah (Rp)</b></th>
-                                <th class="text-center sorting_disabled"><b>GIS</b></th>
-                                <th class="text-center sorting_disabled"><b>KETERANGAN</b></th>
+                                <th class="text-center">No</th>
+                                <th class="text-center sorting_disabled">Tanggal</th>
+                                <th class="text-center sorting_disabled">Tgl Pelaksanaan</th>
+                                <th class="text-center sorting_disabled">Masa Pemeliharaan</th>
+                                <th class="text-center sorting_disabled">Penyedia</th>
+                                <th class="text-center sorting_disabled">Jenis Pipa</th>
+                                <th class="text-center sorting_disabled">Diameter (Inc)</th>
+                                <th class="text-center sorting_disabled">Volume (m)</th>
+                                <th class="text-center sorting_disabled">Honor (Rp)</th>
+                                <th class="text-center sorting_disabled">RAB (Rp)</th>
+                                <th class="text-center sorting_disabled">Bahan (Rp)</th>
+                                <th class="text-center sorting_disabled">Upah (Rp)</th>
+                                <th class="text-center sorting_disabled">Jumlah (Rp)</th>
+                                <th class="text-center sorting_disabled">GIS</th>
+                                <th class="text-center sorting_disabled">Pekerjaan</th>
+                                <th class="text-center sorting_disabled">Lokasi</th>
+                                <th class="text-center sorting_disabled">Keterangan</th>
                             </tr>
                         </thead>
                     </table>
@@ -97,73 +102,73 @@
             function load_data(start = '', end = '') {
                 
                 var table = $('#tblaporanrab').DataTable({
-                    processing: true,
-                    responsive: true,
-                    serverSide: true,
-                    stateSave: false,
-                    columnDefs: [{
-                            "className": "dt-center",
-                            "targets": "_all"
-                        }
-                    ],
-                    ajax: {
-                        url: "{{ route('laporan-rab.index') }}",
-                        data: {
-                            start_date: start,
-                            end_date: end
-                        },
-                    },
-                    columns: [{
-                            data: 'DT_RowIndex',
-                            name: 'DT_RowIndex',
-                            orderable: false,
-                            searchable: false
-                        },
-                        {
-                            data: 'tanggal',
-                            name: 'tanggal',
-                        },
-                        {
-                            data: 'no_spk',
-                            name: 'no_spk'
-                        },
-                        {
-                            data: 'pekerjaan',
-                            name: 'pekerjaan'
-                        },
-                        {
-                            data: 'vol',
-                            name: 'vol'
-                        },
-                        {
-                            data: 'lokasi',
-                            name: 'lokasi'
-                        },
-                        {
-                            data: 'rab',
-                            name: 'rab'
-                        },
-                        {
-                            data: 'bahan',
-                            name: 'bahan'
-                        },
-                        {
-                            data: 'upah',
-                            name: 'upah'
-                        },
-                        {
-                            data: 'jumlah',
-                            name: 'jumlah'
-                        },
-                        {
-                            data: 'gis',
-                            name: 'gis'
-                        },
-                        {
-                            data: 'keterangan',
-                            name: 'keterangan'
-                        },
-                    ],
+                    // processing: true,
+                    // responsive: true,
+                    // serverSide: true,
+                    // stateSave: false,
+                    // columnDefs: [{
+                    //         "className": "dt-center",
+                    //         "targets": "_all"
+                    //     }
+                    // ],
+                    // ajax: {
+                    //     url: "{{ route('laporan-rab.index') }}",
+                    //     data: {
+                    //         start_date: start,
+                    //         end_date: end
+                    //     },
+                    // },
+                    // columns: [{
+                    //         data: 'DT_RowIndex',
+                    //         name: 'DT_RowIndex',
+                    //         orderable: false,
+                    //         searchable: false
+                    //     },
+                    //     {
+                    //         data: 'tanggal',
+                    //         name: 'tanggal',
+                    //     },
+                    //     {
+                    //         data: 'no_spk',
+                    //         name: 'no_spk'
+                    //     },
+                    //     {
+                    //         data: 'pekerjaan',
+                    //         name: 'pekerjaan'
+                    //     },
+                    //     {
+                    //         data: 'vol',
+                    //         name: 'vol'
+                    //     },
+                    //     {
+                    //         data: 'lokasi',
+                    //         name: 'lokasi'
+                    //     },
+                    //     {
+                    //         data: 'rab',
+                    //         name: 'rab'
+                    //     },
+                    //     {
+                    //         data: 'bahan',
+                    //         name: 'bahan'
+                    //     },
+                    //     {
+                    //         data: 'upah',
+                    //         name: 'upah'
+                    //     },
+                    //     {
+                    //         data: 'jumlah',
+                    //         name: 'jumlah'
+                    //     },
+                    //     {
+                    //         data: 'gis',
+                    //         name: 'gis'
+                    //     },
+                    //     {
+                    //         data: 'keterangan',
+                    //         name: 'keterangan'
+                    //     },
+                    // ],
                 });
 
                 table.on('draw', function() {

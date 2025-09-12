@@ -158,6 +158,7 @@
                             <label for="file_spam">File Spam</label>
                             <input type="file" class="form-control" name="file_spam" id="file_spam">
                             <small class="help-block text-danger file_spam"></small>
+                            <small class="help-block  mt-3 ">upload file mx 20 mb</small>
                         </div>
                     </div>
                 </div>
@@ -203,7 +204,6 @@
 </div>
 @endsection
 @section('js')
-
     <script>
         function loading()
         {

@@ -19,8 +19,8 @@ class AdminController extends Controller
         $jumlahPengguna = User::count();
 
         // RAB bulan ini
-        $jumlahRabBulanIni = DataRab::whereMonth('tanggal', now()->month)
-            ->whereYear('tanggal', now()->year)
+        $jumlahRabBulanIni = DataRab::whereMonth('tanggal_input', now()->month)
+            ->whereYear('tanggal_input', now()->year)
             ->count();
 
         // GIS bulan ini
@@ -30,10 +30,10 @@ class AdminController extends Controller
 
         // Data grafik RAB per bulan
         $rabPerBulan = DataRab::select(
-                DB::raw('MONTH(tanggal) as bulan'),
+                DB::raw('MONTH(tanggal_input) as bulan'),
                 DB::raw('COUNT(*) as jumlah')
             )
-            ->whereYear('tanggal', now()->year)
+            ->whereYear('tanggal_input', now()->year)
             ->groupBy('bulan')
             ->orderBy('bulan')
             ->get();

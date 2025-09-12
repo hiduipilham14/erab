@@ -43,10 +43,10 @@ class spamController extends Controller
             'kondisi_existing' => 'required',
             'permasalahan' => 'required',
             'tindak_lanjut' => 'required',
-            'file_existing' => 'max:20048',
-            'file_permasalahan' => 'max:20048',
-            'file_tindak_lanjut' => 'max:20048',
-            'file_spam' => 'max:20048',
+            'file_existing' => 'max:20048|mimes:pdf',
+            'file_permasalahan' => 'max:20048|mimes:pdf',
+            'file_tindak_lanjut' => 'max:20048|mimes:pdf',
+            'file_spam' => 'max:20048|mimes:pdf',
         ], $messages);
         return $validator;
     }

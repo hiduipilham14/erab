@@ -10,4 +10,9 @@ class diameterRab extends Model
     use HasFactory;
     protected $table = 'diameter_rab';
     protected $guarded = ['id'];
+
+    public function dataDiameter()
+    {
+        return $this->belongsTo(dataDiameter::class, 'diameter');
+    }
 }

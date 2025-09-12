@@ -16,7 +16,7 @@ return new class extends Migration
             $table->date('tanggal_input');
             $table->date('tanggal_awal');
             $table->date('tanggal_selesai');
-            
+            $table->date('tanggal_pelaksana');
             // Data SPK
             $table->string('no_spk');
             // Data teknis pekerjaan

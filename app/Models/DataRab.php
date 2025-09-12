@@ -11,17 +11,17 @@ class DataRab extends Model
     protected $table = "data_rabs";
     protected $guarded = ['id'];
 
-    public function jenisPipa(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function jenisPipaRab(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(jenisPipaRab::class, 'data_rab_id');
     }
 
-    public function diameter(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function diameterRab(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(diameterRab::class, 'data_rab_id');
     }
 
-    public function volume(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function volumeRab(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(volumeRab::class, 'data_rab_id');
     }

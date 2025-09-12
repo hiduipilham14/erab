@@ -11,7 +11,7 @@ use App\Models\dataDivisi;
 use App\Models\dataDiameter;
 use Illuminate\Support\Facades\Validator;
 use DB;
-
+use Storage;
 class dataRabController extends Controller
 {
     /**
@@ -36,31 +36,28 @@ class dataRabController extends Controller
                     return $btn;
                 })
                 ->addColumn('diameter', function($row) {
-                    // Mengambil nama diameter dari relasi hasMany
                     $diameters = $row->diameterRab
                         ->pluck('dataDiameter.nama')
-                        ->filter() // Menghilangkan nilai null
-                        ->unique() // Menghilangkan duplikat
+                        ->filter()
+                        ->unique()
                         ->toArray();
                     
                     return !empty($diameters) ? implode(', ', $diameters) : '-';
                 })
                 ->addColumn('jenisPipaRab', function($row) {
-                    // Mengambil nama jenis pipa dari relasi hasMany
                     $jenisPipa = $row->jenisPipaRab
                         ->pluck('dataPipa.nama')
-                        ->filter() // Menghilangkan nilai null
-                        ->unique() // Menghilangkan duplikat
+                        ->filter() 
+                        ->unique() 
                         ->toArray();
 
                     return !empty($jenisPipa) ? implode(', ', $jenisPipa) : '-';
                 })
                 ->addColumn('volume', function($row) {
-                    // Mengambil volume dari relasi hasMany
                     $volumes = $row->volumeRab
                         ->pluck('volume')
-                        ->filter() // Menghilangkan nilai null
-                        ->unique() // Menghilangkan duplikat jika diperlukan
+                        ->filter() 
+                        ->unique() 
                         ->toArray();
                     
                     return !empty($volumes) ? implode(', ', $volumes) : '-';
@@ -89,7 +86,7 @@ class dataRabController extends Controller
             'tanggal_input' => 'required|date',
             'tanggal_awal' => 'required|date',
             'tanggal_selesai' => 'required|date',
-            
+            'tanggal_pelaksana' => 'required|date',
             // Data SPK
             'no_spk' => 'required|max:100',
             
@@ -129,6 +126,7 @@ class dataRabController extends Controller
             'upah',
             'jumlah',
             'gis',
+            'tanggal_pelaksana',
             'pekerjaan_gis',
             'lokasi_gis',
             'keterangan_gis'
@@ -147,7 +145,30 @@ class dataRabController extends Controller
         // dd($request->all(), $data);
 
         $dataRab = dataRab::create($data);
-
+        foreach ($request->jenis_pipa as $index => $jenisPipa) {
+            DB::table('jenispipa_rab')->insert([
+                'jenis_pipa' => $jenisPipa,
+                'data_rab_id' => $dataRab->id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+        foreach ($request->vol as $index => $vol) {
+            DB::table('volume_rab')->insert([
+                'volume' => $vol,
+                'data_rab_id' => $dataRab->id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+        foreach ($request->diameter as $index => $diameter) {
+            DB::table('diameter_rab')->insert([
+                'diameter' => $diameter,
+                'data_rab_id' => $dataRab->id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
         return response()->json([
             'success' => true,
             'message' => 'Data Berhasil Ditambahkan',
@@ -162,36 +183,17 @@ class dataRabController extends Controller
     public function show($id)
     {
         try {
-            $data = DataRab::select([
-                'id',
-                'tanggal',
-                'tanggal_pelaksana',
-                'no_spk',
-                'pekerjaan',
-                'masa_pemeliharaan',
-                'penyedia',
-                'vol',
-                'lokasi',
-                'rab',
-                'keterangan',
-                'honor',
-                'bahan',
-                'upah',
-                'jumlah',
-                'gis',
-                'file',
-                'file2',
-                'file3'
-            ])->findOrFail($id);
-
-            $data->formatted_tanggal = \Carbon\Carbon::parse($data->tanggal)->format('d/m/Y');
-
+            $data = DataRab::with(['diameterRab','jenisPipaRab', 'volumeRab'])->findOrFail($id);
+            $data->tanggal_input = \Carbon\Carbon::parse($data->tanggal_input)->format('d/m/Y');
+            $data->tanggal_awal = \Carbon\Carbon::parse($data->tanggal_awal)->format('d/m/Y');
+            $data->tanggal_selesai = \Carbon\Carbon::parse($data->tanggal_selesai)->format('d/m/Y');
+            $data->tanggal_pelaksana = \Carbon\Carbon::parse($data->tanggal_pelaksana)->format('d/m/Y');
             // Gunakan helper: hilangkan titik ribuan dan ubah koma jadi titik desimal, lalu cast float.
             $rab = str_replace('.', '', $data->rab);
             $rab = str_replace(',', '.', $rab);
 
-            $rab = str_replace('.', '', $data->honor);
-            $rab = str_replace(',', '.', $honor);
+            $honor = str_replace('.', '', $data->honor);
+            $honor = str_replace(',', '.', $honor);
 
             $bahan = str_replace('.', '', $data->bahan);
             $bahan = str_replace(',', '.', $bahan);
@@ -207,8 +209,9 @@ class dataRabController extends Controller
             $data->formatted_bahan = 'Rp ' . number_format((float) $bahan, 0, ',', '.');
             $data->formatted_upah = 'Rp ' . number_format((float) $upah, 0, ',', '.');
             $data->formatted_jumlah = 'Rp ' . number_format((float) $jumlah, 0, ',', '.');
-
-
+            $data->file_spk = $data->file_spk ? Storage::url($data->file_spk) : null;
+            $data->file_ded = $data->file_ded ? Storage::url($data->file_ded) : null;
+            $data->file_rab = $data->file_rab ? Storage::url($data->file_rab) : null;
             return response()->json([
                 'status' => 'success',
                 'html' => view('dataRab.detail', compact('data'))->render()
@@ -221,6 +224,7 @@ class dataRabController extends Controller
                 'message' => 'Data RAB tidak ditemukan'
             ], 404);
         } catch (\Exception $e) {
+            dd($e->getMessage());
             \Log::error("Server error on RAB detail: " . $e->getMessage());
             return response()->json([
                 'status' => 'error',
@@ -238,7 +242,7 @@ class dataRabController extends Controller
     public function edit($id)
     {
         try {
-            $dataUpdateGis = dataRab::findOrFail($id);
+            $dataUpdateGis = dataRab::with(['diameterRab','jenisPipaRab', 'volumeRab'])->findOrFail($id);
             return response()->json($dataUpdateGis);
         } catch (\Exception $e) {
             return response()->json([
@@ -254,24 +258,30 @@ class dataRabController extends Controller
             $dataRab = dataRab::findOrFail($id);
 
             $validator = Validator::make($request->all(), [
-                'tanggal' => 'required|date',
+                'tanggal_input' => 'required|date',
+                'tanggal_awal' => 'required|date',
+                'tanggal_selesai' => 'required|date',
                 'tanggal_pelaksana' => 'required|date',
+                // Data SPK
                 'no_spk' => 'required|max:100',
-                'pekerjaan' => 'required|max:300',
-                'masa_pemeliharaan' => 'required|max:300',
-                'penyedia' => 'required|max:300',
-                'vol' => 'required|max:100',
-                'lokasi' => 'required|max:300',
-                'rab' => 'required|max:100',
-                'keterangan' => 'required|max:300',
-                'honor' => 'required|max:300',
-                'bahan' => 'required|max:100',
-                'upah' => 'required|max:100',
-                'jumlah' => 'required|max:100',
+                // Data teknis pekerjaan
+                'masa_pemeliharaan' => 'nullable|max:300',
+                'penyedia_pipa' => 'nullable|max:300',
+                // File uploads
+                'file_spk' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:20048',
+                'file_ded' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:20048',
+                'file_rab' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:20048',
+                // Data biaya
+                'honor' => 'required|numeric|min:0',
+                'rab' => 'required|numeric|min:0',
+                'bahan' => 'required|numeric|min:0',
+                'upah' => 'required|numeric|min:0',
+                'jumlah' => 'required|numeric|min:0',
+                // Data GIS
                 'gis' => 'nullable|max:100',
-                'file' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:20048',
-                'file2' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:20048',
-                'file3' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:20048',
+                'pekerjaan_gis' => 'nullable|max:300',
+                'lokasi_gis' => 'nullable|max:300',
+                'keterangan_gis' => 'nullable|max:500',
             ]);
 
             if ($validator->fails()) {
@@ -285,6 +295,33 @@ class dataRabController extends Controller
             $validated = $validator->validated();
 
             $dataRab->update($validated);
+            DB::table('jenispipa_rab')->where('data_rab_id', $dataRab->id)->delete();
+            DB::table('volume_rab')->where('data_rab_id', $dataRab->id)->delete();
+            DB::table('diameter_rab')->where('data_rab_id', $dataRab->id)->delete();
+            foreach ($request->jenis_pipa as $index => $jenisPipa) {
+                DB::table('jenispipa_rab')->insert([
+                    'jenis_pipa' => $jenisPipa,
+                    'data_rab_id' => $dataRab->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+            foreach ($request->vol as $index => $vol) {
+                DB::table('volume_rab')->insert([
+                    'volume' => $vol,
+                    'data_rab_id' => $dataRab->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+            foreach ($request->diameter as $index => $diameter) {
+                DB::table('diameter_rab')->insert([
+                    'diameter' => $diameter,
+                    'data_rab_id' => $dataRab->id,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
 
             return response()->json([
                 'success' => true,
@@ -312,7 +349,9 @@ class dataRabController extends Controller
         if (!$dataRab) {
             return response()->json(['error' => 'Data tidak ditemukan'], 404);
         }
-
+        DB::table('jenispipa_rab')->where('data_rab_id', $dataRab->id)->delete();
+        DB::table('volume_rab')->where('data_rab_id', $dataRab->id)->delete();
+        DB::table('diameter_rab')->where('data_rab_id', $dataRab->id)->delete();
         // Hapus data
         $dataRab->delete();
 
