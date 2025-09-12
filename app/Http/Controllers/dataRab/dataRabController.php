@@ -86,51 +86,61 @@ class dataRabController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'tanggal' => 'required|date',
-            'tanggal_pelaksana' => 'required|date',
+            'tanggal_input' => 'required|date',
+            'tanggal_awal' => 'required|date',
+            'tanggal_selesai' => 'required|date',
+            
+            // Data SPK
             'no_spk' => 'required|max:100',
-            'pekerjaan' => 'required|max:300',
-            'masa_pemeliharaan' => 'required|max:300',
-            'penyedia' => 'required|max:300',
-            'vol' => 'required|max:100',
-            'lokasi' => 'required|max:300',
-            'rab' => 'required|max:100',
-            'keterangan' => 'required|max:300',
-            'honor' => 'required|max:300',
-            'bahan' => 'required|max:100',
-            'upah' => 'required|max:100',
-            'jumlah' => 'required|max:100',
+            
+            // Data teknis pekerjaan
+            'masa_pemeliharaan' => 'nullable|max:300',
+            'penyedia_pipa' => 'nullable|max:300',
+            
+            // File uploads
+            'file_spk' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:20048',
+            'file_ded' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:20048',
+            'file_rab' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:20048',
+            
+            // Data biaya
+            'honor' => 'required|numeric|min:0',
+            'rab' => 'required|numeric|min:0',
+            'bahan' => 'required|numeric|min:0',
+            'upah' => 'required|numeric|min:0',
+            'jumlah' => 'required|numeric|min:0',
+            
+            // Data GIS
             'gis' => 'nullable|max:100',
-            'file' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:20048',
-            'file2' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:20048',
-            'file3' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:20048',
+            'pekerjaan_gis' => 'nullable|max:300',
+            'lokasi_gis' => 'nullable|max:300',
+            'keterangan_gis' => 'nullable|max:500',
         ]);
 
         $data = $request->only([
-            'tanggal',
-            'tanggal_pelaksana',
+            'tanggal_input',
+            'tanggal_awal',
+            'tanggal_selesai',
             'no_spk',
-            'pekerjaan',
             'masa_pemeliharaan',
-            'penyedia',
-            'vol',
-            'lokasi',
+            'penyedia_pipa',
             'rab',
-            'keterangan',
             'honor',
             'bahan',
             'upah',
             'jumlah',
-            'gis'
+            'gis',
+            'pekerjaan_gis',
+            'lokasi_gis',
+            'keterangan_gis'
         ]);
 
         // Handle all file uploads
-        foreach (['file', 'file2', 'file3'] as $field) {
+        foreach (['file_spk', 'file_ded', 'file_rab'] as $field) {
             if ($request->hasFile($field)) {
                 $file = $request->file($field);
                 $fileName = Carbon::now()->timestamp . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs('public/uploads', $fileName);
-                $data[$field] = str_replace('public/', '', $path);
+                $path = $file->storeAs('/uploads', $fileName);
+                $data[$field] = $path;
             }
         }
 
