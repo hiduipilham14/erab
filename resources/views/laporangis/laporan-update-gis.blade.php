@@ -107,10 +107,10 @@
                     <thead>
                         <tr>
                             <th rowspan="2" class="text-center" style="width:3%">NO</th>
-                            <th rowspan="2" class="text-center" style="width:15%">Tanggal</th>
+                            <th rowspan="2" class="text-center" style="width:7%">Tanggal</th>
                             <th rowspan="2" class="text-center" style="width:15%">Kegiatan</th>
                            
-                            <th rowspan="2" class="text-center" style="width:10%">Koordinat</th>
+                            <th rowspan="2" class="text-center" style="width:15%">Koordinat</th>
                             <th colspan="2" class="text-center" style="width:10%">Jenis Pipa (DN)</th>
                             <th rowspan="2" class="text-center" style="width:5%">Vol (m)</th>
                             <th colspan="2" class="text-center" style="width:10%">Gate Valve</th>
