@@ -216,12 +216,22 @@
                                     <!-- Baris 4: Tahun Pemasangan Lama dan Baru -->
                                     <div class="col-md-6">
                                         <label class="form-label">Tahun Pemasangan Lama <span class="text-danger">*</span></label>
-                                        <input type="text" name="th_pemasangan_lama" class="form-control" placeholder="0" required />
+                                        <select name="th_pemasangan_lama" class="form-select" required>
+                                            <option value="">-- pilih tahun --</option>
+                                            @foreach ($tahun as $th)
+                                                <option value="{{ $th->nama }}">{{ $th->nama }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
 
                                     <div class="col-md-6">
                                         <label class="form-label">Tahun Pemasangan Baru <span class="text-danger">*</span></label>
-                                        <input type="text" name="th_pemasangan_baru" class="form-control" placeholder="0" required />
+                                        <select name="th_pemasangan_baru" class="form-select" required>
+                                            <option value="">-- pilih tahun --</option>
+                                            @foreach ($tahun as $th)
+                                                <option value="{{ $th->nama }}">{{ $th->nama }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
 
                                     <!-- Baris 5: Volume Lama dan Volume Baru -->
@@ -335,12 +345,22 @@
                                     <!-- Baris 4: Tahun Pemasangan Lama dan Baru -->
                                     <div class="col-md-6">
                                         <label class="form-label">Th Pemasangan Lama <span class="text-danger">*</span></label>
-                                        <input type="text" id="edit_th_pemasangan_lama" name="th_pemasangan_lama" class="form-control" placeholder="0" required />
+                                        <select name="th_pemasangan_lama" id="edit_th_pemasangan_lama" class="form-select" required>
+                                            <option value="">-- pilih tahun --</option>
+                                            @foreach ($tahun as $th)
+                                                <option value="{{ $th->nama }}">{{ $th->nama }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
 
                                     <div class="col-md-6">
                                         <label class="form-label">Th Pemasangan Baru <span class="text-danger">*</span></label>
-                                        <input type="text" id="edit_th_pemasangan_baru" name="th_pemasangan_baru" class="form-control" placeholder="0" required />
+                                        <select name="th_pemasangan_baru" id="edit_th_pemasangan_baru" class="form-select" required>
+                                            <option value="">-- pilih tahun --</option>
+                                            @foreach ($tahun as $th)
+                                                <option value="{{ $th->nama }}">{{ $th->nama }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
 
                                     <!-- Baris 5: Volume Lama dan Volume Baru -->

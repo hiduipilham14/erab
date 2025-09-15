@@ -50,10 +50,11 @@ class dataPenggantianPipaController extends Controller
 
         $divisis = dataDivisi::all();
         $diameters = dataDiameter::all();
+        $tahun = \App\Models\tahun::all();
         // dd($diameters);
         $pipas = dataPipa::all();
 
-        return view('dataPenggantianPipa.index', compact('divisis', 'diameters', 'pipas'));
+        return view('dataPenggantianPipa.index', compact('divisis', 'diameters', 'pipas', 'tahun'));
     }
 
     /**
