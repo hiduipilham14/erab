@@ -210,7 +210,7 @@
                                                     <label class="form-label" for="pipa">PIPA</label>
                                                     <div class="select2-primary">
                                                         <select id="form_jenis_pipa" name="jenis_pipa[]" class="form-select select2 " required multiple>
-                                                            <option value="">-- pilih jenis pipa --</option>
+                                                            {{-- <option value="">-- pilih jenis pipa --</option> --}}
                                                             @foreach ($pipas as $pipa)
                                                                 <option value="{{ $pipa->id }}">{{ $pipa->nama }}</option>
                                                             @endforeach
@@ -223,7 +223,7 @@
                                                     <label class="form-label" for="diameter">Diameter ( inch )</label>
                                                     <div class="select2-primary">
                                                         <select id="form_diameter" name="diameter[]" class="form-select select2 " multiple required>
-                                                            <option value="">-- pilih diameter --</option>
+                                                            {{-- <option value="">-- pilih diameter --</option> --}}
                                                             @foreach ($diameters as $diameter)
                                                                 <option value="{{ $diameter->id }}">{{ $diameter->nama }}</option>
                                                             @endforeach
