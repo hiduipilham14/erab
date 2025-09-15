@@ -93,6 +93,7 @@
                                             <th>Divisi</th>
                                             <th>Volume(M)</th>
                                             <th>Diameter (inchi)</th>
+                                            <th>Pipa</th>
                                             <th>Pekerjaan</th>
                                             <th>Action</th>
                                         </tr>
@@ -298,9 +299,10 @@
                         }
                     },
                     { data: 'divisi', name: 'divisi' },
-                    { data: 'volume', name: 'volume' },
-                    { data: 'diameter', name: 'diameter' },
-                    { data: 'pekerjaan', name: 'pekerjaan' },
+                    { data: 'volume', name: 'volume', class: 'text-center' },
+                    { data: 'diameter', name: 'diameter', class: 'text-center' },
+                    { data: 'jenisPipaJaringan', name: 'jenisPipaJaringan', class: 'text-center' },
+                    { data: 'pekerjaan', name: 'pekerjaan', class: 'text-center' },
                     { data: 'action', name: 'action', orderable: false, searchable: false }
                 ],
 
@@ -355,10 +357,10 @@
         function openModal(mode, id = null) {
             currentMode = mode;
             resetForm();
-            
             if (mode === 'add') {
                 $('#formModalLabel').text('Tambah Data Jaringan Baru');
                 $('#form_method').val('');
+
                 $('#submitBtn').text('Simpan');
             } else if (mode === 'edit') {
                 $('#formModalLabel').text('Edit Data Jaringan Baru');
@@ -366,7 +368,6 @@
                 $('#submitBtn').text('Update');
                 loadEditData(id);
             }
-            
             $('#formModal').modal('show');
         }
 

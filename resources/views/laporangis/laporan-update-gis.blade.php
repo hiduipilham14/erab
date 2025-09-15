@@ -140,31 +140,31 @@
                                     @foreach($daftarLaporan as $laporan)
                                         <tr>
                                             <td class="text-center">{{ $rowCount++ }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($laporan->tanggal)->format('d/m/Y') }}</td>
-                                            <td>{{ $laporan->kegiatan }}</td>
+                                            <td class="text-center">{{ \Carbon\Carbon::parse($laporan->tanggal)->format('d/m/Y') }}</td>
+                                            <td class="text-center">{{ $laporan->kegiatan }}</td>
                                             
-                                            <td class="koordinat-text">
+                                            <td class="koordinat-text text-center">
                                                 @if($laporan->koordinat)
                                                     {{ $laporan->koordinat }}
                                                 @else
                                                     <span class="no-koordinat">-</span>
                                                 @endif
                                             </td>
-                                            <td class="sm-text">{{ $laporan->pipaGis->nama ?? '-' }}</td>
-                                            <td class="sm-text">{{ $laporan->pipaLap->nama ?? '-' }}</td>
-                                            <td class="sm-text">
+                                            <td class="sm-text text-center">{{ $laporan->pipaGis->nama ?? '-' }}</td>
+                                            <td class="sm-text text-center">{{ $laporan->pipaLap->nama ?? '-' }}</td>
+                                            <td class="sm-text text-center">
                                                 @if(is_numeric($laporan->vol))
                                                     {{ number_format((float)$laporan->vol, 2) }}
                                                 @else
                                                     {{ $laporan->vol ?? '-' }}
                                                 @endif
                                             </td>
-                                            <td class="sm-text">{{ $laporan->gateValveGis->nama ?? '-' }}</td>
-                                            <td class="sm-text">{{ $laporan->gateValveLap->nama ?? '-' }}</td>
-                                            <td class="sm-text">{{ $laporan->airValveGis->nama ?? '-' }}</td>
-                                            <td class="sm-text">{{ $laporan->airValveLap->nama ?? '-' }}</td>
-                                            <td><strong>{{ $laporan->lokasi }}</strong></td>
-                                            <td class="text-keterangan">{!! $laporan->keterangan ? nl2br(e($laporan->keterangan)) : '-' !!}</td>
+                                            <td class="sm-text text-center">{{ $laporan->gateValveGis->nama ?? '-' }}</td>
+                                            <td class="sm-text text-center">{{ $laporan->gateValveLap->nama ?? '-' }}</td>
+                                            <td class="sm-text text-center">{{ $laporan->airValveGis->nama ?? '-' }}</td>
+                                            <td class="sm-text text-center">{{ $laporan->airValveLap->nama ?? '-' }}</td>
+                                            <td class="text-center"><strong>{{ $laporan->lokasi }}</strong></td>
+                                            <td class="text-keterangan text-center">{!! $laporan->keterangan ? nl2br(e($laporan->keterangan)) : '-' !!}</td>
                                         </tr>
                                     @endforeach
                                 @endforeach

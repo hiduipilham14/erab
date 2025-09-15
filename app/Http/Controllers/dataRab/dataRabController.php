@@ -35,6 +35,9 @@ class dataRabController extends Controller
                 </button>';
                     return $btn;
                 })
+                ->addColumn('rab', function($row) {
+                    return "Rp " . number_format((float)str_replace(',', '.', str_replace('.', '', $row->rab)), 0, ',', '.');
+                })
                 ->addColumn('diameter', function($row) {
                     $diameters = $row->diameterRab
                         ->pluck('dataDiameter.nama')
@@ -42,7 +45,7 @@ class dataRabController extends Controller
                         ->unique()
                         ->toArray();
                     
-                    return !empty($diameters) ? implode(', ', $diameters) : '-';
+                    return !empty($diameters) ? implode('<br><hr>', $diameters) : '-';
                 })
                 ->addColumn('jenisPipaRab', function($row) {
                     $jenisPipa = $row->jenisPipaRab
@@ -51,7 +54,7 @@ class dataRabController extends Controller
                         ->unique() 
                         ->toArray();
 
-                    return !empty($jenisPipa) ? implode(', ', $jenisPipa) : '-';
+                    return !empty($jenisPipa) ? implode('<br><hr>', $jenisPipa) : '-';
                 })
                 ->addColumn('volume', function($row) {
                     $volumes = $row->volumeRab
@@ -60,7 +63,7 @@ class dataRabController extends Controller
                         ->unique() 
                         ->toArray();
                     
-                    return !empty($volumes) ? implode(', ', $volumes) : '-';
+                    return !empty($volumes) ? implode('<br><hr> ', $volumes) : '-';
                 })
                 
                 ->rawColumns(['action', 'diameter', 'jenisPipaRab', 'volume'])
@@ -95,9 +98,9 @@ class dataRabController extends Controller
             'penyedia_pipa' => 'nullable|max:300',
             
             // File uploads
-            'file_spk' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:20048',
-            'file_ded' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:20048',
-            'file_rab' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:20048',
+            'file_spk' => 'nullable|file|mimes:pdf|max:20048',
+            'file_ded' => 'nullable|file|mimes:pdf|max:20048',
+            'file_rab' => 'nullable|file|mimes:pdf|max:20048',
             
             // Data biaya
             'honor' => 'required|numeric|min:0',
@@ -111,6 +114,13 @@ class dataRabController extends Controller
             'pekerjaan_gis' => 'nullable|max:300',
             'lokasi_gis' => 'nullable|max:300',
             'keterangan_gis' => 'nullable|max:500',
+
+            'jenis_pipa' => 'required|array',
+            'jenis_pipa.*' => 'required|exists:data_pipas,id',
+            'vol' => 'required|array',
+            'vol.*' => 'required|string|max:100',
+            'diameter' => 'required|array',
+            'diameter.*' => 'required|exists:data_diameters,id',
         ]);
 
         $data = $request->only([
@@ -133,12 +143,18 @@ class dataRabController extends Controller
         ]);
 
         // Handle all file uploads
-        foreach (['file_spk', 'file_ded', 'file_rab'] as $field) {
+       foreach (['file_spk', 'file_ded', 'file_rab'] as $field) {
             if ($request->hasFile($field)) {
                 $file = $request->file($field);
+
+                // nama file unik
                 $fileName = Carbon::now()->timestamp . '_' . $file->getClientOriginalName();
-                $path = $file->storeAs('/uploads', $fileName);
-                $data[$field] = $path;
+
+                // pindahkan langsung ke public/uploads
+                $file->move(public_path('uploads'), $fileName);
+
+                // simpan path relatif (supaya gampang dipanggil pakai asset())
+                $data[$field] = 'uploads/' . $fileName;
             }
         }
 
@@ -183,7 +199,11 @@ class dataRabController extends Controller
     public function show($id)
     {
         try {
-            $data = DataRab::with(['diameterRab','jenisPipaRab', 'volumeRab'])->findOrFail($id);
+            $data = DataRab::with(['diameterRab' => function($q) {
+                return $q->with('dataDiameter');
+            },'jenisPipaRab' => function($q) {
+                return $q->with('dataPipa');
+            }, 'volumeRab'])->findOrFail($id);
             $data->tanggal_input = \Carbon\Carbon::parse($data->tanggal_input)->format('d/m/Y');
             $data->tanggal_awal = \Carbon\Carbon::parse($data->tanggal_awal)->format('d/m/Y');
             $data->tanggal_selesai = \Carbon\Carbon::parse($data->tanggal_selesai)->format('d/m/Y');
@@ -209,9 +229,11 @@ class dataRabController extends Controller
             $data->formatted_bahan = 'Rp ' . number_format((float) $bahan, 0, ',', '.');
             $data->formatted_upah = 'Rp ' . number_format((float) $upah, 0, ',', '.');
             $data->formatted_jumlah = 'Rp ' . number_format((float) $jumlah, 0, ',', '.');
-            $data->file_spk = $data->file_spk ? Storage::url($data->file_spk) : null;
-            $data->file_ded = $data->file_ded ? Storage::url($data->file_ded) : null;
-            $data->file_rab = $data->file_rab ? Storage::url($data->file_rab) : null;
+            $data->file_spk = $data->file_spk ? asset($data->file_spk) : null;
+            $data->file_ded = $data->file_ded ? asset($data->file_ded) : null;
+            $data->file_rab = $data->file_rab ? asset($data->file_rab) : null;
+
+            // dd($data);
             return response()->json([
                 'status' => 'success',
                 'html' => view('dataRab.detail', compact('data'))->render()
@@ -268,9 +290,9 @@ class dataRabController extends Controller
                 'masa_pemeliharaan' => 'nullable|max:300',
                 'penyedia_pipa' => 'nullable|max:300',
                 // File uploads
-                'file_spk' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:20048',
-                'file_ded' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:20048',
-                'file_rab' => 'nullable|file|mimes:jpg,jpeg,png,pdf,doc,docx|max:20048',
+                'file_spk' => 'nullable|file|mimes:pdf|max:20048',
+                'file_ded' => 'nullable|file|mimes:pdf|max:20048',
+                'file_rab' => 'nullable|file|mimes:pdf|max:20048',
                 // Data biaya
                 'honor' => 'required|numeric|min:0',
                 'rab' => 'required|numeric|min:0',
@@ -282,6 +304,13 @@ class dataRabController extends Controller
                 'pekerjaan_gis' => 'nullable|max:300',
                 'lokasi_gis' => 'nullable|max:300',
                 'keterangan_gis' => 'nullable|max:500',
+
+                'jenis_pipa' => 'required|array',
+                'jenis_pipa.*' => 'required|exists:data_pipas,id',
+                'vol' => 'required|array',
+                'vol.*' => 'required|string|max:100',
+                'diameter' => 'required|array',
+                'diameter.*' => 'required|exists:data_diameters,id',
             ]);
 
             if ($validator->fails()) {

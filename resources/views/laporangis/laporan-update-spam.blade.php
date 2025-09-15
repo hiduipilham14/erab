@@ -78,6 +78,7 @@
         }
         .text-keterangan {
             font-size: 10px;
+            text-align: center
         }
         .sm-text {
             font-size: 11px;
@@ -128,9 +129,10 @@
                 <table class="table table-bordered">
                     <tr>
                         <th  class="text-center no">NO</th>
-                        <th  class="tanggal text-center">KOORDINAT</th>
-                        <th  class="lokasi text-center">LOKASI</th>
-                         <th  class="lokasi text-center">SPAM</th>
+                        <th  class="tanggal text-center">TANGGAL</th>
+                        <th  class="lokasi text-center">SPAM</th>
+                        <th  class="tanggal text-center">LOKASI</th>
+                        <th  class="koordinat-col text-center">KOORDINAT</th>
                         <th  class="koordinat-col text-center">KONDISI EKSISTING</th>
                         <th colspan="3" class="text-center">PERMASALAHAN</th>
                         <th  class="text-center">TINDAK LANJUT</th>
@@ -140,9 +142,10 @@
                         @php $no = 1; @endphp
                             <tr>
                                 <td class="text-center">{{ $no++ }}</td>
-                                <td class="koordinat-text">{{ $data->koordinat }}</td>
-                                <td class="text-keterangan">{{ $data->lokasi }}</td>
+                                <td class="text-keterangan">{{ $data->tanggal }}</td>
                                 <td class="text-keterangan">{{ $data->spam }}</td>
+                                <td class="text-keterangan">{{ $data->lokasi }}</td>
+                                <td class="text-keterangan">{{ $data->koordinat }}</td>
                                 <td class="text-keterangan">{{ $data->kondisi_existing }}</td>
                                 <td class="text-keterangan" colspan="3">{{ $data->permasalahan }}</td>
                                 <td class="text-keterangan">{{ $data->tindak_lanjut }}</td>

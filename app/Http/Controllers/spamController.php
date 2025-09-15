@@ -69,9 +69,15 @@ class spamController extends Controller
             foreach (['file_existing', 'file_permasalahan', 'file_tindak_lanjut', 'file_spam'] as $field) {
                 if ($request->hasFile($field)) {
                     $file = $request->file($field);
+
+                    // nama file unik
                     $fileName = Carbon::now()->timestamp . '_' . $file->getClientOriginalName();
-                    $path = $file->storeAs('/uploads', $fileName);
-                    $data[$field] = $path;
+
+                    // pindahkan ke folder public/uploads
+                    $file->move(public_path('uploads'), $fileName);
+
+                    // simpan path relatif (biar gampang dipanggil dengan asset())
+                    $data[$field] = 'uploads/' . $fileName;
                 }
             }
             spam::updateOrCreate(['id' => $request->id], $data);
@@ -84,10 +90,11 @@ class spamController extends Controller
     {
         $data = spam::find($id);
         if($data) {
-            $data->file_existing = $data->file_existing ? Storage::url($data->file_existing) : null;
-            $data->file_permasalahan = $data->file_permasalahan ? Storage::url($data->file_permasalahan) : null;
-            $data->file_tindak_lanjut = $data->file_tindak_lanjut ? Storage::url($data->file_tindak_lanjut) : null;
-            $data->file_spam = $data->file_spam ? Storage::url($data->file_spam) : null; 
+          $data->file_existing     = $data->file_existing ? asset($data->file_existing) : null;
+            $data->file_permasalahan = $data->file_permasalahan ? asset($data->file_permasalahan) : null;
+            $data->file_tindak_lanjut= $data->file_tindak_lanjut ? asset($data->file_tindak_lanjut) : null;
+            $data->file_spam         = $data->file_spam ? asset($data->file_spam) : null;
+
             return response()->json(['success' => $data], 200);
         } else {
             return response()->json(['success' => false], 404);

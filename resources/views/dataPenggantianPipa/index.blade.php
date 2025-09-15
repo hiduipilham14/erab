@@ -4,6 +4,16 @@
 
 <head>
     <style>
+        .offcanvas-wide {
+            width: 900px !important;
+            height: 100% !important;
+        }
+
+        @media (max-width: 768px) {
+            .offcanvas-wide {
+                width: 100% !important;
+            }
+        }
         /* Improved mobile responsiveness */
         .custom-offcanvas-center {
             top: 50% !important;
@@ -100,11 +110,9 @@
                                             <th>No</th>
                                             <th>Tanggal</th>
                                             <th>Divisi</th>
+                                            <th>Koordinat</th>
                                             <th>Lokasi</th>
-                                            <th>DN Lama (inchi)</th>
-                                            <th>DN Baru (inchi)</th>
-                                            <th>Vol Lama (m)</th>
-                                            <th>Vol Baru (m)</th>
+                                            <th>Keterangan</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -138,24 +146,23 @@
                         </div>
 
                         <!-- Modal to add new record -->
-                        <div class="offcanvas custom-offcanvas-center" id="add-new-record">
+                        <div class="offcanvas custom-offcanvas-center offcanvas-wide" id="add-new-record">
                             <div class="offcanvas-header border-bottom">
                                 <h5 class="offcanvas-title">Tambah Data Penggantian Pipa</h5>
-                                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
-                                    aria-label="Close"></button>
+                                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                             </div>
                             <div class="offcanvas-body flex-grow-1">
-                                <form class="add-new-record pt-0 row g-2" id="form-add-new-record"
-                                    enctype="multipart/form-data">
+                                <form class="add-new-record pt-0 row g-3" id="form-add-new-record" enctype="multipart/form-data">
                                     @csrf
 
-                                    <div class="col-sm-12">
-                                        <label class="form-label">Tanggal</label>
+                                    <!-- Baris 1: Tanggal dan Divisi -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Tanggal <span class="text-danger">*</span></label>
                                         <input type="date" name="tanggal" class="form-control" required />
                                     </div>
 
-                                    <div class="col-sm-12">
-                                        <label class="form-label">Divisi</label>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Divisi <span class="text-danger">*</span></label>
                                         <select name="divisi" class="form-select" required>
                                             <option value="">-- pilih divisi --</option>
                                             @foreach ($divisis as $divisi)
@@ -164,85 +171,91 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-sm-12">
-                                        <label class="form-label">Pipa Lama</label>
+                                    <!-- Baris 2: Pipa Lama dan Pipa Baru -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Pipa Lama <span class="text-danger">*</span></label>
                                         <select name="pipa_lama" class="form-select" required>
-                                            <option value="">-- pilih Pipa --</option>
+                                            <option value="">-- pilih jenis pipa --</option>
                                             @foreach ($pipas as $pipa)
                                                 <option value="{{ $pipa->id }}">{{ $pipa->nama }}</option>
                                             @endforeach
                                         </select>
                                     </div>
 
-                                    <div class="col-sm-12">
-                                        <label class="form-label">Pipa Baru</label>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Pipa Baru <span class="text-danger">*</span></label>
                                         <select name="pipa_baru" class="form-select" required>
-                                            <option value="">-- pilih pipa --</option>
+                                            <option value="">-- pilih jenis pipa --</option>
                                             @foreach ($pipas as $pipa)
                                                 <option value="{{ $pipa->id }}">{{ $pipa->nama }}</option>
                                             @endforeach
                                         </select>
                                     </div>
 
-                                    <div class="col-sm-12">
-                                        <label class="form-label">DN Lama</label>
+                                    <!-- Baris 3: DN Lama dan DN Baru -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Diameter Lama (inchi) <span class="text-danger">*</span></label>
                                         <select name="dn_lama" class="form-select" required>
-                                            <option value="">-- pilih diameter --</option>
+                                            <option value="">-- pilih dn --</option>
                                             @foreach ($diameters as $diameter)
                                                 <option value="{{ $diameter->id }}">{{ $diameter->nama }}</option>
                                             @endforeach
                                         </select>
                                     </div>
 
-                                    <div class="col-sm-12">
-                                        <label class="form-label">DN Baru</label>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Diameter Baru (inchi) <span class="text-danger">*</span></label>
                                         <select name="dn_baru" class="form-select" required>
-                                            <option value="">-- pilih diameter --</option>
+                                            <option value="">-- pilih dn --</option>
                                             @foreach ($diameters as $diameter)
                                                 <option value="{{ $diameter->id }}">{{ $diameter->nama }}</option>
                                             @endforeach
                                         </select>
                                     </div>
 
-                                    <div class="col-sm-12">
-                                        <label class="form-label">Tahun Pemasangan Lama</label>
-                                        <input type="text" name="th_pemasangan_lama" class="form-control" required />
+                                    <!-- Baris 4: Tahun Pemasangan Lama dan Baru -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Tahun Pemasangan Lama <span class="text-danger">*</span></label>
+                                        <input type="text" name="th_pemasangan_lama" class="form-control" placeholder="0" required />
                                     </div>
 
-                                    <div class="col-sm-12">
-                                        <label class="form-label">Tahun Pemasangan Baru</label>
-                                        <input type="text" name="th_pemasangan_baru" class="form-control" required />
+                                    <div class="col-md-6">
+                                        <label class="form-label">Tahun Pemasangan Baru <span class="text-danger">*</span></label>
+                                        <input type="text" name="th_pemasangan_baru" class="form-control" placeholder="0" required />
                                     </div>
 
-                                    <div class="col-sm-12">
-                                        <label class="form-label">Koordinat</label>
-                                        <input type="text" name="koordinat" class="form-control" required />
+                                    <!-- Baris 5: Volume Lama dan Volume Baru -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Volume Lama (m) <span class="text-danger">*</span></label>
+                                        <input type="text" name="vol_lama" class="form-control" placeholder="0" required />
                                     </div>
 
-                                    <div class="col-sm-12">
-                                        <label class="form-label">Vol (m) Lama</label>
-                                        <input type="text" name="vol_lama" class="form-control" required />
+                                    <div class="col-md-6">
+                                        <label class="form-label">Volume Baru (m) <span class="text-danger">*</span></label>
+                                        <input type="text" name="vol_baru" class="form-control" placeholder="0" required />
                                     </div>
 
-                                    <div class="col-sm-12">
-                                        <label class="form-label">Vol (m) Baru</label>
-                                        <input type="text" name="vol_baru" class="form-control" required />
+                                    <!-- Baris 6: Koordinat dan Lokasi -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Koordinat <span class="text-danger">*</span></label>
+                                        <input type="text" name="koordinat" class="form-control" placeholder="0" required />
                                     </div>
 
-                                    <div class="col-sm-12">
-                                        <label class="form-label">Lokasi</label>
-                                        <input type="text" name="lokasi" class="form-control" required />
+                                    <div class="col-md-6">
+                                        <label class="form-label">Lokasi <span class="text-danger">*</span></label>
+                                        <input type="text" name="lokasi" class="form-control" placeholder="Lokasi pekerjaan" required />
                                     </div>
 
-                                    <div class="col-sm-12">
+                                    <!-- Baris 7: Keterangan (full width) -->
+                                    <div class="col-6">
                                         <label class="form-label">Keterangan</label>
-                                        <textarea name="keterangan" class="form-control" rows="2" required></textarea>
+                                        <textarea name="keterangan" class="form-control" rows="2" placeholder="Keterangan tambahan"></textarea>
                                     </div>
 
-                                    <div class="col-sm-12 mt-3">
-                                        <button type="submit" class="btn btn-primary">Simpan</button>
-                                        <button type="reset" class="btn btn-outline-secondary"
-                                            data-bs-dismiss="offcanvas">Batal</button>
+                                    <!-- Baris 8: Tombol (full width) -->
+                                    <div class="col-12 mt-4">
+                                        <button type="submit" class="btn btn-primary me-sm-3 me-1">Simpan</button>
+                                        <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="offcanvas">Batal</button>
                                     </div>
                                 </form>
                             </div>
@@ -250,27 +263,25 @@
 
                         <!--/ DataTable with Buttons -->
                         <!-- Modal edit record -->
-                        <div class="offcanvas custom-offcanvas-center" id="edit-record">
+                        <div class="offcanvas custom-offcanvas-center offcanvas-wide" id="edit-record">
                             <div class="offcanvas-header border-bottom">
                                 <h5 class="offcanvas-title">Edit Data Penggantian Pipa</h5>
-                                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
-                                    aria-label="Close"></button>
+                                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                             </div>
                             <div class="offcanvas-body flex-grow-1">
-                                <form class="edit-record pt-0 row g-2" id="form-edit-record"
-                                    enctype="multipart/form-data">
+                                <form class="edit-record pt-0 row g-3" id="form-edit-record" enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
                                     <input type="hidden" id="edit_id" name="id">
 
-                                    <div class="col-sm-12">
-                                        <label class="form-label">Tanggal</label>
-                                        <input type="date" id="edit_tanggal" name="tanggal" class="form-control"
-                                            required />
+                                    <!-- Baris 1: Tanggal dan Divisi -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Tanggal <span class="text-danger">*</span></label>
+                                        <input type="date" id="edit_tanggal" name="tanggal" class="form-control" required />
                                     </div>
 
-                                    <div class="col-sm-12">
-                                        <label class="form-label">Divisi</label>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Divisi <span class="text-danger">*</span></label>
                                         <select id="edit_divisi" name="divisi" class="form-select" required>
                                             <option value="">-- pilih divisi --</option>
                                             @foreach ($divisis as $divisi)
@@ -279,91 +290,91 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-sm-12">
-                                        <label class="form-label">Pipa Lama</label>
+                                    <!-- Baris 2: Pipa Lama dan Pipa Baru -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">PIPA Lama <span class="text-danger">*</span></label>
                                         <select id="edit_pipa_lama" name="pipa_lama" class="form-select" required>
-                                            <option value="">-- pilih pipa --</option>
+                                            <option value="">-- pilih jenis pipa --</option>
                                             @foreach ($pipas as $pipa)
                                                 <option value="{{ $pipa->id }}">{{ $pipa->nama }}</option>
                                             @endforeach
                                         </select>
                                     </div>
 
-                                    <div class="col-sm-12">
-                                        <label class="form-label">Pipa Baru</label>
+                                    <div class="col-md-6">
+                                        <label class="form-label">PIPA Baru <span class="text-danger">*</span></label>
                                         <select id="edit_pipa_baru" name="pipa_baru" class="form-select" required>
-                                            <option value="">-- pilih pipa --</option>
+                                            <option value="">-- pilih jenis pipa --</option>
                                             @foreach ($pipas as $pipa)
                                                 <option value="{{ $pipa->id }}">{{ $pipa->nama }}</option>
                                             @endforeach
                                         </select>
                                     </div>
 
-                                    <div class="col-sm-12">
-                                        <label class="form-label">DN (inchi) Lama</label>
+                                    <!-- Baris 3: Diameter Lama dan Diameter Baru -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Diameter Lama (inchi) <span class="text-danger">*</span></label>
                                         <select id="edit_dn_lama" name="dn_lama" class="form-select" required>
-                                            <option value="">-- pilih diameter --</option>
+                                            <option value="">-- pilih dn --</option>
                                             @foreach ($diameters as $diameter)
                                                 <option value="{{ $diameter->id }}">{{ $diameter->nama }}</option>
                                             @endforeach
                                         </select>
                                     </div>
 
-                                    <div class="col-sm-12">
-                                        <label class="form-label">DN (inchi) Baru</label>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Diameter Baru (inchi) <span class="text-danger">*</span></label>
                                         <select id="edit_dn_baru" name="dn_baru" class="form-select" required>
-                                            <option value="">-- pilih diameter --</option>
+                                            <option value="">-- pilih dn --</option>
                                             @foreach ($diameters as $diameter)
                                                 <option value="{{ $diameter->id }}">{{ $diameter->nama }}</option>
                                             @endforeach
                                         </select>
                                     </div>
 
-                                    <div class="col-sm-12">
-                                        <label class="form-label">Th Pemasangan Lama</label>
-                                        <input type="text" id="edit_th_pemasangan_lama" name="th_pemasangan_lama"
-                                            class="form-control" required />
+                                    <!-- Baris 4: Tahun Pemasangan Lama dan Baru -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Th Pemasangan Lama <span class="text-danger">*</span></label>
+                                        <input type="text" id="edit_th_pemasangan_lama" name="th_pemasangan_lama" class="form-control" placeholder="0" required />
                                     </div>
 
-                                    <div class="col-sm-12">
-                                        <label class="form-label">Th Pemasangan Baru</label>
-                                        <input type="text" id="edit_th_pemasangan_baru" name="th_pemasangan_baru"
-                                            class="form-control" required />
+                                    <div class="col-md-6">
+                                        <label class="form-label">Th Pemasangan Baru <span class="text-danger">*</span></label>
+                                        <input type="text" id="edit_th_pemasangan_baru" name="th_pemasangan_baru" class="form-control" placeholder="0" required />
                                     </div>
 
-                                    <div class="col-sm-12">
-                                        <label class="form-label">Koordinat</label>
-                                        <input type="text" id="edit_koordinat" name="koordinat"
-                                            class="form-control" required />
+                                    <!-- Baris 5: Volume Lama dan Volume Baru -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Volume Lama (m) <span class="text-danger">*</span></label>
+                                        <input type="text" id="edit_vol_lama" name="vol_lama" class="form-control" placeholder="0" required />
                                     </div>
 
-                                    <div class="col-sm-12">
-                                        <label class="form-label">Vol (m) Lama</label>
-                                        <input type="text" id="edit_vol_lama" name="vol_lama"
-                                            class="form-control" required />
+                                    <div class="col-md-6">
+                                        <label class="form-label">Volume Baru (m) <span class="text-danger">*</span></label>
+                                        <input type="text" id="edit_vol_baru" name="vol_baru" class="form-control" placeholder="0" required />
                                     </div>
 
-                                    <div class="col-sm-12">
-                                        <label class="form-label">Vol (m) Baru</label>
-                                        <input type="text" id="edit_vol_baru" name="vol_baru"
-                                            class="form-control" required />
+                                    <!-- Baris 6: Koordinat dan Lokasi -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Koordinat <span class="text-danger">*</span></label>
+                                        <input type="text" id="edit_koordinat" name="koordinat" class="form-control" placeholder="0" required />
                                     </div>
 
-                                    <div class="col-sm-12">
-                                        <label class="form-label">Lokasi</label>
-                                        <input type="text" id="edit_lokasi" name="lokasi" class="form-control"
-                                            required />
+                                    <div class="col-md-6">
+                                        <label class="form-label">Lokasi <span class="text-danger">*</span></label>
+                                        <input type="text" id="edit_lokasi" name="lokasi" class="form-control" placeholder="Lokasi pekerjaan" required />
                                     </div>
 
-                                    <div class="col-sm-12">
+                                    <!-- Baris 7: Keterangan (full width) -->
+                                    <div class="col-6">
                                         <label class="form-label">Keterangan</label>
-                                        <textarea id="edit_keterangan" name="keterangan" class="form-control" rows="2" required></textarea>
+                                        <textarea id="edit_keterangan" name="keterangan" class="form-control" rows="2" placeholder="Keterangan tambahan"></textarea>
                                     </div>
 
-                                    <div class="col-sm-12 mt-3">
-                                        <button type="submit" class="btn btn-primary">Update</button>
-                                        <button type="reset" class="btn btn-outline-secondary"
-                                            data-bs-dismiss="offcanvas">Batal</button>
+                                    <!-- Baris 8: Tombol (full width) -->
+                                    <div class="col-12 mt-4">
+                                        <button type="submit" class="btn btn-primary me-sm-3 me-1">Update</button>
+                                        <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="offcanvas">Batal</button>
                                     </div>
                                 </form>
                             </div>
@@ -415,24 +426,16 @@
                         name: 'divisi'
                     },
                     {
+                        data: 'koordinat',
+                        name: 'koordinat'
+                    },
+                    {
                         data: 'lokasi',
                         name: 'lokasi'
                     },
                     {
-                        data: 'dn_lama',
-                        name: 'dn_lama'
-                    },
-                    {
-                        data: 'dn_baru',
-                        name: 'dn_baru'
-                    },
-                    {
-                        data: 'vol_lama',
-                        name: 'vol_lama'
-                    },
-                    {
-                        data: 'vol_baru',
-                        name: 'vol_baru'
+                        data: 'keterangan',
+                        name: 'keterangan'
                     },
                     {
                         data: 'action',

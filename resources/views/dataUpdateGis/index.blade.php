@@ -5,6 +5,16 @@
 <head>
     <style>
         /* Improved mobile responsiveness */
+        .offcanvas-wide {
+            width: 900px !important;
+            height: 100% !important;
+        }
+
+        @media (max-width: 768px) {
+            .offcanvas-wide {
+                width: 100% !important;
+            }
+        }
         .custom-offcanvas-center {
             top: 50% !important;
             left: 50% !important;
@@ -100,12 +110,10 @@
                                             <th>No</th>
                                             <th>Tanggal</th>
                                             <th>Divisi</th>
-                                            <th>Pekerjaan</th>
-                                            <th>Vol (m)</th>
+                                            <th>Kegiatan</th>
                                             <th>Lokasi</th>
                                             <th>Koordinat</th>
-                                            <th>Pipa GIS</th>
-                                            <th>Pipa LAP</th>
+                                            <th>Volume(M)</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -139,28 +147,23 @@
                         </div>
 
                         <!-- Modal tambah data -->
-                        <div class="offcanvas custom-offcanvas-center" id="add-new-record">
+                        <div class="offcanvas custom-offcanvas-center offcanvas-wide" id="add-new-record">
                             <div class="offcanvas-header border-bottom">
                                 <h5 class="offcanvas-title" id="exampleModalLabel">Tambah Data Update GIS</h5>
-                                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
-                                    aria-label="Close"></button>
+                                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                             </div>
                             <div class="offcanvas-body flex-grow-1">
-                                <form class="add-new-record pt-0 row g-2" id="form-add-new-record"
-                                    enctype="multipart/form-data">
+                                <form class="add-new-record pt-0 row g-3" id="form-add-new-record" enctype="multipart/form-data">
                                     @csrf
 
-                                    <div class="col-sm-12">
-                                        <label class="form-label" for="tanggal">Tanggal <span
-                                                class="text-danger">*</span></label>
-                                        <input type="date" id="tanggal" name="tanggal" class="form-control"
-                                            required />
+                                    <!-- Baris 1: Tanggal dan Divisi -->
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="tanggal">Tanggal <span class="text-danger">*</span></label>
+                                        <input type="date" id="tanggal" name="tanggal" class="form-control" required />
                                     </div>
 
-                                    <!-- Divisi Selection -->
-                                    <div class="col-sm-12">
-                                        <label class="form-label" for="divisi_id">Divisi <span
-                                                class="text-danger">*</span></label>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="divisi_id">Divisi <span class="text-danger">*</span></label>
                                         <select id="divisi_id" name="divisi_id" class="form-select" required>
                                             <option value=""> -- pilih divisi --</option>
                                             @foreach ($divisis as $divisi)
@@ -169,49 +172,32 @@
                                         </select>
                                     </div>
 
-                                    <!-- Activity Field -->
-                                    <div class="col-sm-12">
-                                        <label class="form-label" for="kegiatan">Kegiatan <span
-                                                class="text-danger">*</span></label>
-                                        <input type="text" id="kegiatan" name="kegiatan" class="form-control"
-                                            placeholder="Nama kegiatan" required />
+                                    <!-- Baris 2: Kegiatan dan Koordinat -->
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="kegiatan">Kegiatan <span class="text-danger">*</span></label>
+                                        <input type="text" id="kegiatan" name="kegiatan" class="form-control" placeholder="Nama kegiatan" required />
                                     </div>
 
-                                    <!-- Coordinate Field -->
-                                    <div class="col-sm-12">
-                                        <label class="form-label" for="koordinat">Koordinat <span
-                                                class="text-danger">*</span></label>
-                                        <input type="text" id="koordinat" name="koordinat" class="form-control"
-                                            placeholder="0" required />
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="koordinat">Koordinat <span class="text-danger">*</span></label>
+                                        <input type="text" id="koordinat" name="koordinat" class="form-control" placeholder="0" required />
                                     </div>
 
-                                    <!-- Volume Field -->
-                                    <div class="col-sm-12">
-                                        <label class="form-label" for="vol">Vol (m) <span
-                                                class="text-danger">*</span></label>
-                                        <input type="text" id="vol" name="vol" class="form-control"
-                                            placeholder="0" required />
+                                    <!-- Baris 3: Volume dan Lokasi -->
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="vol">Vol (m) <span class="text-danger">*</span></label>
+                                        <input type="text" id="vol" name="vol" class="form-control" placeholder="0" required />
                                     </div>
 
-                                    <!-- Gate Valve GIS Selection -->
-                                    <div class="col-sm-12">
-                                        <label class="form-label" for="gate_valve_gis">Gate Valve (GIS) <span
-                                                class="text-danger">*</span></label>
-                                        <select id="gate_valve_gis" name="gate_valve_gis" class="form-select"
-                                            required>
-                                            <option value="">-- pipih diameter --</option>
-                                            @foreach ($diameters as $diameter)
-                                                <option value="{{ $diameter->id }}">{{ $diameter->nama }}</option>
-                                            @endforeach
-                                        </select>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="lokasi">Lokasi <span class="text-danger">*</span></label>
+                                        <input type="text" id="lokasi" name="lokasi" class="form-control" placeholder="Lokasi pekerjaan" required />
                                     </div>
 
-                                    <!-- Gate Valve Lapangan Selection -->
-                                    <div class="col-sm-12">
-                                        <label class="form-label" for="gate_valve_lap">Gate Valve (Lap) <span
-                                                class="text-danger">*</span></label>
-                                        <select id="gate_valve_lap" name="gate_valve_lap" class="form-select"
-                                            required>
+                                    <!-- Baris 4: Gate Valve GIS dan LAP -->
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="gate_valve_gis">Gate Valve (GIS) <span class="text-danger">*</span></label>
+                                        <select id="gate_valve_gis" name="gate_valve_gis" class="form-select" required>
                                             <option value="">-- pilih diameter --</option>
                                             @foreach ($diameters as $diameter)
                                                 <option value="{{ $diameter->id }}">{{ $diameter->nama }}</option>
@@ -219,34 +205,19 @@
                                         </select>
                                     </div>
 
-                                    <!-- Pipa GIS Selection -->
-                                    <div class="col-sm-12">
-                                        <label class="form-label" for="pipa_gis">Pipa (GIS) <span
-                                                class="text-danger">*</span></label>
-                                        <select id="pipa_gis" name="pipa_gis" class="form-select" required>
-                                            <option value="">Pilih Jenis Pipa</option>
-                                            @foreach ($pipas as $pipa)
-                                                <option value="{{ $pipa->id }}">{{ $pipa->nama }}</option>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="gate_valve_lap">Gate Valve (Lap) <span class="text-danger">*</span></label>
+                                        <select id="gate_valve_lap" name="gate_valve_lap" class="form-select" required>
+                                            <option value="">-- pilih diameter --</option>
+                                            @foreach ($diameters as $diameter)
+                                                <option value="{{ $diameter->id }}">{{ $diameter->nama }}</option>
                                             @endforeach
                                         </select>
                                     </div>
 
-                                    <!-- Pipa Lapangan Selection -->
-                                    <div class="col-sm-12">
-                                        <label class="form-label" for="pipa_lap">Pipa (Lap) <span
-                                                class="text-danger">*</span></label>
-                                        <select id="pipa_lap" name="pipa_lap" class="form-select" required>
-                                            <option value="">-- pilih jenis pipa --</option>
-                                            @foreach ($pipas as $pipa)
-                                                <option value="{{ $pipa->id }}">{{ $pipa->nama }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <!-- Air Valve GIS Selection -->
-                                    <div class="col-sm-12">
-                                        <label class="form-label" for="air_valve_gis">Air Valve (GIS) <span
-                                                class="text-danger">*</span></label>
+                                    <!-- Baris 5: Air Valve GIS dan LAP -->
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="air_valve_gis">Air Valve (GIS) <span class="text-danger">*</span></label>
                                         <select id="air_valve_gis" name="air_valve_gis" class="form-select" required>
                                             <option value="">-- pilih diameter --</option>
                                             @foreach ($diameters as $diameter)
@@ -255,38 +226,47 @@
                                         </select>
                                     </div>
 
-                                    <!-- Air Valve Lapangan Selection -->
-                                    <div class="col-sm-12">
-                                        <label class="form-label" for="air_valve_lap">Air Valve (Lap) <span
-                                                class="text-danger">*</span></label>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="air_valve_lap">Air Valve (Lap) <span class="text-danger">*</span></label>
                                         <select id="air_valve_lap" name="air_valve_lap" class="form-select" required>
-                                            <option value="">-- pilih diameter</option>
+                                            <option value="">-- pilih diameter --</option>
                                             @foreach ($diameters as $diameter)
                                                 <option value="{{ $diameter->id }}">{{ $diameter->nama }}</option>
                                             @endforeach
                                         </select>
                                     </div>
 
-                                    <!-- Location Field -->
-                                    <div class="col-sm-12">
-                                        <label class="form-label" for="lokasi">Lokasi <span
-                                                class="text-danger">*</span></label>
-                                        <input type="text" id="lokasi" name="lokasi" class="form-control"
-                                            placeholder="Lokasi pekerjaan" required />
+                                    <!-- Baris 6: Pipa GIS dan LAP -->
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="pipa_gis">Pipa (GIS) <span class="text-danger">*</span></label>
+                                        <select id="pipa_gis" name="pipa_gis" class="form-select" required>
+                                            <option value="">-- pilih jenis pipa --</option>
+                                            @foreach ($pipas as $pipa)
+                                                <option value="{{ $pipa->id }}">{{ $pipa->nama }}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
 
-                                    <!-- Description Field -->
-                                    <div class="col-sm-12">
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="pipa_lap">Pipa (Lap) <span class="text-danger">*</span></label>
+                                        <select id="pipa_lap" name="pipa_lap" class="form-select" required>
+                                            <option value="">-- pilih jenis pipa --</option>
+                                            @foreach ($pipas as $pipa)
+                                                <option value="{{ $pipa->id }}">{{ $pipa->nama }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <!-- Baris 7: Keterangan (full width) -->
+                                    <div class="col-6">
                                         <label class="form-label" for="keterangan">Keterangan</label>
                                         <textarea id="keterangan" name="keterangan" class="form-control" placeholder="Keterangan tambahan" rows="2"></textarea>
                                     </div>
 
-
-                                    <div class="col-sm-12 mt-3">
-                                        <button type="submit"
-                                            class="btn btn-primary data-submit me-sm-3 me-1">Simpan</button>
-                                        <button type="reset" class="btn btn-outline-secondary"
-                                            data-bs-dismiss="offcanvas">Batal</button>
+                                    <!-- Baris 8: Tombol (full width) -->
+                                    <div class="col-12 mt-4">
+                                        <button type="submit" class="btn btn-primary data-submit me-sm-3 me-1">Simpan</button>
+                                        <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="offcanvas">Batal</button>
                                     </div>
                                 </form>
                             </div>
@@ -295,31 +275,25 @@
                         <!--/ DataTable with Buttons -->
 
                         <!-- Edit Modal -->
-                        <div class="offcanvas custom-offcanvas-center" id="edit-record">
+                        <div class="offcanvas custom-offcanvas-center offcanvas-wide" id="edit-record">
                             <div class="offcanvas-header border-bottom">
                                 <h5 class="offcanvas-title" id="editModalLabel">Edit Data Update GIS</h5>
-                                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
-                                    aria-label="Close"></button>
+                                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                             </div>
                             <div class="offcanvas-body flex-grow-1">
-                                <form class="edit-record pt-0 row g-2" id="form-edit-record"
-                                    enctype="multipart/form-data">
+                                <form class="edit-record pt-0 row g-3" id="form-edit-record" enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
                                     <input type="hidden" id="edit_id" name="id">
 
-                                    <!-- Tanggal -->
-                                    <div class="col-sm-12">
-                                        <label class="form-label" for="edit_tanggal">Tanggal <span
-                                                class="text-danger">*</span></label>
-                                        <input type="date" id="edit_tanggal" name="tanggal" class="form-control"
-                                            required />
+                                    <!-- Baris 1: Tanggal dan Divisi -->
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="edit_tanggal">Tanggal <span class="text-danger">*</span></label>
+                                        <input type="date" id="edit_tanggal" name="tanggal" class="form-control" required />
                                     </div>
 
-                                    <!-- Divisi -->
-                                    <div class="col-sm-12">
-                                        <label class="form-label" for="edit_divisi_id">Divisi <span
-                                                class="text-danger">*</span></label>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="edit_divisi_id">Divisi <span class="text-danger">*</span></label>
                                         <select id="edit_divisi_id" name="divisi_id" class="form-select" required>
                                             <option value="">-- pilih divisi --</option>
                                             @foreach ($divisis as $divisi)
@@ -328,36 +302,32 @@
                                         </select>
                                     </div>
 
-                                    <!-- Kegiatan -->
-                                    <div class="col-sm-12">
-                                        <label class="form-label" for="edit_kegiatan">Kegiatan <span
-                                                class="text-danger">*</span></label>
-                                        <input type="text" id="edit_kegiatan" name="kegiatan"
-                                            class="form-control" required />
+                                    <!-- Baris 2: Kegiatan dan Koordinat -->
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="edit_kegiatan">Kegiatan <span class="text-danger">*</span></label>
+                                        <input type="text" id="edit_kegiatan" name="kegiatan" class="form-control" required />
                                     </div>
 
-                                    <!-- Koordinat -->
-                                    <div class="col-sm-12">
-                                        <label class="form-label" for="edit_koordinat">Koordinat <span
-                                                class="text-danger">*</span></label>
-                                        <input type="text" id="edit_koordinat" name="koordinat"
-                                            class="form-control" required />
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="edit_koordinat">Koordinat <span class="text-danger">*</span></label>
+                                        <input type="text" id="edit_koordinat" name="koordinat" class="form-control" required />
                                     </div>
 
-                                    <!-- Volume -->
-                                    <div class="col-sm-12">
-                                        <label class="form-label" for="edit_vol">Vol (m) <span
-                                                class="text-danger">*</span></label>
-                                        <input type="text" id="edit_vol" name="vol" class="form-control"
-                                            required />
+                                    <!-- Baris 3: Volume dan Lokasi -->
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="edit_vol">Vol (m) <span class="text-danger">*</span></label>
+                                        <input type="text" id="edit_vol" name="vol" class="form-control" required />
                                     </div>
 
-                                    <!-- Gate Valve GIS -->
-                                    <div class="col-sm-12">
-                                        <label class="form-label" for="edit_gate_valve_gis">Gate Valve (GIS) <span
-                                                class="text-danger">*</span></label>
-                                        <select id="edit_gate_valve_gis" name="gate_valve_gis" class="form-select"
-                                            required>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="edit_lokasi">Lokasi <span class="text-danger">*</span></label>
+                                        <input type="text" id="edit_lokasi" name="lokasi" class="form-control" required />
+                                    </div>
+
+                                    <!-- Baris 4: Gate Valve GIS dan LAP -->
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="edit_gate_valve_gis">Gate Valve (GIS) <span class="text-danger">*</span></label>
+                                        <select id="edit_gate_valve_gis" name="gate_valve_gis" class="form-select" required>
                                             <option value="">-- pilih diameter --</option>
                                             @foreach ($diameters as $diameter)
                                                 <option value="{{ $diameter->id }}">{{ $diameter->nama }}</option>
@@ -365,12 +335,9 @@
                                         </select>
                                     </div>
 
-                                    <!-- Gate Valve Lapangan -->
-                                    <div class="col-sm-12">
-                                        <label class="form-label" for="edit_gate_valve_lap">Gate Valve (Lap)
-                                            <span class="text-danger">*</span></label>
-                                        <select id="edit_gate_valve_lap" name="gate_valve_lap" class="form-select"
-                                            required>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="edit_gate_valve_lap">Gate Valve (Lap) <span class="text-danger">*</span></label>
+                                        <select id="edit_gate_valve_lap" name="gate_valve_lap" class="form-select" required>
                                             <option value="">-- pilih diameter --</option>
                                             @foreach ($diameters as $diameter)
                                                 <option value="{{ $diameter->id }}">{{ $diameter->nama }}</option>
@@ -378,79 +345,63 @@
                                         </select>
                                     </div>
 
-                                    <!-- Pipa GIS -->
-                                    <div class="col-sm-12">
-                                        <label class="form-label" for="edit_pipa_gis">Pipa (GIS) <span
-                                                class="text-danger">*</span></label>
+                                    <!-- Baris 5: Air Valve GIS dan LAP -->
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="edit_air_valve_gis">Air Valve (GIS) <span class="text-danger">*</span></label>
+                                        <select id="edit_air_valve_gis" name="air_valve_gis" class="form-select" required>
+                                            <option value="">-- pilih diameter --</option>
+                                            @foreach ($diameters as $diameter)
+                                                <option value="{{ $diameter->id }}">{{ $diameter->nama }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="edit_air_valve_lap">Air Valve (Lap) <span class="text-danger">*</span></label>
+                                        <select id="edit_air_valve_lap" name="air_valve_lap" class="form-select" required>
+                                            <option value="">-- pilih diameter --</option>
+                                            @foreach ($diameters as $diameter)
+                                                <option value="{{ $diameter->id }}">{{ $diameter->nama }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <!-- Baris 6: Pipa GIS dan LAP -->
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="edit_pipa_gis">Pipa (GIS) <span class="text-danger">*</span></label>
                                         <select id="edit_pipa_gis" name="pipa_gis" class="form-select" required>
-                                            <option value="">-- pilih pipa --</option>
+                                            <option value="">-- pilih jenis pipa --</option>
                                             @foreach ($pipas as $pipa)
                                                 <option value="{{ $pipa->id }}">{{ $pipa->nama }}</option>
                                             @endforeach
                                         </select>
                                     </div>
 
-                                    <!-- Pipa Lapangan -->
-                                    <div class="col-sm-12">
-                                        <label class="form-label" for="edit_pipa_lap">Pipa (Lap) <span
-                                                class="text-danger">*</span></label>
+                                    <div class="col-md-6">
+                                        <label class="form-label" for="edit_pipa_lap">Pipa (Lap) <span class="text-danger">*</span></label>
                                         <select id="edit_pipa_lap" name="pipa_lap" class="form-select" required>
-                                            <option value="">-- pilih pipa --</option>
+                                            <option value="">-- pilih jenis pipa --</option>
                                             @foreach ($pipas as $pipa)
                                                 <option value="{{ $pipa->id }}">{{ $pipa->nama }}</option>
                                             @endforeach
                                         </select>
                                     </div>
 
-                                    <!-- Air Valve GIS -->
-                                    <div class="col-sm-12">
-                                        <label class="form-label" for="edit_air_valve_gis">Air Valve (GIS) <span
-                                                class="text-danger">*</span></label>
-                                        <select id="edit_air_valve_gis" name="air_valve_gis" class="form-select"
-                                            required>
-                                            <option value="">Pilih Diameter</option>
-                                            @foreach ($diameters as $diameter)
-                                                <option value="{{ $diameter->id }}">{{ $diameter->nama }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <!-- Air Valve Lapangan -->
-                                    <div class="col-sm-12">
-                                        <label class="form-label" for="edit_air_valve_lap">Air Valve (Lapangan) <span
-                                                class="text-danger">*</span></label>
-                                        <select id="edit_air_valve_lap" name="air_valve_lap" class="form-select"
-                                            required>
-                                            <option value="">Pilih Diameter</option>
-                                            @foreach ($diameters as $diameter)
-                                                <option value="{{ $diameter->id }}">{{ $diameter->nama }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-
-                                    <!-- Lokasi -->
-                                    <div class="col-sm-12">
-                                        <label class="form-label" for="edit_lokasi">Lokasi <span
-                                                class="text-danger">*</span></label>
-                                        <input type="text" id="edit_lokasi" name="lokasi" class="form-control"
-                                            required />
-                                    </div>
-
-                                    <!-- Keterangan -->
-                                    <div class="col-sm-12">
+                                    <!-- Baris 7: Keterangan (full width) -->
+                                    <div class="col-6">
                                         <label class="form-label" for="edit_keterangan">Keterangan</label>
                                         <textarea id="edit_keterangan" name="keterangan" class="form-control" rows="2"></textarea>
                                     </div>
 
-                                    <div class="col-sm-12 mt-3">
-                                        <button type="submit"
-                                            class="btn btn-primary data-submit me-sm-3 me-1">Update</button>
-                                        <button type="reset" class="btn btn-outline-secondary"
-                                            data-bs-dismiss="offcanvas">Batal</button>
+                                    <!-- Baris 8: Tombol (full width) -->
+                                    <div class="col-12 mt-4">
+                                        <button type="submit" class="btn btn-primary data-submit me-sm-3 me-1">Update</button>
+                                        <button type="reset" class="btn btn-outline-secondary" data-bs-dismiss="offcanvas">Batal</button>
                                     </div>
                                 </form>
                             </div>
                         </div>
+
                         
                         <!-- Detail Modal -->
                         <div class="offcanvas custom-offcanvas-center" id="detail-record">
@@ -570,10 +521,7 @@
                         data: 'kegiatan',
                         name: 'kegiatan'
                     },
-                    {
-                        data: 'vol',
-                        name: 'vol'
-                    },
+                    
                     {
                         data: 'lokasi',
                         name: 'lokasi'
@@ -582,13 +530,9 @@
                         data: 'koordinat',
                         name: 'koordinat'
                     },
-                    {
-                        data: 'pipa_gis', // dari addColumn('pipa_gis', ...)
-                        name: 'pipa_gis'
-                    },
-                    {
-                        data: 'pipa_lap', // dari addColumn('pipa_lap', ...)
-                        name: 'pipa_lap'
+                   {
+                        data: 'vol',
+                        name: 'vol'
                     },
                     {
                         data: 'action',

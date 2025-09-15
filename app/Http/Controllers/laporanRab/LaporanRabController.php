@@ -4,6 +4,9 @@ namespace App\Http\Controllers\laporanRab;
 
 use App\Http\Controllers\Controller;
 use App\Models\DataRab;
+use App\Models\dataPipa;
+use App\Models\dataDivisi;
+use App\Models\dataDiameter;
 use Illuminate\Http\Request;
 use DateTime;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -21,16 +24,22 @@ class LaporanRabController extends Controller
     {
         $data['title'] = "Laporan RAB";
         if ($request->ajax()) {
-            $dataRab = DataRab::query();
+            $dataRab = DataRab::query()->with(['diameterRab','jenisPipaRab', 'volumeRab']);
             if($request->start_date != null && $request->end_date != null) {
                 $tgl_awal = DateTime::createFromFormat('d/m/Y', $request->start_date)->format('Y-m-d');
                 $tgl_akhir = DateTime::createFromFormat('d/m/Y', $request->end_date)->format('Y-m-d');
-                $dataRab->whereBetween('tanggal', [$tgl_awal, $tgl_akhir]);
+                $dataRab->whereBetween('tanggal_input', [$tgl_awal, $tgl_akhir]);
             }
-            return DataTables::of($dataRab->orderBy('tanggal', 'asc'))
+            return DataTables::of($dataRab->orderBy('tanggal_input', 'asc'))
                     ->addIndexColumn()
-                    ->editColumn('tanggal', function ($row) {
-                        return Carbon::parse($row->tanggal)->locale('id')->translatedFormat('d F Y');
+                    ->editColumn('tanggal_input', function ($row) {
+                        return Carbon::parse($row->tanggal_input)->locale('id')->translatedFormat('d F Y');
+                    })
+                    ->editColumn('rab', function ($row) {
+                        return "Rp ".number_format($row->rab, 2, ',', '.');
+                    })
+                    ->editColumn('tanggal_pelaksana', function ($row) {
+                    return Carbon::parse($row->tanggal_pelaksana)->locale('id')->translatedFormat('d F Y');
                     })->make(true);
         }
 
@@ -68,7 +77,7 @@ class LaporanRabController extends Controller
         $tgl_awal->setLocale("id");
         $tgl_akhir->setLocale("id");
 
-        $data['data'] = dataRab::query()->whereBetween('tanggal', [$tgl_awal->translatedFormat("Y-m-d"), $tgl_akhir->translatedFormat("Y-m-d")])->get();
+        $data['data'] = dataRab::query()->with(['diameterRab','jenisPipaRab', 'volumeRab'])->whereBetween('tanggal_input', [$tgl_awal->translatedFormat("Y-m-d"), $tgl_akhir->translatedFormat("Y-m-d")])->get();
         $data['title'] = "LAPORAN REALISASI RAB PEKERJAAN SIPIL & PERPIPAAN";
         $data['bulan'] = $tgl_awal->translatedFormat("d F Y") . ' - ' . $tgl_akhir->translatedFormat("d F Y");
         $data['staff'] = Auth::user()->name;

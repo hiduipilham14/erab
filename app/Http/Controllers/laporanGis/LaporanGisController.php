@@ -93,7 +93,12 @@ class LaporanGisController extends Controller
         // dd($startDate, $endDate);
         switch($kategori) {
             case "data-jaringan" :
-                $laporanRaw = dataJaringanBaru::with(['data_divisi', 'data_pipas', 'data_diameters'])->whereBetween("tanggal", [$startDate, $endDate])->get()->groupBy('data_divisi.nama');
+                $laporanRaw = dataJaringanBaru::with([
+                'data_divisi',
+                'diameterJaringan.dataDiameter', // Eager load nested relation
+                'jenisPipaJaringan.jenisPipa', 
+                'volumeJaringan'
+                ])->whereBetween("tanggal", [$startDate, $endDate])->get()->groupBy('data_divisi.nama');
                 foreach($laporanRaw as $divisi => $laporan) {
                     $daftarLokasi = $laporan->pluck("lokasi")->unique()->toArray();
 

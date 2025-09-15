@@ -82,94 +82,107 @@
 </div>
 
 
-<div class="modal fade" id="modal-spam" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <form method="post" id="saveForm" enctype="multipart/form-data">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel"></h5>
-                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body py-3">
-                    @csrf
-                    <div class="row">              
-                        <div class="col-md-6 form-group mb-3">
-                            <input type="hidden" name="id" id="id">
-                            <label for="tanggal">Tanggal</label>
-                            <input type="date" class="form-control" name="tanggal" id="tanggal" value=""
-                                required">
-    
-                            <small class="help-block text-danger tanggal"></small>
-                        </div>
-                        <div class="col-md-6 form-group mb-3">
-                            <label for="lokasi">Lokasi</label>
-                            <textarea class="form-control" name="lokasi" id="lokasi" rows="3"
-                                placeholder="Masukkan Lokasi"></textarea>
-                            <small class="help-block text-danger lokasi"></small>
-                        </div>
-                         <div class="col-md-6 form-group mb-3">
-                            <label for="spam">Spam</label>
-                           <input type="text" class="form-control" name="spam" id="spam" placeholder="Masukkan Spam" value=""
-                                required">
-                            <small class="help-block text-danger spam"></small>
-                        </div>
-                        <div class="col-md-6 form-group mb-3">
-                            <label for="koordinat">Koordinat</label>
-                            <input type="text" class="form-control" name="koordinat" id="koordinat"
-                                placeholder="Masukkan Koordinat">
-                            <small class="help-block text-danger koordinat"></small>
-                        </div>
-                         <div class="col-md-6 form-group mb-3">
-                            <label for="kondisi_existing">Kondisi Eksisting</label>
-                            <input type="text" class="form-control" name="kondisi_existing" id="kondisi_existing"
-                                placeholder="Masukkan Kondisi Existing">
-                            <small class="help-block text-danger kondisi_existing"></small>
-                        </div>
+<div class="modal fade" id="modal-spam" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <form method="post" id="saveForm" enctype="multipart/form-data">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Form SPAM</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
 
-                        <div class="col-md-6 form-group mb-3">
-                            <label for="file_existing">File Eksisting</label>
-                            <input type="file" class="form-control" name="file_existing" id="file_existing">
-                            <small class="help-block text-danger file_existing"></small>
-                        </div>
-                         <div class="col-md-6 form-group mb-3">
-                            <label for="permasalahan">Permasalahan</label>
-                            <input type="text" class="form-control" name="permasalahan" id="permasalahan"
-                                placeholder="Masukkan Permasalahan">
-                            <small class="help-block text-danger permasalahan"></small>
-                        </div>
-                         <div class="col-md-6 form-group mb-3">
-                            <label for="file_permasalahan">File Permasalahan</label>
-                            <input type="file" class="form-control" name="file_permasalahan" id="file_permasalahan">
-                            <small class="help-block text-danger file_permasalahan"></small>
-                        </div>
-                         <div class="col-md-6 form-group mb-3">
-                            <label for="tindak_lanjut">Tindak Lanjut</label>
-                            <textarea class="form-control" name="tindak_lanjut" id="tindak_lanjut"
-                                placeholder="Masukkan Tindak Lanjut"></textarea>
-                            <small class="help-block text-danger tindak_lanjut"></small>
-                        </div>
-                         <div class="col-md-6 form-group mb-3">
-                            <label for="file_tindak_lanjut">File Tindak Lanjut</label>
-                            <input type="file" class="form-control" name="file_tindak_lanjut" id="file_tindak_lanjut">
-                            <small class="help-block text-danger file_tindak_lanjut"></small>
-                        </div>
-                        <div class="col-md-6 form-group mb-3">
-                            <label for="file_spam">File Spam</label>
-                            <input type="file" class="form-control" name="file_spam" id="file_spam">
-                            <small class="help-block text-danger file_spam"></small>
-                            <small class="help-block  mt-3 ">upload file mx 20 mb</small>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Tutup</button>
-                    <button type="submit" id="save" class="btn btn-primary">Save Spam</button>
-                </div>
+        <div class="modal-body py-3">
+          @csrf
+          <input type="hidden" name="id" id="id">
+
+          <div class="row">
+            <!-- Kolom Kiri -->
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="tanggal" class="form-label">Tanggal</label>
+                <input type="date" class="form-control" name="tanggal" id="tanggal" required>
+                <small class="help-block text-danger tanggal"></small>
+              </div>
+
+              <div class="mb-3">
+                <label for="spam" class="form-label">SPAM</label>
+                <input type="text" class="form-control" name="spam" id="spam" placeholder="Masukkan SPAM" required>
+                <small class="help-block text-danger spam"></small>
+              </div>
+
+              <div class="mb-3">
+                <label for="koordinat" class="form-label">Koordinat</label>
+                <input type="text" class="form-control" name="koordinat" id="koordinat" placeholder="Masukkan Koordinat">
+                <small class="help-block text-danger koordinat"></small>
+              </div>
+
+              <div class="mb-3">
+                <label for="file_existing" class="form-label">File Eksisting</label>
+                <input type="file" class="form-control" name="file_existing" id="file_existing">
+                <small class="help-block text-danger file_existing"></small>
+              </div>
+
+              <div class="mb-3">
+                <label for="file_permasalahan" class="form-label">File Permasalahan</label>
+                <input type="file" class="form-control" name="file_permasalahan" id="file_permasalahan">
+                <small class="help-block text-danger file_permasalahan"></small>
+              </div>
+
+              <div class="mb-3">
+                <label for="file_spam" class="form-label">File SPAM</label>
+                <input type="file" class="form-control" name="file_spam" id="file_spam">
+                <small class="help-block text-danger file_spam"></small>
+               
+              </div>
+
+              <div class="mb-3">
+                <label for="file_tindak_lanjut" class="form-label">File Tindak Lanjut</label>
+                <input type="file" class="form-control" name="file_tindak_lanjut" id="file_tindak_lanjut">
+                <small class="help-block text-danger file_tindak_lanjut"></small>
+                <small class="help-block mt-2 text-muted">Upload file max 20 MB</small>
+              </div>
             </div>
-        </form>
-    </div>
+
+            <!-- Kolom Kanan -->
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="lokasi" class="form-label">Lokasi</label>
+                <textarea class="form-control" name="lokasi" id="lokasi" rows="3" placeholder="Masukkan Lokasi"></textarea>
+                <small class="help-block text-danger lokasi"></small>
+              </div>
+
+              <div class="mb-3">
+                <label for="kondisi_existing" class="form-label">Kondisi Eksisting</label>
+                <input type="text" class="form-control" name="kondisi_existing" id="kondisi_existing" placeholder="Masukkan Kondisi Eksisting">
+                <small class="help-block text-danger kondisi_existing"></small>
+              </div>
+
+              <div class="mb-3">
+                <label for="permasalahan" class="form-label">Permasalahan</label>
+                <input type="text" class="form-control" name="permasalahan" id="permasalahan" placeholder="Masukkan Permasalahan">
+                <small class="help-block text-danger permasalahan"></small>
+              </div>
+
+              <div class="mb-3">
+                <label for="tindak_lanjut" class="form-label">Tindak Lanjut</label>
+                <textarea class="form-control" name="tindak_lanjut" id="tindak_lanjut" rows="3" placeholder="Masukkan Tindak Lanjut"></textarea>
+                <small class="help-block text-danger tindak_lanjut"></small>
+              </div>
+
+              
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+          <button type="submit" id="save" class="btn btn-primary">Save SPAM</button>
+        </div>
+      </div>
+    </form>
+  </div>
 </div>
+
 
 <div class="modal fade" id="modal-detail-spam" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
@@ -344,7 +357,9 @@
                     .then((willEdit) => {
                         if (willEdit.value) {
                             $("#id").val(id);
-                            $("#tanggal").val(tanggal);
+                            let parts = tanggal.split("/");
+                            let formatted = `${parts[2]}-${parts[1]}-${parts[0]}`;
+                            $("#tanggal").val(formatted);
                             $("#spam").val(spam);
                             $("#lokasi").val(lokasi);
                             $("#koordinat").val(koordinat);

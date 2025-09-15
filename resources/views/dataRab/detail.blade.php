@@ -71,6 +71,30 @@
                         </td>
                     </tr>
                     <tr>
+                        <th style="width: 40%;">Pipa</th>
+                        <td style="width: 60%;">
+                            @if($data->jenisPipaRab && $data->jenisPipaRab->count() > 0)
+                                @foreach($data->jenisPipaRab as $jenis)
+                                    <span class="badge bg-info text-dark">{{ $jenis->dataPipa->nama }}</span>
+                                @endforeach
+                            @else
+                                -
+                            @endif
+                        </td>
+                    </tr>
+                     <tr>
+                        <th style="width: 40%;">Diameter (inchi)</th>
+                        <td style="width: 60%;">
+                            @if($data->diameterRab && $data->diameterRab->count() > 0)
+                                @foreach($data->diameterRab as $diameter)
+                                    <span class="badge bg-info text-dark">{{ $diameter->dataDiameter->nama }}</span>
+                                @endforeach
+                            @else
+                                -
+                            @endif
+                        </td>
+                    </tr>
+                    <tr>
                         <th style="width: 40%;">Rab (Rp)</th>
                         <td style="width: 60%;">{{ $data->formatted_rab ?? '-' }}</td>
                     </tr>
@@ -98,19 +122,31 @@
                     <tr>
                         <th style="width: 40%;">FILE SPK</th>
                         <td style="width: 60%;" id="file_existing-detail">
-                            <a href="{{$data->file_spk}}" class="btn btn-success" target="_blank">Lihat File</a>
+                            @if(!$data->file_spk)
+                                <span class="-">-</span>
+                            @else
+                                <a href="{{$data->file_spk}}" class="btn btn-success" target="_blank">Lihat File</a>
+                            @endif
                         </td>
                     </tr>
                     <tr>
                         <th style="width: 40%;">FILE DED</th>
                         <td style="width: 60%;" id="file_permasalahan-detail">
-                             <a href="{{$data->file_ded}}" class="btn btn-success" target="_blank">Lihat File</a>
+                             @if(!$data->file_ded)
+                                <span class="-">-</span>
+                            @else
+                                <a href="{{$data->file_ded}}" class="btn btn-success" target="_blank">Lihat File</a>
+                            @endif
                         </td>
                     </tr>
                     <tr>
                         <th style="width: 40%;">FILE RAB</th>
                         <td style="width: 60%;" id="file_tindak_lanjut-detail">
+                             @if(!$data->file_rab)
+                                <span class="-">-</span>
+                            @else
                              <a href="{{$data->file_rab}}" class="btn btn-success" target="_blank">Lihat File</a>
+                             @endif
                         </td>
                     </tr>
                </table> 

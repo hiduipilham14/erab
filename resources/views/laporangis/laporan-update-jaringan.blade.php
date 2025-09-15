@@ -147,26 +147,26 @@
                                     @php $rowCount += 1; @endphp
                                     <tr>
                                         <td class="text-center">{{ $rowCount }}</td>
-                                        <td>{{ \Carbon\Carbon::parse($laporan->tanggal)->format('d/m/Y') }}</td>
+                                        <td class="text-center">{{ \Carbon\Carbon::parse($laporan->tanggal)->format('d/m/Y') }}</td>
                                         @if($laporan->pekerjaan != $lastpekerjaan)
-                                            <td>{{ $laporan->pekerjaan }}</td>
+                                            <td class="text-center">{{ $laporan->pekerjaan }}</td>
                                             @php $lastpekerjaan = $laporan->pekerjaan @endphp
                                         @else
-                                            <td>~</td>
+                                            <td class="text-center">~</td>
                                         @endif
 
-                                        <td style="font-size: 10px;">
+                                        <td style="font-size: 10px;" class="text-center">
                                             <strong>{{ $laporan->lokasi }}</strong>
                                         </td>
-                                        <td class="sm-text">{{ $laporan->data_pipas->nama ?? '-' }}</td>
-                                        <td class="dn-col">
+                                        <td class="sm-text text-center">{{ $laporan->data_pipas->nama ?? '-' }}</td>
+                                        <td class="dn-col text-center">
                                             @if(is_numeric($laporan->data_diameters->nama ?? $laporan->dn))
                                                 {{ number_format($laporan->data_diameters->nama ?? $laporan->dn, 0, '', '') }}
                                             @else
                                                 {{ $laporan->data_diameters->nama ?? ($laporan->dn ?? '-') }}
                                             @endif
                                         </td>
-                                        <td class="sm-text">
+                                        <td class="sm-text text-center">
                                             @if(is_numeric($laporan->vol))
                                                 {{ number_format($laporan->vol, 0, '', '') }}
                                             @else
@@ -174,7 +174,7 @@
                                             @endif
                                         </td>
 
-                                        <td class="koordinat-text">
+                                        <td class="koordinat-text text-center">
                                                 @if($laporan->koordinat)
                                                     {{ $laporan->koordinat }}
                                                 @else
@@ -182,7 +182,7 @@
                                                 @endif
                                         </td>
 
-                                        <td class="text-keterangan">
+                                        <td class="text-keterangan text-center">
                                             {!! $laporan->keterangan ? nl2br(e($laporan->keterangan)) : '-' !!}
                                         </td>
                                     </tr>

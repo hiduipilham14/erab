@@ -102,39 +102,72 @@
         </div>
         <div class="card">
             <div class="card-body">
-                <table id="data" class="table table-bordered text-center" style="font-size: 14px;">
+                <table id="data" class="table table-bordered text-center" style="font-size: 10px;">
                         <tr>
-                            <th rowspan="2" class="column-center">No</th>
-                            <th rowspan="2" class="column-center">Tanggal RAB</th>
-                            <th rowspan="2" class="column-center">No SPK</th>
-                            <th rowspan="2" class="column-center">Pekerjaan</th>
-                            <th rowspan="2" class="column-center">Vol (M)</th>
-                            <th rowspan="2" class="column-center">Lokasi</th>
-                            <th rowspan="2" class="column-center">RAB (Rp)</th>
-                            <th colspan="3" class="column-center">Realisasi</th>
-                            <th rowspan="2" class="column-center">keterangan</th>
-                            <th rowspan="2" class="column-center">GIS</th>
-                        </tr>
-                        <tr>
-                            <th class="column-center">Bahan</th>
-                            <th class="column-center">Upah</th>
-                            <th class="column-center">Jumlah</th>
+                            <th class="column-center">Tanggal</th>
+                            <th class="column-center">Pelaksana</th>
+                            <th class="column-center">Masa Pemeliharaan</th>
+                            <th class="column-center">Penyedia</th>
+                            <th class="column-center">Jenis PIPA</th>
+                            <th class="column-center">Diameter (inch)</th>
+                            <th class="column-center">Volume</th>
+                            <th class="column-center">Honor (Rp)</th>
+                            <th class="column-center">RAB (Rp)</th>
+                            <th class="column-center">Bahan (Rp)</th>
+                            <th class="column-center">Upah (Rp)</th>
+                            <th class="column-center">Jumlah (Rp)</th>
+                            <th class="column-center">Gis</th>
+                            <th class="column-center">Pekerjaan</th>
+                            <th class="column-center">Lokasi</th>
+                            <th class="column-center">Keterangan</th>
+
                         </tr>
                         @if (count($data) > 0)
                             @foreach ($data as $row)
                                 <tr>
-                                    <td class="column-center text-sm">{{ $loop->iteration }}</td>
-                                    <td class="column-center text-sm">{{ Carbon\Carbon::parse($row->tanggal)->locale("id")->translatedFormat("d F Y") }}</td>
-                                    <td class="column-center text-sm">{{ $row->no_spk }}</td>
-                                    <td class="column-center text-sm">{{ $row->pekerjaan }}</td>
-                                    <td class="column-center text-sm">{{ $row->vol ?? '-' }}</td>
-                                    <td class="column-center text-sm">{{ $row->lokasi}}</td>
-                                    <td class="column-center text-sm">{{ $row->rab }}</td>
-                                    <td class="column-center text-sm">{{ $row->bahan ?? "-" }}</td>
-                                    <td class="column-center text-sm">{{ $row->upah ?? "-" }}</td>
-                                    <td class="column-center text-sm">{{ $row->jumlah ?? "-" }}</td>
-                                    <td class="column-center text-sm">{{ $row->keterangan ?? "-" }}</td>
-                                    <td class="column-center text-sm">{{ $row->gis ?? "-" }}</td>
+                                    <td class="column-center">{{\Carbon\Carbon::parse($row->tanggal_input)->locale("id")->translatedFormat("d F Y")}}</td>
+                                    <td class="column-center">{{\Carbon\Carbon::parse($row->tanggal_pelaksana)->locale("id")->translatedFormat("d F Y")}}</td>
+                                    <td class="column-center">{{ $row->masa_pemeliharaan }}</td>
+                                    <td class="column-center">{{ $row->penyedia_pipa }}</td>
+                                    <td class="column-center">
+                                        @php
+                                            $jenisPipa = $row->jenisPipaRab
+                                            ->pluck('dataPipa.nama')
+                                            ->filter() 
+                                            ->unique() 
+                                            ->toArray();
+                                            echo !empty($jenisPipa) ? implode(', ', $jenisPipa) : '-';
+                                        @endphp
+                                    </td>
+                                    <td class="column-center">
+                                        @php
+                                            $diameter = $row->diameterRab
+                                            ->pluck('dataDiameter.diameter')
+                                            ->filter() 
+                                            ->unique() 
+                                            ->toArray();
+                                            echo !empty($diameter) ? implode(', ', $diameter) : '-';
+                                        @endphp
+                                    </td>
+                                    <td class="column-center">
+                                        @php
+                                            $volume = $row->volumeRab
+                                            ->pluck('volume')
+                                            ->filter() 
+                                            ->unique() 
+                                            ->toArray();
+                                            echo !empty($volume) ? implode(', ', $volume) : '-';
+                                        @endphp
+                                    </td>
+                                    <td class="column-center">Rp {{ number_format($row->honor, 2, ',', '.') }}</td>
+                                    <td class="column-center">Rp {{ number_format($row->rab, 2, ',', '.') }}</td>
+                                    <td class="column-center">Rp {{ number_format($row->bahan, 2, ',', '.') }}</td>
+                                    <td class="column-center">Rp {{ number_format($row->upah, 2, ',', '.') }}</td>
+                                    <td class="column-center">Rp {{ number_format($row->jumlah, 2, ',', '.') }}</td>
+                                    <td class="column-center">{{ $row->gis }}</td>
+                                    <td class="column-center">{{ $row->pekerjaan_gis }}</td>
+                                    <td class="column-center">{{ $row->lokasi_gis }}</td>
+                                    <td class="column-center">{{ $row->keterangan_gis }}</td>
                                 </tr>
                             @endforeach
                         @else

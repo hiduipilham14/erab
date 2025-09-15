@@ -158,48 +158,48 @@
                                     @php $rowCount += 1; @endphp
                                     <tr>
                                         <td class="text-center">{{ $rowCount }}</td>
-                                        <td class="sm-text">
+                                        <td class="sm-text text-center">
                                             {{ $laporan->tanggal ?? '-' }}
                                         </td>
-                                        <td style="font-size: 10px;">
+                                        <td style="font-size: 10px;" class="text-center">
                                             <strong>{{ $laporan->lokasi }}</strong>
                                         </td>
-                                        <td class="koordinat-text">
+                                        <td class="koordinat-text text-center">
                                             {{ $laporan->koordinat ?? '-' }}
                                         </td>
-                                        <td class="sm-text">{{ $laporan->pipaLama->nama ?? '-' }}</td>
-                                        <td class="sm-text">
+                                        <td class="sm-text text-center">{{ $laporan->pipaLama->nama ?? '-' }}</td>
+                                        <td class="sm-text text-center">
                                             @if(is_numeric($laporan->diameterLama->nama))
                                                 {{ number_format($laporan->diameterLama->nama, 0, '', '') }}
                                             @else
                                                 {{ $laporan->diameterLama->nama ?? '-' }}
                                             @endif
                                         </td>
-                                        <td class="sm-text">
+                                        <td class="sm-text text-center">
                                             @if(is_numeric($laporan->vol_lama))
                                                 {{ number_format($laporan->vol_lama, 0, '', '') }}
                                             @else
                                                 {{ $laporan->vol_lama ?? '-' }}
                                             @endif
                                         </td>
-                                        <td class="sm-text">{{ $laporan->th_pemasangan_lama ?? '-' }}</td>
-                                        <td class="sm-text">{{ $laporan->pipaBaru->nama ?? '-' }}</td>
-                                        <td class="sm-text">
+                                        <td class="sm-text text-center">{{ $laporan->th_pemasangan_lama ?? '-' }}</td>
+                                        <td class="sm-text text-center">{{ $laporan->pipaBaru->nama ?? '-' }}</td>
+                                        <td class="sm-text text-center">
                                             @if(is_numeric($laporan->diameterBaru->nama))
                                                 {{ number_format($laporan->diameterBaru->nama, 0, '', '') }}
                                             @else
                                                 {{ $laporan->diameterBaru->nama ?? '-' }}
                                             @endif
                                         </td>
-                                        <td class="sm-text">
+                                        <td class="sm-text text-center">
                                             @if(is_numeric($laporan->vol_baru))
                                                 {{ number_format($laporan->vol_baru, 0, '', '') }}
                                             @else
                                                 {{ $laporan->vol_baru ?? '-' }}
                                             @endif
                                         </td>
-                                        <td class="sm-text">{{ $laporan->th_pemasangan_baru ?? '-' }}</td>
-                                        <td class="text-keterangan">
+                                        <td class="sm-text text-center">{{ $laporan->th_pemasangan_baru ?? '-' }}</td>
+                                        <td class="text-keterangan text-center">
                                             {!! $laporan->keterangan ? nl2br(e($laporan->keterangan)) : '-' !!}
                                         </td>
                                     </tr>

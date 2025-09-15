@@ -21,7 +21,7 @@ class dataPenggantianPipaController extends Controller
     {
         if ($request->ajax()) {
             $data = dataPenggantianPipa::with(['data_divisi', 'diameterLama', 'diameterBaru'])
-                ->select('id', 'tanggal', 'divisi', 'lokasi', 'dn_lama', 'dn_baru', 'vol_lama', 'vol_baru')
+                ->select('*')
                 ->latest();
 
             return datatables()->of($data)

@@ -43,18 +43,10 @@
                                 <th class="text-center sorting_disabled">Tgl Pelaksanaan</th>
                                 <th class="text-center sorting_disabled">Masa Pemeliharaan</th>
                                 <th class="text-center sorting_disabled">Penyedia</th>
-                                <th class="text-center sorting_disabled">Jenis Pipa</th>
-                                <th class="text-center sorting_disabled">Diameter (Inc)</th>
-                                <th class="text-center sorting_disabled">Volume (m)</th>
-                                <th class="text-center sorting_disabled">Honor (Rp)</th>
+                                <th class="text-center sorting_disabled">No SPK</th>
                                 <th class="text-center sorting_disabled">RAB (Rp)</th>
-                                <th class="text-center sorting_disabled">Bahan (Rp)</th>
-                                <th class="text-center sorting_disabled">Upah (Rp)</th>
-                                <th class="text-center sorting_disabled">Jumlah (Rp)</th>
-                                <th class="text-center sorting_disabled">GIS</th>
                                 <th class="text-center sorting_disabled">Pekerjaan</th>
                                 <th class="text-center sorting_disabled">Lokasi</th>
-                                <th class="text-center sorting_disabled">Keterangan</th>
                             </tr>
                         </thead>
                     </table>
@@ -102,73 +94,61 @@
             function load_data(start = '', end = '') {
                 
                 var table = $('#tblaporanrab').DataTable({
-                    // processing: true,
-                    // responsive: true,
-                    // serverSide: true,
-                    // stateSave: false,
-                    // columnDefs: [{
-                    //         "className": "dt-center",
-                    //         "targets": "_all"
-                    //     }
-                    // ],
-                    // ajax: {
-                    //     url: "{{ route('laporan-rab.index') }}",
-                    //     data: {
-                    //         start_date: start,
-                    //         end_date: end
-                    //     },
-                    // },
-                    // columns: [{
-                    //         data: 'DT_RowIndex',
-                    //         name: 'DT_RowIndex',
-                    //         orderable: false,
-                    //         searchable: false
-                    //     },
-                    //     {
-                    //         data: 'tanggal',
-                    //         name: 'tanggal',
-                    //     },
-                    //     {
-                    //         data: 'no_spk',
-                    //         name: 'no_spk'
-                    //     },
-                    //     {
-                    //         data: 'pekerjaan',
-                    //         name: 'pekerjaan'
-                    //     },
-                    //     {
-                    //         data: 'vol',
-                    //         name: 'vol'
-                    //     },
-                    //     {
-                    //         data: 'lokasi',
-                    //         name: 'lokasi'
-                    //     },
-                    //     {
-                    //         data: 'rab',
-                    //         name: 'rab'
-                    //     },
-                    //     {
-                    //         data: 'bahan',
-                    //         name: 'bahan'
-                    //     },
-                    //     {
-                    //         data: 'upah',
-                    //         name: 'upah'
-                    //     },
-                    //     {
-                    //         data: 'jumlah',
-                    //         name: 'jumlah'
-                    //     },
-                    //     {
-                    //         data: 'gis',
-                    //         name: 'gis'
-                    //     },
-                    //     {
-                    //         data: 'keterangan',
-                    //         name: 'keterangan'
-                    //     },
-                    // ],
+                    processing: true,
+                    responsive: true,
+                    serverSide: true,
+                    stateSave: false,
+                    columnDefs: [{
+                            "className": "dt-center",
+                            "targets": "_all"
+                        }
+                    ],
+                    ajax: {
+                        url: "{{ route('laporan-rab.index') }}",
+                        data: {
+                            start_date: start,
+                            end_date: end
+                        },
+                    },
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            name: 'DT_RowIndex',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'tanggal_input',
+                            name: 'tanggal_input',
+                        },
+                        {
+                            data: 'tanggal_pelaksana',
+                            name: 'tanggal_pelaksana'
+                        },
+                        {
+                            data: 'masa_pemeliharaan',
+                            name: 'masa_pemeliharaan'
+                        },
+                        {
+                            data: 'penyedia_pipa',
+                            name: 'penyedia_pipa'
+                        },
+                        {
+                            data: 'no_spk',
+                            name: 'no_spk'
+                        },
+                        {
+                            data: 'rab',
+                            name: 'rab'
+                        },
+                        {
+                            data: 'pekerjaan_gis',
+                            name: 'pekerjaan_gis'
+                        },
+                        {
+                            data: 'lokasi_gis',
+                            name: 'lokasi_gis'
+                        },
+                    ],
                 });
 
                 table.on('draw', function() {

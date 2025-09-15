@@ -409,11 +409,11 @@
                     { data: 'tanggal_input', name: 'tanggal_input', render: formatDate },
                     { data: 'tanggal_awal', name: 'tanggal_awal', render: formatDate },
                     { data: 'no_spk', name: 'no_spk' },
-                    { data: 'diameter', name: 'diameter' },
-                    { data: 'jenisPipaRab', name: 'jenisPipaRab' },
-                    { data: 'volume', name: 'volume' },
-                    { data: 'rab', name: 'rab', render: data => 'Rp ' + data },
-                    { data: 'pekerjaan_gis', name: 'pekerjaan_gis' },
+                    { data: 'diameter', name: 'diameter', class: 'text-center' },
+                    { data: 'jenisPipaRab', name: 'jenisPipaRab', class: 'text-center' },
+                    { data: 'volume', name: 'volume', class: 'text-center' },
+                    { data: 'rab', name: 'rab', class: 'text-center' },
+                    { data: 'pekerjaan_gis', name: 'pekerjaan_gis', class: 'text-center' },
                     { data: 'action', name: 'action', orderable: false, searchable: false, render: renderActionButtons }
                 ],
                 dom: '<"card-header flex-column flex-md-row"<"head-label text-center"><"dt-action-buttons text-end pt-3 pt-md-0"B>><"row"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 d-flex justify-content-center justify-content-md-end"f>>t<"row"<"col-sm-12 col-md-6"i><"col-sm-12 col-md-6"p>>',
@@ -497,6 +497,23 @@
                 submitRabForm(table);
             });
         }
+
+
+        function resetForm() {
+            $('#form-rab')[0].reset();
+            $('#volume-container').html(`
+                <label class="form-label" for="form_vol">Vol (m) <span class="text-danger">*</span></label>
+                <div class="input-group mb-3">
+                    <input type="number" id="vol" name="vol[]" class="form-control" placeholder="0" required />
+                    <button type="button" class="btn btn-success " id="btn-add-volume"><i class="fa fa-plus"></i></button>
+                </div>
+            `);
+            $('#form_diameter').val(null).trigger('change');
+            $('#form_jenis_pipa').val(null).trigger('change');
+            $('#current-file_spk-container').addClass('d-none');
+            $('#current-file_ded-container').addClass('d-none');
+            $('#current-file_rab-container').addClass('d-none');
+        }
         
         // Show RAB modal for add or edit
         function showRabModal(mode, data = null) {
@@ -514,6 +531,7 @@
             
             if (mode === 'add') {
                 $('#method-field').html('@csrf');
+                resetForm();
             } else {
                 $('#method-field').html('@csrf @method("PUT")');
                 populateForm(data);
@@ -542,6 +560,7 @@
             $('#upah').val(data.upah);
             $('#jumlah').val(data.jumlah);
             $('#gis').val(data.gis);
+            $("#volume-container").html('<label class="form-label" for="form_vol">Vol (m) <span class="text-danger">*</span></label>');
             data.volume_rab.forEach((v,i) => {
                 const volumeInput = `
                     <div class="input-group mb-2 volume-entry">
@@ -643,6 +662,7 @@
                 },
                 error: function(xhr) {
                     // Close loading first
+                    $('#modalRabForm').modal('hide');
                     swalInstance.close();
                     
                     if (xhr.status === 422) {

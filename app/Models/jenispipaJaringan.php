@@ -13,4 +13,9 @@ class jenispipaJaringan extends Model
         'jenis_pipa',
         'data_jaringan_barus_id',
     ];
+
+    public function jenisPipa()
+    {
+        return $this->belongsTo(dataPipa::class, 'jenis_pipa');
+    }
 }

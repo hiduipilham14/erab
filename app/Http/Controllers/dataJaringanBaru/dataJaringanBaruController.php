@@ -22,6 +22,7 @@ class dataJaringanBaruController extends Controller
             $data = dataJaringanBaru::with([
                 'data_divisi',
                 'diameterJaringan.dataDiameter', // Eager load nested relation
+                'jenisPipaJaringan.jenisPipa', 
                 'volumeJaringan'
             ])->get();
 
@@ -35,8 +36,8 @@ class dataJaringanBaruController extends Controller
                         ->filter() // Menghilangkan nilai null
                         ->unique() // Menghilangkan duplikat
                         ->toArray();
-                    
-                    return !empty($diameters) ? implode(', ', $diameters) : '-';
+
+                    return !empty($diameters) ? implode('<br><hr>', $diameters) : '-';
                 })
                 ->addColumn('volume', function($row) {
                     // Mengambil volume dari relasi hasMany
@@ -45,8 +46,16 @@ class dataJaringanBaruController extends Controller
                         ->filter() // Menghilangkan nilai null
                         ->unique() // Menghilangkan duplikat jika diperlukan
                         ->toArray();
-                    
-                    return !empty($volumes) ? implode(', ', $volumes) : '-';
+
+                    return !empty($volumes) ? implode('<br><hr>', $volumes) : '-';
+                })
+                ->addColumn('jenisPipaJaringan', function($row) {
+                    $jenisPipa = $row->jenisPipaJaringan
+                        ->pluck('jenisPipa.nama')
+                        ->filter() 
+                        ->unique() 
+                        ->toArray();
+                    return implode('<br><hr>', $jenisPipa) ;
                 })
                 ->addColumn('action', function ($row) {
                     return '<div class="d-inline-block">
@@ -61,7 +70,7 @@ class dataJaringanBaruController extends Controller
                         </a>
                     </div>';
                 })
-            ->rawColumns(['action'])
+            ->rawColumns(['action', 'divisi', 'diameter', 'volume', 'jenisPipaJaringan'])
             ->make(true);
         }
 
