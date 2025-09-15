@@ -69,13 +69,10 @@ class spamController extends Controller
             foreach (['file_existing', 'file_permasalahan', 'file_tindak_lanjut', 'file_spam'] as $field) {
                 if ($request->hasFile($field)) {
                     $file = $request->file($field);
-
                     // nama file unik
                     $fileName = Carbon::now()->timestamp . '_' . $file->getClientOriginalName();
-
                     // pindahkan ke folder public/uploads
                     $file->move(public_path('uploads'), $fileName);
-
                     // simpan path relatif (biar gampang dipanggil dengan asset())
                     $data[$field] = 'uploads/' . $fileName;
                 }

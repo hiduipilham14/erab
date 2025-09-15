@@ -322,7 +322,17 @@ class dataRabController extends Controller
             }
 
             $validated = $validator->validated();
-
+            foreach (['file_spk', 'file_ded', 'file_rab'] as $field) {
+                if ($request->hasFile($field)) {
+                    $file = $request->file($field);
+                    // nama file unik
+                    $fileName = Carbon::now()->timestamp . '_' . $file->getClientOriginalName();
+                    // pindahkan langsung ke public/uploads
+                    $file->move(public_path('uploads'), $fileName);
+                    // simpan path relatif (supaya gampang dipanggil pakai asset())
+                    $validated[$field] = 'uploads/' . $fileName;
+                }
+            }
             $dataRab->update($validated);
             DB::table('jenispipa_rab')->where('data_rab_id', $dataRab->id)->delete();
             DB::table('volume_rab')->where('data_rab_id', $dataRab->id)->delete();
