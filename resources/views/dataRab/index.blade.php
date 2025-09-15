@@ -383,7 +383,7 @@
             // Initialize form submission handler
             initializeFormSubmission(table);
 
-             $("#btn-add-volume").click(function() {
+            $("body").on('click', "#btn-add-volume", function() {
                 const volumeInput = `
                     <div class="input-group mb-2 volume-entry">
                         <input type="number" name="vol[]" class="form-control" placeholder="0" required />

@@ -266,7 +266,7 @@
                 dropdownParent: $('#form_jenis_pipa').parent()
             });
             $('#form_jenis_pipa').val(null).trigger('change');
-            $("#btn-add-volume").click(function() {
+            $("body").on('click', "#btn-add-volume", function() {
                 const volumeInput = `
                     <div class="input-group mb-2 volume-entry">
                         <input type="number" name="vol[]" class="form-control" placeholder="0" required />
@@ -360,7 +360,15 @@
             if (mode === 'add') {
                 $('#formModalLabel').text('Tambah Data Jaringan Baru');
                 $('#form_method').val('');
-
+                $('#volume-container').html(`
+                    <label class="form-label" for="form_vol">Vol (m) <span class="text-danger">*</span></label>
+                    <div class="input-group mb-3">
+                        <input type="number" id="vol" name="vol[]" class="form-control" placeholder="0" required />
+                        <button type="button" class="btn btn-success " id="btn-add-volume"><i class="fa fa-plus"></i></button>
+                    </div>
+                `);
+                $('#form_diameter').val(null).trigger('change');
+                $('#form_jenis_pipa').val(null).trigger('change');
                 $('#submitBtn').text('Simpan');
             } else if (mode === 'edit') {
                 $('#formModalLabel').text('Edit Data Jaringan Baru');
