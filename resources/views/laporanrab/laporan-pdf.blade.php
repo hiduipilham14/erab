@@ -145,7 +145,7 @@
                                             ->pluck('dataDiameter.nama')
                                             ->filter()
                                             ->unique()
-                                            ->toArray();
+                                            ->toArray(); 
                                             echo !empty($diameter) ? implode('<br><hr>', $diameter) : '-';
                                         @endphp
                                     </td>
