@@ -102,7 +102,7 @@
         </div>
         <div class="card">
             <div class="card-body">
-                <table id="data" class="table table-bordered text-center" style="font-size: 10px;">
+                <table id="data" class="table table-bordered text-center" style="font-size: 9px;">
                         <tr>
                             <th class="column-center">Tanggal</th>
                             <th class="column-center">Pelaksana</th>
@@ -136,17 +136,17 @@
                                             ->filter() 
                                             ->unique() 
                                             ->toArray();
-                                            echo !empty($jenisPipa) ? implode(', ', $jenisPipa) : '-';
+                                            echo !empty($jenisPipa) ? implode('<br><hr>', $jenisPipa) : '-';
                                         @endphp
                                     </td>
                                     <td class="column-center">
                                         @php
                                             $diameter = $row->diameterRab
-                                            ->pluck('dataDiameter.diameter')
-                                            ->filter() 
-                                            ->unique() 
+                                            ->pluck('dataDiameter.nama')
+                                            ->filter()
+                                            ->unique()
                                             ->toArray();
-                                            echo !empty($diameter) ? implode(', ', $diameter) : '-';
+                                            echo !empty($diameter) ? implode('<br><hr>', $diameter) : '-';
                                         @endphp
                                     </td>
                                     <td class="column-center">
@@ -156,7 +156,7 @@
                                             ->filter() 
                                             ->unique() 
                                             ->toArray();
-                                            echo !empty($volume) ? implode(', ', $volume) : '-';
+                                            echo !empty($volume) ? implode('<br><hr> ', $volume) : '-';
                                         @endphp
                                     </td>
                                     <td class="column-center">Rp {{ number_format($row->honor, 2, ',', '.') }}</td>

@@ -77,7 +77,7 @@ class LaporanRabController extends Controller
         $tgl_awal->setLocale("id");
         $tgl_akhir->setLocale("id");
 
-        $data['data'] = dataRab::query()->with(['diameterRab','jenisPipaRab', 'volumeRab'])->whereBetween('tanggal_input', [$tgl_awal->translatedFormat("Y-m-d"), $tgl_akhir->translatedFormat("Y-m-d")])->get();
+        $data['data'] = dataRab::with(['diameterRab','jenisPipaRab', 'volumeRab'])->whereBetween('tanggal_input', [$tgl_awal->translatedFormat("Y-m-d"), $tgl_akhir->translatedFormat("Y-m-d")])->get();
         $data['title'] = "LAPORAN REALISASI RAB PEKERJAAN SIPIL & PERPIPAAN";
         $data['bulan'] = $tgl_awal->translatedFormat("d F Y") . ' - ' . $tgl_akhir->translatedFormat("d F Y");
         $data['staff'] = Auth::user()->name;
@@ -106,7 +106,7 @@ class LaporanRabController extends Controller
         $carbon->setLocale("id");
         $tgl_awal = "2024-01-01";
         $tgl_akhir = "2025-01-01";
-        $data['data'] = dataRab::whereBetween('tanggal', [$tgl_awal, $tgl_akhir])->get();
+        $data['data'] = dataRab::with(['diameterRab','jenisPipaRab', 'volumeRab'])->whereBetween('tanggal', [$tgl_awal, $tgl_akhir])->get();
         $data['title'] = "LAPORAN REALISASI RAB PEKERJAAN SIPIL & PERPIPAAN";
         $data['bulan'] = $carbon->parse($tgl_awal)->translatedFormat("F Y") . ' - ' . $carbon->parse($tgl_akhir)->translatedFormat("F Y");
         $data['staff'] = Auth::user()->name;
