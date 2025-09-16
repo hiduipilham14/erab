@@ -53,6 +53,9 @@
         .koordinat {
             width: 25%;
         }
+        .tanggal {
+            width: 10%;
+        }
         .keterangan {
             width: 25%;
         }
@@ -60,7 +63,7 @@
             width: 20%;
         }
         .gislapvol {
-            width: 5%;
+            width: 15%;
             text-align: center;
         }
         .dn-col {
@@ -116,7 +119,7 @@
             <h6>Bulan: {{ $laporan_bulan }}</h6>
         </div>
 
-        <div class="mt-1 mb-1">
+        <div class="mt-1 mb-1" style="margin-bottom:5px;">
             <span><b>UPDATE DATA PENGEMBANGAN JARINGAN BARU</b></span>
         </div>
 
@@ -125,11 +128,11 @@
                 <table class="table table-bordered">
                     <tr>
                         <th class="text-center no">NO</th>
-                        <th class="kegiatan text-center">Tanggal</th>
+                        <th class="tanggal text-center">Tanggal</th>
                         <th class="kegiatan text-center">Pekerjaan</th>
                         <th class="lokasi text-center">Lokasi</th>
                         <th class="gislapvol text-center">Jenis Pipa (DN)</th>
-                        <th class="dn-col text-center">Diameter (inchi)</th>
+                        <th class="gislapvol text-center">Diameter (inchi)</th>
                         <th class="gislapvol text-center">Vol (m)</th>
                         <th class="gislapvol text-center">Koordinat</th>
                         <th class="keterangan text-center">Keterangan</th>
@@ -158,20 +161,36 @@
                                         <td style="font-size: 10px;" class="text-center">
                                             <strong>{{ $laporan->lokasi }}</strong>
                                         </td>
-                                        <td class="sm-text text-center">{{ $laporan->data_pipas->nama ?? '-' }}</td>
+                                        <td class="sm-text text-center">
+                                            @php
+                                                $jenisPipa = $laporan->jenisPipaJaringan
+                                                        ->pluck('jenisPipa.nama')
+                                                        ->filter() 
+                                                        ->unique() 
+                                                        ->toArray();
+                                                echo implode('<br><hr>', $jenisPipa) ;
+                                            @endphp
+                                        </td>
                                         <td class="dn-col text-center">
-                                            @if(is_numeric($laporan->data_diameters->nama ?? $laporan->dn))
-                                                {{ number_format($laporan->data_diameters->nama ?? $laporan->dn, 0, '', '') }}
-                                            @else
-                                                {{ $laporan->data_diameters->nama ?? ($laporan->dn ?? '-') }}
-                                            @endif
+                                            @php
+                                                 $diameters = $laporan->diameterJaringan
+                                                        ->pluck('dataDiameter.nama')
+                                                        ->filter() 
+                                                        ->unique() 
+                                                        ->toArray();
+
+                                                echo !empty($diameters) ? implode('<br><hr>', $diameters) : '-';
+                                            @endphp
                                         </td>
                                         <td class="sm-text text-center">
-                                            @if(is_numeric($laporan->vol))
-                                                {{ number_format($laporan->vol, 0, '', '') }}
-                                            @else
-                                                {{ $laporan->vol ?? '-' }}
-                                            @endif
+                                            @php
+                                                $volumes = $laporan->volumeJaringan
+                                                    ->pluck('volume')
+                                                    ->filter() 
+                                                    ->unique() 
+                                                    ->toArray();
+                                                echo !empty($volumes) ? implode('<br><hr>', $volumes) : '-';
+                                            @endphp
                                         </td>
 
                                         <td class="koordinat-text text-center">

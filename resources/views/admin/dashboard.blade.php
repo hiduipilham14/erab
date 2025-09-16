@@ -163,6 +163,7 @@
         function getDataByMonth(source) {
             let arr = Array(12).fill(0);
             source.forEach(item => { arr[item.bulan - 1] = item.jumlah; });
+            console.log(arr)
             return arr;
         }
         const updateGis = getDataByMonth(@json($updateGis));
