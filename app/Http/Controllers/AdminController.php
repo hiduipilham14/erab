@@ -8,6 +8,7 @@ use App\Models\DataRab;
 use App\Models\dataUpdateGis;
 use App\Models\dataJaringanBaru;
 use App\Models\dataPenggantianPipa;
+use App\models\spam;
 use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
@@ -24,9 +25,23 @@ class AdminController extends Controller
             ->count();
 
         // GIS bulan ini
-        $jumlahGisBulanIni = DataUpdateGis::whereMonth('tanggal', now()->month)
+        // $jumlahGisBulanIni = DataUpdateGis::whereMonth('tanggal', now()->month)
+        //     ->whereYear('tanggal', now()->year)
+        //     ->count();
+
+        $tables = [
+            'data_update_gis',
+            'data_jaringan_barus',
+            'data_penggantian_pipas',
+            'spam'
+        ];
+
+        $jumlahGisBulanIni = collect($tables)->sum(function($table) {
+            return DB::table($table)
+            ->whereMonth('tanggal', now()->month)
             ->whereYear('tanggal', now()->year)
             ->count();
+        });
 
         // Data grafik RAB per bulan
         $rabPerBulan = DataRab::select(
@@ -59,6 +74,13 @@ class AdminController extends Controller
             )
             ->whereYear('tanggal', now()->year)
             ->groupBy('bulan')->orderBy('bulan')->get();
+        
+        $spam =  spam::select(
+                DB::raw('MONTH(tanggal) as bulan'),
+                DB::raw('COUNT(*) as jumlah')
+            )
+        ->whereYear('tanggal', now()->year)
+        ->groupBy('bulan')->orderBy('bulan')->get();
 
         return view('admin.dashboard', compact(
             'title',
@@ -68,7 +90,8 @@ class AdminController extends Controller
             'rabPerBulan',
             'updateGis',
             'jaringanBaru',
-            'penggantianPipa'
+            'penggantianPipa',
+            'spam'
         ));
     }
 }

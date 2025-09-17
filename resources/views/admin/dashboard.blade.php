@@ -169,6 +169,7 @@
         const updateGis = getDataByMonth(@json($updateGis));
         const jaringanBaru = getDataByMonth(@json($jaringanBaru));
         const penggantianPipa = getDataByMonth(@json($penggantianPipa));
+        const spam = getDataByMonth(@json($spam));
 
         new Chart(document.getElementById('gisChart'), {
             type: 'bar',
@@ -195,6 +196,14 @@
                         label: 'Penggantian Pipa',
                         data: penggantianPipa,
                         backgroundColor: '#31C48D',
+                        borderWidth: 0,
+                        barThickness: 12,
+                        borderRadius: 2
+                    },
+                    {
+                        label: 'Spam',
+                        data: spam,
+                        backgroundColor: '#B001EB',
                         borderWidth: 0,
                         barThickness: 12,
                         borderRadius: 2

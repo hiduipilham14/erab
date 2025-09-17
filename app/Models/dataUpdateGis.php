@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class dataUpdateGis extends Model
 {
-    use HasFactory;
+use HasFactory;
 protected $fillable = [
         'tanggal',
         'divisi_id',
