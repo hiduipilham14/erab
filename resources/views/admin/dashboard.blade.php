@@ -181,7 +181,7 @@
                         data: updateGis,
                         backgroundColor: '#ff6b35',
                         borderWidth: 0,
-                        barThickness: 12,
+                        maxBarThickness: 15,
                         borderRadius: 2
                     },
                     {
@@ -189,7 +189,7 @@
                         data: jaringanBaru,
                         backgroundColor: '#1E429F',
                         borderWidth: 0,
-                        barThickness: 12,
+                        maxBarThickness: 15,
                         borderRadius: 2
                     },
                     {
@@ -197,7 +197,7 @@
                         data: penggantianPipa,
                         backgroundColor: '#31C48D',
                         borderWidth: 0,
-                        barThickness: 12,
+                        maxBarThickness: 15,
                         borderRadius: 2
                     },
                     {
@@ -205,7 +205,7 @@
                         data: spam,
                         backgroundColor: '#B001EB',
                         borderWidth: 0,
-                        barThickness: 12,
+                        maxBarThickness: 15,
                         borderRadius: 2
                     }
                 ]
@@ -242,7 +242,10 @@
                         },
                         ticks: {
                             color: '#666'
-                        }
+                        },
+                        // Menambahkan spacing antar datasets
+                        categoryPercentage: 0.8, // Total width of bar group
+                        barPercentage: 0.6 // Individual bar width within group (smaller = more spacing)
                     },
                     y: {
                         beginAtZero: true,
@@ -260,6 +263,16 @@
                         ticks: {
                             color: '#666'
                         }
+                    }
+                },
+                // Menambahkan spacing antar datasets dan konfigurasi tambahan
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+                elements: {
+                    bar: {
+                        borderSkipped: false
                     }
                 }
             }
