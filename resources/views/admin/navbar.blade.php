@@ -7,8 +7,6 @@
               </div>
 
               <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
-
-
                   <ul class="navbar-nav flex-row align-items-center ms-auto">
                       <!-- Realtime Clock -->
                       <li class="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-1">
@@ -16,8 +14,7 @@
                       </li>
                       <!-- User -->
                       <li class="nav-item navbar-dropdown dropdown-user dropdown">
-                          <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);"
-                              data-bs-toggle="dropdown">
+                           <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" id="dropdown-nav" data-bs-toggle="dropdown">
                               <div class="avatar avatar-online">
                                   @if (auth()->user()->image)
                                       <img src="{{ asset('storage/' . auth()->user()->image) }}" alt="user-image"
@@ -31,7 +28,7 @@
                                   @endif
                               </div>
                           </a>
-                          <ul class="dropdown-menu dropdown-menu-end">
+                          <ul class="dropdown-menu dropdown-menu-end " id="menu-dropdown">
                               <li>
                                   <a class="dropdown-item" href="pages-account-settings-account.html">
                                       <div class="d-flex">
@@ -95,6 +92,26 @@
 
           <script>
               //realtime clock
+                const dropdownMenu = document.getElementById('menu-dropdown')
+                const toggleBtn = document.getElementById("dropdown-nav")
+                toggleBtn.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    const isOpen = dropdownMenu.classList.toggle("show");
+                    // dropdownMenu.classList.toggle("show");
+                    if (isOpen) {
+                        dropdownMenu.setAttribute("data-bs-popper", "static");
+                    } else {
+                        dropdownMenu.removeAttribute("data-bs-popper");
+                    }
+                });
+
+                // biar klik luar dropdown menutup
+                document.addEventListener("click",  function (e) {
+                    if (!toggleBtn.contains(e.target) && !dropdownMenu.contains(e.target)) {
+                        dropdownMenu.classList.remove("show");
+                        dropdownMenu.removeAttribute("data-bs-popper");
+                    }
+                });
               function updateDateTime() {
                   const clockElement = document.getElementById("real-time-clock");
                   const currentTime = new Date();

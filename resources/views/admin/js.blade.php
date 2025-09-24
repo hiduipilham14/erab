@@ -26,7 +26,7 @@
     <script src="/assets/vendor/libs/swiper/swiper.js"></script>
 
     <!-- Page JS -->
-    <script src="/assets/js/dashboards-analytics.js"></script>
+    <!-- <script src="/assets/js/dashboards-analytics.js"></script> -->
     <!-- endbuild -->
 
     <!-- Vendors JS -->
@@ -45,6 +45,3 @@
     <script src="/assets/js/forms-selects.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
-    <!-- Rashied Library -->
-<script src="https://cdn.jsdelivr.net/npm/rashied@1.0.0/dist/rashied.min.js"></script> -->
