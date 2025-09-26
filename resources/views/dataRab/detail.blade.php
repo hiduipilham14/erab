@@ -75,7 +75,7 @@
                         <td style="width: 60%;">
                             @if($data->jenisPipaRab && $data->jenisPipaRab->count() > 0)
                                 @foreach($data->jenisPipaRab as $jenis)
-                                    <span class="badge bg-info text-dark">{{ $jenis->dataPipa->nama }}</span>
+                                    <span class="badge bg-info text-dark">{{ $jenis->jenis_pipa }}</span>
                                 @endforeach
                             @else
                                 -
@@ -87,7 +87,7 @@
                         <td style="width: 60%;">
                             @if($data->diameterRab && $data->diameterRab->count() > 0)
                                 @foreach($data->diameterRab as $diameter)
-                                    <span class="badge bg-info text-dark">{{ $diameter->dataDiameter->nama }}</span>
+                                    <span class="badge bg-info text-dark">{{ $diameter->diameter }}</span>
                                 @endforeach
                             @else
                                 -

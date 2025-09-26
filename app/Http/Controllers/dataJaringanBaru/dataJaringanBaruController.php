@@ -32,7 +32,7 @@ class dataJaringanBaruController extends Controller
                 ->addColumn('diameter', function($row) {
                     // Mengambil nama diameter dari relasi hasMany
                     $diameters = $row->diameterJaringan
-                        ->pluck('dataDiameter.nama')
+                        ->pluck('diameter')
                         ->filter() // Menghilangkan nilai null
                         ->unique() // Menghilangkan duplikat
                         ->toArray();
@@ -51,7 +51,7 @@ class dataJaringanBaruController extends Controller
                 })
                 ->addColumn('jenisPipaJaringan', function($row) {
                     $jenisPipa = $row->jenisPipaJaringan
-                        ->pluck('jenisPipa.nama')
+                        ->pluck('jenis_pipa')
                         ->filter() 
                         ->unique() 
                         ->toArray();
@@ -111,11 +111,11 @@ class dataJaringanBaruController extends Controller
             'koordinat' => 'required|string|max:100',
             'lokasi' => 'required|string|max:255',
             'jenis_pipa' => 'required|array',
-            'jenis_pipa.*' => 'required|exists:data_pipas,id',
+            'jenis_pipa.*' => 'required',
             'vol' => 'required|array',
             'vol.*' => 'required|string|max:100',
             'diameter' => 'required|array',
-            'diameter.*' => 'required|exists:data_diameters,id',
+            'diameter.*' => 'required',
             'keterangan' => 'required|string|max:255',
         ]);
 
@@ -233,11 +233,11 @@ class dataJaringanBaruController extends Controller
                 'koordinat' => 'required|string|max:100',
                 'lokasi' => 'required|string|max:255',
                 'jenis_pipa' => 'required|array',
-                'jenis_pipa.*' => 'required|exists:data_pipas,id',
+                'jenis_pipa.*' => 'required',
                 'vol' => 'required|array',
                 'vol.*' => 'required|string|max:100',
                 'diameter' => 'required|array',
-                'diameter.*' => 'required|exists:data_diameters,id',
+                'diameter.*' => 'required',
                 'keterangan' => 'required|string|max:255',
             ]);
 

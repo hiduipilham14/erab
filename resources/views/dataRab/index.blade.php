@@ -206,28 +206,21 @@
                                                 </div>
                                                 
                                                 <!-- PIPA -->
-                                                <div class="mb-3">
-                                                    <label class="form-label" for="pipa">PIPA</label>
-                                                    <div class="select2-primary">
-                                                        <select id="form_jenis_pipa" name="jenis_pipa[]" class="form-select select2 " required multiple>
-                                                            {{-- <option value="">-- pilih jenis pipa --</option> --}}
-                                                            @foreach ($pipas as $pipa)
-                                                                <option value="{{ $pipa->id }}">{{ $pipa->nama }}</option>
-                                                            @endforeach
-                                                        </select>
+
+                                                <div class="mb-3" id="pipa-container">
+                                                    <label class="form-label" for="jenis_pipa">PIPA</label>
+                                                    <div class="input-group mb-3">
+                                                        <input type="text" id="jenis_pipa" name="jenis_pipa[]" class="form-control" placeholder="Masukkan Pipa" required />
+                                                        <button type="button" class="btn btn-success " id="btn-add-pipa"><i class="fa fa-plus"></i></button>
                                                     </div>
                                                 </div>
                                                 
                                                 <!-- Diameter (inch) -->
-                                                <div class="mb-3">
+                                                <div class="mb-3" id="diameter-container">
                                                     <label class="form-label" for="diameter">Diameter ( inch )</label>
-                                                    <div class="select2-primary">
-                                                        <select id="form_diameter" name="diameter[]" class="form-select select2 " multiple required>
-                                                            {{-- <option value="">-- pilih diameter --</option> --}}
-                                                            @foreach ($diameters as $diameter)
-                                                                <option value="{{ $diameter->id }}">{{ $diameter->nama }}</option>
-                                                            @endforeach
-                                                        </select>
+                                                    <div class="input-group mb-3">
+                                                        <input type="text" id="diameter" name="diameter[]" class="form-control" placeholder="Masukkan Diameter" required />
+                                                        <button type="button" class="btn btn-success " id="btn-add-diameter"><i class="fa fa-plus"></i></button>
                                                     </div>
                                                 </div>
                                                 
@@ -393,6 +386,34 @@
                 $("#volume-container").append(volumeInput);
             });
 
+            $("body").on('click', "#btn-add-diameter", function() {
+                const diameterInput = `
+                    <div class="input-group mb-2 diameter-entry">
+                        <input type="text" name="diameter[]" class="form-control" placeholder="Masukkan Diameter" required />
+                        <button type="button" class="btn btn-danger btn-remove-diameter"><i class="fa fa-minus"></i></button>
+                    </div>
+                `;
+                $("#diameter-container").append(diameterInput);
+            });
+
+            $("body").on('click', "#btn-add-pipa", function() {
+                const pipaInput = `
+                    <div class="input-group mb-2 pipa-entry">
+                        <input type="text" name="jenis_pipa[]" class="form-control" placeholder="Masukkan pipa" required />
+                        <button type="button" class="btn btn-danger btn-remove-pipa"><i class="fa fa-minus"></i></button>
+                    </div>
+                `;
+                $("#pipa-container").append(pipaInput);
+            });
+            
+            $(document).on('click', '.btn-remove-pipa', function() {
+                $(this).closest('.pipa-entry').remove();
+            });
+
+            $(document).on('click', '.btn-remove-diameter', function() {
+                $(this).closest('.diameter-entry').remove();
+            });
+
             $(document).on('click', '.btn-remove-volume', function() {
                 $(this).closest('.volume-entry').remove();
             });
@@ -508,8 +529,20 @@
                     <button type="button" class="btn btn-success " id="btn-add-volume"><i class="fa fa-plus"></i></button>
                 </div>
             `);
-            $('#form_diameter').val(null).trigger('change');
-            $('#form_jenis_pipa').val(null).trigger('change');
+            $('#diameter-container').html(`
+                <label class="form-label" for="form_diameter">Diameter (inch) <span class="text-danger">*</span></label>
+                <div class="input-group mb-3">
+                    <input type="text" id="diameter" name="diameter[]" class="form-control" placeholder="Masukkan Diameter" required />
+                    <button type="button" class="btn btn-success " id="btn-add-diameter"><i class="fa fa-plus"></i></button>
+                </div>
+            `);
+            $('#pipa-container').html(`
+                <label class="form-label" for="form_pipa">Pipa<span class="text-danger">*</span></label>
+                <div class="input-group mb-3">
+                    <input type="text" id="jenis_pipa" name="jenis_pipa[]" class="form-control" placeholder="Masukkan pipa" required />
+                    <button type="button" class="btn btn-success " id="btn-add-pipa"><i class="fa fa-plus"></i></button>
+                </div>
+            `);
             $('#current-file_spk-container').addClass('d-none');
             $('#current-file_ded-container').addClass('d-none');
             $('#current-file_rab-container').addClass('d-none');
@@ -561,6 +594,9 @@
             $('#jumlah').val(data.jumlah);
             $('#gis').val(data.gis);
             $("#volume-container").html('<label class="form-label" for="form_vol">Vol (m) <span class="text-danger">*</span></label>');
+            $("#diameter-container").html('<label class="form-label" for="form_vol">Diameter (inch) <span class="text-danger">*</span></label>');
+            $("#pipa-container").html('<label class="form-label" for="form_vol">Pipa <span class="text-danger">*</span></label>');
+            
             data.volume_rab.forEach((v,i) => {
                 const volumeInput = `
                     <div class="input-group mb-2 volume-entry">
@@ -572,10 +608,30 @@
                 `;
                 $("#volume-container").append(volumeInput);
             });
-            let diameter = data.diameter_rab.map(d => d.diameter.toString());
-            $('#form_diameter').val(diameter).trigger('change');
-            let jenis_pipa = data.jenis_pipa_rab.map(p => p.jenis_pipa.toString());
-            $('#form_jenis_pipa').val(jenis_pipa).trigger('change');
+
+            data.diameter_rab.forEach((v,i) => {
+                const diameterInput = `
+                    <div class="input-group mb-2 diameter-entry">
+                        <input type="text" name="diameter[]" class="form-control" placeholder="Masukkan Diameter" value="${v.diameter}" required />
+                        ${i === 0 ? 
+                            '<button type="button" class="btn btn-success " id="btn-add-diameter"><i class="fa fa-plus"></i></button>' :
+                            '<button type="button" class="btn btn-danger btn-remove-diameter"><i class="fa fa-minus"></i></button>'}
+                    </div>
+                `;
+                $("#diameter-container").append(diameterInput);
+            });
+
+            data.jenis_pipa_rab.forEach((v,i) => {
+                const pipaInput = `
+                    <div class="input-group mb-2 pipa-entry">
+                        <input type="text" name="jenis_pipa[]" class="form-control" placeholder="Masukkan Pipa" value="${v.jenis_pipa}" required />
+                        ${i === 0 ? 
+                            '<button type="button" class="btn btn-success " id="btn-add-pipa"><i class="fa fa-plus"></i></button>' :
+                            '<button type="button" class="btn btn-danger btn-remove-pipa"><i class="fa fa-minus"></i></button>'}
+                    </div>
+                `;
+                $("#pipa-container").append(pipaInput);
+            });
             // Show current files if they exist
             showCurrentFile('file_spk', data.file_spk);
             showCurrentFile('file_ded', data.file_ded);

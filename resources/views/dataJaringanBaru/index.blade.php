@@ -140,79 +140,74 @@
                                             @csrf
                                             <input type="hidden" id="form_id" name="id">
                                             <input type="hidden" id="form_method" name="_method" value="">
-                                            <div class="col-sm-6">
-                                                <label class="form-label" for="form_tanggal">Tanggal <span class="text-danger">*</span></label>
-                                                <input type="date" id="form_tanggal" name="tanggal" class="form-control" required />
-                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="form_tanggal">Tanggal <span class="text-danger">*</span></label>
+                                                        <input type="date" id="form_tanggal" name="tanggal" class="form-control" required />
+                                                    </div>
 
-                                            <div class="col-sm-6">
-                                                <label class="form-label" for="form_pekerjaan">Pekerjaan <span class="text-danger">*</span></label>
-                                                <input type="text" id="form_pekerjaan" name="pekerjaan" class="form-control"
-                                                    placeholder="Jenis pekerjaan" required />
-                                            </div>
+                                                      <!-- Divisi Selection -->
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="form_divisi">Divisi <span class="text-danger">*</span></label>
+                                                        <select id="form_divisi" name="divisi" class="form-select" required>
+                                                            <option value="">-- pilih divisi --</option>
+                                                            @foreach ($divisis as $divisi)
+                                                                <option value="{{ $divisi->id }}">{{ $divisi->nama }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
 
-                                            <!-- Divisi Selection -->
-                                            <div class="col-sm-6">
-                                                <label class="form-label" for="form_divisi">Divisi <span class="text-danger">*</span></label>
-                                                <select id="form_divisi" name="divisi" class="form-select" required>
-                                                    <option value="">-- pilih divisi --</option>
-                                                    @foreach ($divisis as $divisi)
-                                                        <option value="{{ $divisi->id }}">{{ $divisi->nama }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
+                                                    <!-- Pipa Selection -->
+                                                     <div class="mb-3" id="pipa-container">
+                                                        <label class="form-label" for="jenis_pipa">PIPA</label>
+                                                        <div class="input-group mb-3">
+                                                            <input type="text" id="jenis_pipa" name="jenis_pipa[]" class="form-control" placeholder="Masukkan Pipa" required />
+                                                            <button type="button" class="btn btn-success " id="btn-add-pipa"><i class="fa fa-plus"></i></button>
+                                                        </div>
+                                                    </div>
 
-                                           
+                                                      <!-- Diameter-->
+                                                        <div class="mb-3" id="diameter-container">
+                                                            <label class="form-label" for="diameter">Diameter ( inch )</label>
+                                                            <div class="input-group mb-3">
+                                                                <input type="text" id="diameter" name="diameter[]" class="form-control" placeholder="Masukkan Diameter" required />
+                                                                <button type="button" class="btn btn-success " id="btn-add-diameter"><i class="fa fa-plus"></i></button>
+                                                            </div>
+                                                        </div>
 
-                                            <div class="col-sm-6">
-                                                <label class="form-label" for="form_koordinat">Koordinat <span class="text-danger">*</span></label>
-                                                <input type="text" id="form_koordinat" name="koordinat" class="form-control" placeholder="0" required />
-                                            </div>
-
-                                             <div class="col-sm-6" id="volume-container" >
-                                                <label class="form-label" for="form_vol">Vol (m) <span class="text-danger">*</span></label>
-                                                <div class="input-group mb-2 volume-entry">
-                                                    <input type="number" name="vol[]" class="form-control" placeholder="0" required />
-                                                    <button type="button" class="btn btn-success " id="btn-add-volume"><i class="fa fa-plus"></i></button>
+                                                    
+                                                    <div class="form-group" id="volume-container" >
+                                                        <label class="form-label" for="form_vol">Vol (m) <span class="text-danger">*</span></label>
+                                                        <div class="input-group mb-2 volume-entry">
+                                                            <input type="number" name="vol[]" class="form-control" placeholder="0" required />
+                                                            <button type="button" class="btn btn-success " id="btn-add-volume"><i class="fa fa-plus"></i></button>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="form_koordinat">Koordinat <span class="text-danger">*</span></label>
+                                                        <input type="text" id="form_koordinat" name="koordinat" class="form-control" placeholder="0" required />
+                                                    </div>
                                                 </div>
-                                            </div>
 
-
-                                            <div class="col-sm-6">
-                                                <label class="form-label" for="form_lokasi">Lokasi <span class="text-danger">*</span></label>
-                                                <input type="text" id="form_lokasi" name="lokasi" class="form-control"
-                                                    placeholder="Lokasi pekerjaan" required />
-                                            </div>
-
-                                            <!-- Pipa Selection -->
-                                            <div class="col-sm-6">
-                                                <label class="form-label" for="form_jenis_pipa">PIPA <span class="text-danger">*</span></label>
-                                                <div class="select2-primary">
-                                                    <select id="form_jenis_pipa" name="jenis_pipa[]" class="form-select select2 " required multiple>
-                                                        {{-- <option value="">-- pilih jenis pipa --</option> --}}
-                                                        @foreach ($pipas as $pipa)
-                                                            <option value="{{ $pipa->id }}">{{ $pipa->nama }}</option>
-                                                        @endforeach
-                                                    </select>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="form_pekerjaan">Pekerjaan <span class="text-danger">*</span></label>
+                                                        <input type="text" id="form_pekerjaan" name="pekerjaan" class="form-control"
+                                                            placeholder="Jenis pekerjaan" required />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="form_lokasi">Lokasi <span class="text-danger">*</span></label>
+                                                        <input type="text" id="form_lokasi" name="lokasi" class="form-control"
+                                                            placeholder="Lokasi pekerjaan" required />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="form_keterangan">Keterangan</label>
+                                                        <textarea id="form_keterangan" name="keterangan" class="form-control" placeholder="Keterangan " rows="2"></textarea>
+                                                    </div>
                                                 </div>
-                                            </div>
-
-                                            <!-- Diameter-->
-                                            <div class="col-sm-6">
-                                                <label class="form-label" for="form_diameter">DN (inchi) <span class="text-danger">*</span></label>
-                                                 <div class="select2-primary">
-                                                     <select id="form_diameter" name="diameter[]" class="form-select select2 " multiple required>
-                                                         {{-- <option value="">-- pilih diameter --</option> --}}
-                                                         @foreach ($diameters as $diameter)
-                                                             <option value="{{ $diameter->id }}">{{ $diameter->nama }}</option>
-                                                         @endforeach
-                                                     </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="col-sm-6">
-                                                <label class="form-label" for="form_keterangan">Keterangan</label>
-                                                <textarea id="form_keterangan" name="keterangan" class="form-control" placeholder="Keterangan " rows="2"></textarea>
                                             </div>
                                         </form>
                                     </div>
@@ -256,16 +251,6 @@
             initDataTable();
             setupEventHandlers();
 
-             $('#form_diameter').wrap('<div class="position-relative"></div>').select2({
-                placeholder: '-- pilih diameter --',
-                dropdownParent: $('#form_diameter').parent()
-            });
-            $('#form_diameter').val(null).trigger('change');
-            $('#form_jenis_pipa').wrap('<div class="position-relative"></div>').select2({
-                placeholder: '-- pilih jenis pipa --',
-                dropdownParent: $('#form_jenis_pipa').parent()
-            });
-            $('#form_jenis_pipa').val(null).trigger('change');
             $("body").on('click', "#btn-add-volume", function() {
                 const volumeInput = `
                     <div class="input-group mb-2 volume-entry">
@@ -276,9 +261,38 @@
                 $("#volume-container").append(volumeInput);
             });
 
+            $("body").on('click', "#btn-add-diameter", function() {
+                const diameterInput = `
+                    <div class="input-group mb-2 diameter-entry">
+                        <input type="text" name="diameter[]" class="form-control" placeholder="Masukkan Diameter" required />
+                        <button type="button" class="btn btn-danger btn-remove-diameter"><i class="fa fa-minus"></i></button>
+                    </div>
+                `;
+                $("#diameter-container").append(diameterInput);
+            });
+
+            $("body").on('click', "#btn-add-pipa", function() {
+                const pipaInput = `
+                    <div class="input-group mb-2 pipa-entry">
+                        <input type="text" name="jenis_pipa[]" class="form-control" placeholder="Masukkan pipa" required />
+                        <button type="button" class="btn btn-danger btn-remove-pipa"><i class="fa fa-minus"></i></button>
+                    </div>
+                `;
+                $("#pipa-container").append(pipaInput);
+            });
+
+            $(document).on('click', '.btn-remove-pipa', function() {
+                $(this).closest('.pipa-entry').remove();
+            });
+
+            $(document).on('click', '.btn-remove-diameter', function() {
+                $(this).closest('.diameter-entry').remove();
+            });
+
             $(document).on('click', '.btn-remove-volume', function() {
                 $(this).closest('.volume-entry').remove();
             });
+
         });
 
         function initDataTable() {
@@ -367,8 +381,20 @@
                         <button type="button" class="btn btn-success " id="btn-add-volume"><i class="fa fa-plus"></i></button>
                     </div>
                 `);
-                $('#form_diameter').val(null).trigger('change');
-                $('#form_jenis_pipa').val(null).trigger('change');
+                $('#diameter-container').html(`
+                    <label class="form-label" for="form_diameter">Diameter (inch) <span class="text-danger">*</span></label>
+                    <div class="input-group mb-3">
+                        <input type="text" id="diameter" name="diameter[]" class="form-control" placeholder="Masukkan Diameter" required />
+                        <button type="button" class="btn btn-success " id="btn-add-diameter"><i class="fa fa-plus"></i></button>
+                    </div>
+                `);
+                $('#pipa-container').html(`
+                    <label class="form-label" for="form_pipa">Pipa<span class="text-danger">*</span></label>
+                    <div class="input-group mb-3">
+                        <input type="text" id="jenis_pipa" name="jenis_pipa[]" class="form-control" placeholder="Masukkan pipa" required />
+                        <button type="button" class="btn btn-success " id="btn-add-pipa"><i class="fa fa-plus"></i></button>
+                    </div>
+                `);
                 $('#submitBtn').text('Simpan');
             } else if (mode === 'edit') {
                 $('#formModalLabel').text('Edit Data Jaringan Baru');
@@ -409,6 +435,8 @@
             $('#form_lokasi').val(data.lokasi);
             $('#form_keterangan').val(data.keterangan);
             $("#volume-container").html('<label class="form-label" for="form_vol">Vol (m) <span class="text-danger">*</span></label>');
+            $("#diameter-container").html('<label class="form-label" for="form_vol">Diameter (inch) <span class="text-danger">*</span></label>');
+            $("#pipa-container").html('<label class="form-label" for="form_vol">Pipa <span class="text-danger">*</span></label>');
             data.volume_jaringan.forEach((v,i) => {
                 const volumeInput = `
                     <div class="input-group mb-2 volume-entry">
@@ -420,10 +448,29 @@
                 `;
                 $("#volume-container").append(volumeInput);
             });
-            let diameter = data.diameter_jaringan.map(d => d.diameter.toString());
-            $('#form_diameter').val(diameter).trigger('change');
-            let jenis_pipa = data.jenis_pipa_jaringan.map(p => p.jenis_pipa.toString());
-            $('#form_jenis_pipa').val(jenis_pipa).trigger('change');
+            data.diameter_jaringan.forEach((v,i) => {
+                const diameterInput = `
+                    <div class="input-group mb-2 diameter-entry">
+                        <input type="text" name="diameter[]" class="form-control" placeholder="Masukkan Diameter" value="${v.diameter}" required />
+                        ${i === 0 ? 
+                            '<button type="button" class="btn btn-success " id="btn-add-diameter"><i class="fa fa-plus"></i></button>' :
+                            '<button type="button" class="btn btn-danger btn-remove-diameter"><i class="fa fa-minus"></i></button>'}
+                    </div>
+                `;
+                $("#diameter-container").append(diameterInput);
+            });
+
+            data.jenis_pipa_jaringan.forEach((v,i) => {
+                const pipaInput = `
+                    <div class="input-group mb-2 pipa-entry">
+                        <input type="text" name="jenis_pipa[]" class="form-control" placeholder="Masukkan Pipa" value="${v.jenis_pipa}" required />
+                        ${i === 0 ? 
+                            '<button type="button" class="btn btn-success " id="btn-add-pipa"><i class="fa fa-plus"></i></button>' :
+                            '<button type="button" class="btn btn-danger btn-remove-pipa"><i class="fa fa-minus"></i></button>'}
+                    </div>
+                `;
+                $("#pipa-container").append(pipaInput);
+            });
         }
 
         function handleFormSubmit(e) {

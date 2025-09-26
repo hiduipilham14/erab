@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('diameter_rab', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('diameter')->constrained('data_diameters')->cascadeOnDelete();
+            $table->string('diameter');
             $table->foreignId('data_rab_id')->constrained('data_rabs')->cascadeOnDelete();
             $table->timestamps();
         });

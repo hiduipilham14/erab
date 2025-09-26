@@ -40,7 +40,7 @@ class dataRabController extends Controller
                 })
                 ->addColumn('diameter', function($row) {
                     $diameters = $row->diameterRab
-                        ->pluck('dataDiameter.nama')
+                        ->pluck('diameter')
                         ->filter()
                         ->unique()
                         ->toArray();
@@ -49,7 +49,7 @@ class dataRabController extends Controller
                 })
                 ->addColumn('jenisPipaRab', function($row) {
                     $jenisPipa = $row->jenisPipaRab
-                        ->pluck('dataPipa.nama')
+                        ->pluck('jenis_pipa')
                         ->filter() 
                         ->unique() 
                         ->toArray();
@@ -116,11 +116,11 @@ class dataRabController extends Controller
             'keterangan_gis' => 'nullable|max:500',
 
             'jenis_pipa' => 'required|array',
-            'jenis_pipa.*' => 'required|exists:data_pipas,id',
+            'jenis_pipa.*' => 'required',
             'vol' => 'required|array',
             'vol.*' => 'required|string|max:100',
             'diameter' => 'required|array',
-            'diameter.*' => 'required|exists:data_diameters,id',
+            'diameter.*' => 'required',
         ]);
 
         $data = $request->only([
@@ -199,11 +199,7 @@ class dataRabController extends Controller
     public function show($id)
     {
         try {
-            $data = DataRab::with(['diameterRab' => function($q) {
-                return $q->with('dataDiameter');
-            },'jenisPipaRab' => function($q) {
-                return $q->with('dataPipa');
-            }, 'volumeRab'])->findOrFail($id);
+            $data = DataRab::with(['diameterRab','jenisPipaRab', 'volumeRab'])->findOrFail($id);
             $data->tanggal_input = \Carbon\Carbon::parse($data->tanggal_input)->format('d/m/Y');
             $data->tanggal_awal = \Carbon\Carbon::parse($data->tanggal_awal)->format('d/m/Y');
             $data->tanggal_selesai = \Carbon\Carbon::parse($data->tanggal_selesai)->format('d/m/Y');
@@ -306,11 +302,11 @@ class dataRabController extends Controller
                 'keterangan_gis' => 'nullable|max:500',
 
                 'jenis_pipa' => 'required|array',
-                'jenis_pipa.*' => 'required|exists:data_pipas,id',
+                'jenis_pipa.*' => 'required',
                 'vol' => 'required|array',
                 'vol.*' => 'required|string|max:100',
                 'diameter' => 'required|array',
-                'diameter.*' => 'required|exists:data_diameters,id',
+                'diameter.*' => 'required',
             ]);
 
             if ($validator->fails()) {

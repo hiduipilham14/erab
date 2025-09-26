@@ -132,7 +132,7 @@
                                     <td class="column-center">
                                         @php
                                             $jenisPipa = $row->jenisPipaRab
-                                            ->pluck('dataPipa.nama')
+                                            ->pluck('jenis_pipa')
                                             ->filter() 
                                             ->unique() 
                                             ->toArray();
@@ -142,7 +142,7 @@
                                     <td class="column-center">
                                         @php
                                             $diameter = $row->diameterRab
-                                            ->pluck('dataDiameter.nama')
+                                            ->pluck('diameter')
                                             ->filter()
                                             ->unique()
                                             ->toArray(); 

@@ -164,7 +164,7 @@
                                         <td class="sm-text text-center">
                                             @php
                                                 $jenisPipa = $laporan->jenisPipaJaringan
-                                                        ->pluck('jenisPipa.nama')
+                                                        ->pluck('jenis_pipa')
                                                         ->filter() 
                                                         ->unique() 
                                                         ->toArray();
@@ -174,7 +174,7 @@
                                         <td class="dn-col text-center">
                                             @php
                                                  $diameters = $laporan->diameterJaringan
-                                                        ->pluck('dataDiameter.nama')
+                                                        ->pluck('diameter')
                                                         ->filter() 
                                                         ->unique() 
                                                         ->toArray();
