@@ -11,16 +11,8 @@ class dataJaringanBaru extends Model
 {
     use HasFactory;
     
-    protected $fillable = [
-        'tanggal',
-        'pekerjaan',
-        'divisi',
-        'vol',
-        'koordinat',
-        'lokasi',
-        'jenis_pipa',
-        'diameter',
-        'keterangan',
+    protected $guarded = [
+        'id',
     ];
 
     public function data_divisi(): BelongsTo

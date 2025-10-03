@@ -430,7 +430,7 @@
             $('#form_id').val(data.id);
             $('#form_tanggal').val(data.tanggal.split(' ')[0]);
             $('#form_pekerjaan').val(data.pekerjaan);
-            $('#form_divisi').val(data.divisi_id);
+            $('#form_divisi').val(data.divisi);
             $('#form_koordinat').val(data.koordinat);
             $('#form_lokasi').val(data.lokasi);
             $('#form_keterangan').val(data.keterangan);

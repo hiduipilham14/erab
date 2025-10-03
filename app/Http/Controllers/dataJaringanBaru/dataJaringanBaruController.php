@@ -226,7 +226,8 @@ class dataJaringanBaruController extends Controller
         try {
             $dataJaringanBaru = dataJaringanBaru::findOrFail($id);
 
-            $validated = $request->validate([
+            // Gunakan Validator facade untuk mendapatkan object validator
+            $validator = Validator::make($request->all(), [
                 'tanggal' => 'required|date',
                 'pekerjaan' => 'required|string|max:255',
                 'divisi' => 'required|exists:data_divisis,id',
@@ -241,6 +242,7 @@ class dataJaringanBaruController extends Controller
                 'keterangan' => 'required|string|max:255',
             ]);
 
+            // Cek jika validasi gagal
             if ($validator->fails()) {
                 return response()->json([
                     'success' => false,
@@ -249,12 +251,17 @@ class dataJaringanBaruController extends Controller
                 ], 422);
             }
 
+            // Ambil data yang sudah divalidasi
             $validated = $validator->validated();
-
+            // dd($validated);
+            // Update data utama
             $dataJaringanBaru->update($validated);
+
+            // Hapus dan insert data relasi
             DB::table('jenispipa_jaringan')->where('data_jaringan_barus_id', $dataJaringanBaru->id)->delete();
             DB::table('volume_jaringan')->where('data_jaringan_barus_id', $dataJaringanBaru->id)->delete();
             DB::table('diameter_jaringan')->where('data_jaringan_barus_id', $dataJaringanBaru->id)->delete();
+
             foreach ($request->jenis_pipa as $index => $jenisPipa) {
                 DB::table('jenispipa_jaringan')->insert([
                     'jenis_pipa' => $jenisPipa,
@@ -263,6 +270,7 @@ class dataJaringanBaruController extends Controller
                     'updated_at' => now(),
                 ]);
             }
+
             foreach ($request->vol as $index => $vol) {
                 DB::table('volume_jaringan')->insert([
                     'volume' => $vol,
@@ -271,6 +279,7 @@ class dataJaringanBaruController extends Controller
                     'updated_at' => now(),
                 ]);
             }
+
             foreach ($request->diameter as $index => $diameter) {
                 DB::table('diameter_jaringan')->insert([
                     'diameter' => $diameter,
